@@ -1,20 +1,18 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Header } from "../components/header";
+import { CurrentTimeProvider } from "../context/current-time";
 
 export const Route = createRootRoute({
   component: () => (
-    <>
-      <main className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{" "}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
-      </main>
-      <hr />
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
+    <CurrentTimeProvider>
+      <div className="text-lg text-gray-400 bg-gray-950">
+        <Header />
+        <main className="h-[calc(100vh-4rem)]">
+          <Outlet />
+        </main>
+        <TanStackRouterDevtools />
+      </div>
+    </CurrentTimeProvider>
   ),
 });

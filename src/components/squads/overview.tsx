@@ -1,3 +1,4 @@
+import { cn } from "../../lib/cn";
 import { PressureGraph } from "./pressure-graph";
 import { StatusLabel } from "./status-label";
 import { TimeAndPressure } from "./time-and-pressure";
@@ -8,9 +9,16 @@ export const SquadsOverview = () => {
       {data.squads.map((squad) => (
         <div
           key={squad.id}
-          className="w-96 bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden"
+          className="relative w-96 bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden"
         >
-          <div className="flex items-center justify-between p-4 border-b border-gray-800">
+          <div
+            className={cn(
+              "absolute inset-0 bg-gradient-to-b to-transparent",
+              squad.status.id === "active" && "from-amber-950/50",
+              squad.status.id === "standby" && "from-zinc-800/50"
+            )}
+          />
+          <div className="relative flex items-center justify-between p-4 border-b border-zinc-800">
             <h2 className="text-white text-xl font-bold">{squad.radioId}</h2>
             <StatusLabel status={squad.status} />
           </div>
@@ -27,7 +35,7 @@ export const SquadsOverview = () => {
           />
         </div>
       ))}
-      <button className="w-96 cursor-pointer bg-gray-900/25 hover:bg-gray-900/50 border border-gray-900 hover:border-gray-800 rounded-2xl flex flex-col items-center justify-center">
+      <button className="w-96 cursor-pointer bg-zinc-900/25 hover:bg-zinc-900/50 border border-zinc-900 hover:border-zinc-800 rounded-2xl flex flex-col items-center justify-center">
         <h2 className="">Trupp hinzufügen</h2>
       </button>
     </section>

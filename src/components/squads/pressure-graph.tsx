@@ -10,7 +10,7 @@ export const PressureGraph = ({
   );
 
   return (
-    <div className="relative w-full h-2 bg-gray-800">
+    <div className="relative w-full h-2 bg-zinc-800">
       <div
         className={cn(
           "h-full bg-emerald-300",

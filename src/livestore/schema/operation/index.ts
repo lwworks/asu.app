@@ -1,0 +1,51 @@
+import { Events, Schema, State } from "@livestore/livestore";
+
+export const operationsTable = State.SQLite.table({
+  name: "operation",
+  columns: {
+    id: State.SQLite.text({ primaryKey: true }),
+    description: State.SQLite.text({ default: "" }),
+    createdAt: State.SQLite.integer({
+      schema: Schema.DateFromNumber,
+    }),
+    recordKeeper: State.SQLite.text({ nullable: true }),
+    completedAt: State.SQLite.integer({
+      nullable: true,
+      schema: Schema.DateFromNumber,
+    }),
+  },
+});
+
+export type Operation = typeof operationsTable.Type;
+
+export const operationsEvents = {
+  operationCreated: Events.synced({
+    name: "v1.OperationCreated",
+    schema: Schema.Struct({
+      id: Schema.String,
+      description: Schema.String,
+      createdAt: Schema.Date,
+      recordKeeper: Schema.String,
+    }),
+  }),
+  recordKeeperUpdated: Events.synced({
+    name: "v1.RecordKeeperUpdated",
+    schema: Schema.Struct({ id: Schema.String, recordKeeper: Schema.String }),
+  }),
+  completedAtUpdated: Events.synced({
+    name: "v1.OperationCompleted",
+    schema: Schema.Struct({ id: Schema.String, completedAt: Schema.Date }),
+  }),
+};
+
+export const operationsMaterializers = State.SQLite.materializers(
+  operationsEvents,
+  {
+    "v1.OperationCreated": ({ id, description, createdAt, recordKeeper }) =>
+      operationsTable.insert({ id, description, createdAt, recordKeeper }),
+    "v1.RecordKeeperUpdated": ({ id, recordKeeper }) =>
+      operationsTable.update({ id, recordKeeper }),
+    "v1.OperationCompleted": ({ id, completedAt }) =>
+      operationsTable.update({ id, completedAt }),
+  }
+);

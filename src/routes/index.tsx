@@ -1,9 +1,9 @@
-import { SquadsOverview } from "../components/squads/overview";
+import { NewOperation } from "../components/operation/new";
 
 export const Route = createFileRoute({
   component: Index,
 });
 
 function Index() {
-  return <SquadsOverview />;
+  return <NewOperation />;
 }

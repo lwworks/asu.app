@@ -15,7 +15,7 @@ export const TimeAndPressure = ({
   );
 
   return (
-    <div className="border-b border-gray-800 grid grid-cols-2 divide-x divide-gray-800 text-gray-500">
+    <div className="relative border-b border-zinc-800 grid grid-cols-2 divide-x divide-zinc-800 text-zinc-500">
       <div className="p-4">
         <div className={cn("text-3xl font-mono", startTime && "text-white")}>
           {startTime ? duration(startTime, currentTime) : "00:00"}

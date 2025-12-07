@@ -11,44 +11,44 @@
 import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EinsatzOperationIdRouteImport } from './routes/einsatz/$operationId'
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EinsatzOperationIdRoute = EinsatzOperationIdRouteImport.update({
+  id: '/einsatz/$operationId',
+  path: '/einsatz/$operationId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/einsatz/$operationId': typeof EinsatzOperationIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/einsatz/$operationId': typeof EinsatzOperationIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/einsatz/$operationId': typeof EinsatzOperationIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/einsatz/$operationId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/einsatz/$operationId'
+  id: '__root__' | '/' | '/einsatz/$operationId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  EinsatzOperationIdRoute: typeof EinsatzOperationIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -60,11 +60,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/einsatz/$operationId': {
+      id: '/einsatz/$operationId'
+      path: '/einsatz/$operationId'
+      fullPath: '/einsatz/$operationId'
+      preLoaderRoute: typeof EinsatzOperationIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -79,19 +79,19 @@ declare module './routes/index' {
     FileRoutesByPath['/']['fullPath']
   >
 }
-declare module './routes/about' {
+declare module './routes/einsatz/$operationId' {
   const createFileRoute: CreateFileRoute<
-    '/about',
-    FileRoutesByPath['/about']['parentRoute'],
-    FileRoutesByPath['/about']['id'],
-    FileRoutesByPath['/about']['path'],
-    FileRoutesByPath['/about']['fullPath']
+    '/einsatz/$operationId',
+    FileRoutesByPath['/einsatz/$operationId']['parentRoute'],
+    FileRoutesByPath['/einsatz/$operationId']['id'],
+    FileRoutesByPath['/einsatz/$operationId']['path'],
+    FileRoutesByPath['/einsatz/$operationId']['fullPath']
   >
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  EinsatzOperationIdRoute: EinsatzOperationIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

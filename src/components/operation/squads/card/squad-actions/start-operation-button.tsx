@@ -32,7 +32,6 @@ export const StartOperationButton = ({
 
   return (
     <Button
-      size="lg"
       className={cn("bg-emerald-300 hover:bg-emerald-300/90 w-full", className)}
       onClick={handleStartOperation}
     >

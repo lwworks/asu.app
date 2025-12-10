@@ -29,6 +29,13 @@ export const squadMembersEvents = {
       startPressure: Schema.Number,
     }),
   }),
+  squadMemberEndPressureUpdated: Events.synced({
+    name: "v1.SquadMemberEndPressureUpdated",
+    schema: Schema.Struct({
+      id: Schema.String,
+      endPressure: Schema.Number,
+    }),
+  }),
 };
 
 export const squadMembersMaterializers = State.SQLite.materializers(
@@ -52,5 +59,7 @@ export const squadMembersMaterializers = State.SQLite.materializers(
         isLeader,
         startPressure,
       }),
+    "v1.SquadMemberEndPressureUpdated": ({ id, endPressure }) =>
+      squadMembersTable.update({ endPressure }).where({ id }),
   }
 );

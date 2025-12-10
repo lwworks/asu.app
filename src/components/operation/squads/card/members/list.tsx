@@ -1,10 +1,18 @@
+import { cn } from "@/lib/cn";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
+import { ArrowRightIcon } from "lucide-react";
 
-export const MembersList = ({ members }: { members: SquadMember[] }) => {
+export const MembersList = ({
+  members,
+  status,
+}: {
+  members: SquadMember[];
+  status: string;
+}) => {
   if (members.length === 0) return null;
 
   return (
-    <div className="p-6 py-5 border-b">
+    <div className={cn("p-6 py-5", status === "ended" ? "pb-0" : "border-b")}>
       <ul className="space-y-2">
         {members.map((member) => (
           <li key={member.id} className="flex items-center justify-between">
@@ -21,11 +29,22 @@ export const MembersList = ({ members }: { members: SquadMember[] }) => {
                 {member.organization}
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-sm font-mono">
-                {member.startPressure} bar
+            <div className="flex">
+              <div className="text-right">
+                <div className="text-sm font-mono">
+                  {member.startPressure} bar
+                </div>
+                <div className="text-xs text-muted-foreground">Startdruck</div>
               </div>
-              <div className="text-xs text-muted-foreground">Startdruck</div>
+              {member.endPressure && (
+                <div className="text-right ml-1">
+                  <div className="text-sm font-mono flex items-center gap-1">
+                    <ArrowRightIcon className="size-4 text-muted-foreground/50" />
+                    <span>{member.endPressure} bar</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">Enddruck</div>
+                </div>
+              )}
             </div>
           </li>
         ))}

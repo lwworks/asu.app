@@ -65,23 +65,26 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
   };
 
   return (
-    <div>
-      <div className="px-6 pt-6 flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider border-b pb-3">
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="px-6 pt-6 flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider border-b pb-3 flex-none">
         <div className="w-17 shrink-0">Zeit</div>
         <div className="grow">Meldung</div>
         <div className="w-12 shrink-0">Druck</div>
       </div>
-      <div className="relative">
-        <ul ref={logsRef} className="px-6 py-3 space-y-2 h-48 overflow-y-auto">
+      <div className="relative flex-1 min-h-0">
+        <ul
+          ref={logsRef}
+          className="px-6 py-3 space-y-2 h-full overflow-y-auto"
+        >
           {(logs as SquadLog[])
             .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
             .map((log) => (
               <li key={log.id} className="flex text-sm leading-tight">
-                <div className="w-17 shrink-0 text-muted-foreground">
+                <div className="w-17 shrink-0 text-muted-foreground/50">
                   {format(log.timestamp, "HH:mm:ss")}
                 </div>
-                <div className="grow">{log.text}</div>
-                <div className="w-12 shrink-0 text-muted-foreground text-right">
+                <div className="grow text-muted-foreground">{log.text}</div>
+                <div className="w-12 shrink-0 text-muted-foreground/50 text-right">
                   {log.pressure}
                 </div>
               </li>
@@ -91,7 +94,7 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
         <div className="absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-card to-transparent" />
       </div>
       <form
-        className="flex gap-2 p-6 pt-0 relative z-10"
+        className="flex gap-2 p-6 pt-0 relative z-10 flex-none"
         onSubmit={handleSubmitLog}
       >
         <Field className="grow">

@@ -27,10 +27,12 @@ export const MemberForm = ({
   squadId,
   members,
   onCloseClick,
+  className,
 }: {
   squadId: string;
   members: SquadMember[];
   onCloseClick: () => void;
+  className?: string;
 }) => {
   const { store } = useStore();
   const { currentTime } = useCurrentTime();
@@ -104,7 +106,7 @@ export const MemberForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-6 pt-1 pb-5 bg-white/4 border-b flex-none"
+      className={cn("p-6 pt-1 pb-5 bg-white/4 border-b flex-none", className)}
     >
       <FieldGroup className="gap-2">
         <div className="flex items-center justify-between">

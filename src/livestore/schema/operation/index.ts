@@ -34,7 +34,7 @@ export const operationsEvents = {
     name: "v1.RecordKeeperUpdated",
     schema: Schema.Struct({ id: Schema.String, recordKeeper: Schema.String }),
   }),
-  completedAtUpdated: Events.synced({
+  operationCompleted: Events.synced({
     name: "v1.OperationCompleted",
     schema: Schema.Struct({ id: Schema.String, completedAt: Schema.Date }),
   }),

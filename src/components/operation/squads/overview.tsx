@@ -1,18 +1,21 @@
 import { SquadCard } from "@/components/operation/squads/card";
 import { operationSquads$ } from "@/livestore/queries/operation/squads";
 import { useStore } from "@livestore/react";
-import { NewSquad } from "./new-squad";
+import { NewSquadButton } from "./new-squad-button";
 
 export const OperationSquads = ({ operationId }: { operationId: string }) => {
   const { store } = useStore();
   const squads = store.useQuery(operationSquads$(operationId));
 
   return (
-    <section className="p-8 gap-8 h-full flex items-stretch">
-      {squads.map((squad) => (
-        <SquadCard key={squad.id} squad={squad} />
-      ))}
-      <NewSquad operationId={operationId} />
+    <section className="p-8 h-full overflow-x-auto">
+      <div className="h-full flex gap-8 items-stretch">
+        {squads.map((squad) => (
+          <SquadCard key={squad.id} squad={squad} />
+        ))}
+        <NewSquadButton operationId={operationId} />
+        <div className="w-px shrink-0" />
+      </div>
     </section>
   );
 };

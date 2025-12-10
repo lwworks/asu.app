@@ -1,31 +1,41 @@
-import { Button } from "@/components/ui/button";
 import type { Squad } from "@/livestore/schema/operation/squad";
-import { PauseIcon, SquareIcon } from "lucide-react";
+import type { SquadMember } from "@/livestore/schema/operation/squad-member";
+import { EmailReportForm } from "./email-report-form";
+import { EndOperationButton } from "./end-operation-button";
+import { PauseOperationButton } from "./pause-operation-button";
 import { StartOperationButton } from "./start-operation-button";
 
-export const SquadActions = ({ squad }: { squad: Squad }) => {
+export const SquadActions = ({
+  squad,
+  members,
+}: {
+  squad: Squad;
+  members: SquadMember[];
+}) => {
+  const membersWithoutEndPressure = members.filter(
+    (member) => member.endPressure === null
+  ).length;
+
   return (
-    <>
-      <div className="p-6 bg-white/4 flex gap-2 border-t">
-        {squad.status === "standby" && (
-          <StartOperationButton squadId={squad.id} />
-        )}
-        {squad.status === "active" && (
-          <>
-            <Button variant="outline" size="lg">
-              <PauseIcon className="size-3.5" />
-              <span>Einsatz pausieren</span>
-            </Button>
-            <Button
-              className="bg-destructive hover:bg-destructive/90"
-              size="lg"
-            >
-              <SquareIcon className="size-3.5" />
-              <span>Einsatz beenden</span>
-            </Button>
-          </>
-        )}
-      </div>
-    </>
+    <div className="flex gap-2">
+      {squad.status === "standby" && (
+        <StartOperationButton squadId={squad.id} />
+      )}
+      {squad.status === "active" && (
+        <>
+          <PauseOperationButton
+            squadId={squad.id}
+            className="w-[calc(50%-4px)]"
+          />
+          <EndOperationButton
+            squadId={squad.id}
+            className="w-[calc(50%-4px)]"
+          />
+        </>
+      )}
+      {squad.status === "ended" && membersWithoutEndPressure === 0 && (
+        <EmailReportForm squadId={squad.id} />
+      )}
+    </div>
   );
 };

@@ -6,7 +6,7 @@ import { events } from "@/livestore/schema";
 import { useStore } from "@livestore/react";
 import { PlusIcon } from "lucide-react";
 
-export const NewSquad = ({ operationId }: { operationId: string }) => {
+export const NewSquadButton = ({ operationId }: { operationId: string }) => {
   const { store } = useStore();
   const { currentTime } = useCurrentTime();
 
@@ -26,7 +26,7 @@ export const NewSquad = ({ operationId }: { operationId: string }) => {
   };
 
   return (
-    <Card className="bg-background w-96 flex items-center justify-center">
+    <Card className="bg-background w-96 shrink-0 flex items-center justify-center">
       <Button variant="ghost" onClick={createSquad}>
         <PlusIcon className="size-4" />
         <span>Trupp hinzufügen</span>

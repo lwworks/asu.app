@@ -12,43 +12,43 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as EinsatzOperationIdRouteImport } from './routes/einsatz/$operationId'
+import { Route as EinsatzOperationSlugRouteImport } from './routes/einsatz/$operationSlug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EinsatzOperationIdRoute = EinsatzOperationIdRouteImport.update({
-  id: '/einsatz/$operationId',
-  path: '/einsatz/$operationId',
+const EinsatzOperationSlugRoute = EinsatzOperationSlugRouteImport.update({
+  id: '/einsatz/$operationSlug',
+  path: '/einsatz/$operationSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/einsatz/$operationId': typeof EinsatzOperationIdRoute
+  '/einsatz/$operationSlug': typeof EinsatzOperationSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/einsatz/$operationId': typeof EinsatzOperationIdRoute
+  '/einsatz/$operationSlug': typeof EinsatzOperationSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/einsatz/$operationId': typeof EinsatzOperationIdRoute
+  '/einsatz/$operationSlug': typeof EinsatzOperationSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/einsatz/$operationId'
+  fullPaths: '/' | '/einsatz/$operationSlug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/einsatz/$operationId'
-  id: '__root__' | '/' | '/einsatz/$operationId'
+  to: '/' | '/einsatz/$operationSlug'
+  id: '__root__' | '/' | '/einsatz/$operationSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  EinsatzOperationIdRoute: typeof EinsatzOperationIdRoute
+  EinsatzOperationSlugRoute: typeof EinsatzOperationSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -60,11 +60,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/einsatz/$operationId': {
-      id: '/einsatz/$operationId'
-      path: '/einsatz/$operationId'
-      fullPath: '/einsatz/$operationId'
-      preLoaderRoute: typeof EinsatzOperationIdRouteImport
+    '/einsatz/$operationSlug': {
+      id: '/einsatz/$operationSlug'
+      path: '/einsatz/$operationSlug'
+      fullPath: '/einsatz/$operationSlug'
+      preLoaderRoute: typeof EinsatzOperationSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -79,19 +79,19 @@ declare module './routes/index' {
     FileRoutesByPath['/']['fullPath']
   >
 }
-declare module './routes/einsatz/$operationId' {
+declare module './routes/einsatz/$operationSlug' {
   const createFileRoute: CreateFileRoute<
-    '/einsatz/$operationId',
-    FileRoutesByPath['/einsatz/$operationId']['parentRoute'],
-    FileRoutesByPath['/einsatz/$operationId']['id'],
-    FileRoutesByPath['/einsatz/$operationId']['path'],
-    FileRoutesByPath['/einsatz/$operationId']['fullPath']
+    '/einsatz/$operationSlug',
+    FileRoutesByPath['/einsatz/$operationSlug']['parentRoute'],
+    FileRoutesByPath['/einsatz/$operationSlug']['id'],
+    FileRoutesByPath['/einsatz/$operationSlug']['path'],
+    FileRoutesByPath['/einsatz/$operationSlug']['fullPath']
   >
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  EinsatzOperationIdRoute: EinsatzOperationIdRoute,
+  EinsatzOperationSlugRoute: EinsatzOperationSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

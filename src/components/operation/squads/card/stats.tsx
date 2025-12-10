@@ -1,0 +1,126 @@
+import { useCurrentTime } from "@/context/current-time";
+import { cn } from "@/lib/cn";
+import { duration } from "@/lib/duration";
+import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
+import type { Squad } from "@/livestore/schema/operation/squad";
+import type { SquadLog } from "@/livestore/schema/operation/squad-log";
+import type { SquadMember } from "@/livestore/schema/operation/squad-member";
+import { useStore } from "@livestore/react";
+import { differenceInSeconds } from "date-fns";
+
+const predictedPressure = (
+  startPressure: number,
+  startTime: Date | null,
+  currentTime: Date,
+  logs: SquadLog[],
+  defaultBarsPerMinute: number
+) => {
+  if (!startTime || !startPressure) return 0;
+  let duration = differenceInSeconds(currentTime, startTime) / 60;
+  let barsPerMinute = defaultBarsPerMinute;
+  let latestPressure = startPressure;
+
+  const logsWithLowerPressures = logs.filter(
+    (log) => log.pressure !== null && log.pressure < startPressure
+  );
+  if (logsWithLowerPressures.length > 0) {
+    const logWithLowestPressure = logsWithLowerPressures.sort(
+      (a, b) => a.pressure! - b.pressure!
+    )[0];
+    latestPressure = logWithLowestPressure.pressure!;
+    duration =
+      differenceInSeconds(logWithLowestPressure.timestamp, startTime) / 60;
+    barsPerMinute = (startPressure - latestPressure) / duration;
+    duration =
+      differenceInSeconds(currentTime, logWithLowestPressure.timestamp) / 60;
+  }
+  return Math.max(
+    Math.ceil((latestPressure - duration * barsPerMinute) / 5) * 5,
+    0
+  );
+};
+
+export const SquadStats = ({
+  squad,
+  members,
+}: {
+  squad: Squad;
+  members: SquadMember[];
+}) => {
+  const { currentTime } = useCurrentTime();
+  const { store } = useStore();
+  const logs = store.useQuery(squadLogs$(squad.id)) as SquadLog[];
+
+  const defaultBarsPerMinute = 10;
+  const defaultStartPressure = 300;
+
+  const startPressure =
+    members
+      .filter((member) => member.startPressure !== null)
+      .sort((a, b) => a.startPressure! - b.startPressure!)[0]?.startPressure ??
+    defaultStartPressure;
+
+  const pressure = predictedPressure(
+    startPressure,
+    squad.startedAt,
+    currentTime,
+    logs,
+    defaultBarsPerMinute
+  );
+
+  return (
+    <div>
+      <div className="grid grid-cols-2 divide-x border-b">
+        <div className="p-6">
+          <div
+            className={cn(
+              "text-3xl font-mono",
+              squad.startedAt && "text-white"
+            )}
+          >
+            {squad.startedAt ? duration(squad.startedAt, currentTime) : "00:00"}
+          </div>
+          <div className="text-sm uppercase tracking-wider text-muted-foreground">
+            im Einsatz
+          </div>
+        </div>
+        <div className="p-6">
+          <div
+            className={cn(
+              "text-3xl font-mono text-emerald-300",
+              pressure < 200 && "text-amber-300",
+              pressure < 100 && "text-destructive"
+            )}
+          >
+            {pressure}
+          </div>
+          <div className="text-sm uppercase tracking-wider text-muted-foreground">
+            Restdruck
+          </div>
+        </div>
+      </div>
+      <div className="relative w-full h-2 bg-zinc-800">
+        <div
+          className={cn(
+            "h-full bg-emerald-300",
+            pressure < 200 && "bg-amber-300",
+            pressure < 100 && "bg-destructive"
+          )}
+          style={{ width: `${(pressure / 300) * 100}%` }}
+        />
+        <div className="absolute inset-y-0 left-1/6 w-px -translate-x-px bg-zinc-800" />
+        <div className="absolute inset-y-0 left-1/3 w-px -translate-x-px bg-zinc-800" />
+        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-zinc-800" />
+        <div className="absolute inset-y-0 left-2/3 w-px -translate-x-px bg-zinc-800" />
+        <div className="absolute inset-y-0 left-5/6 w-px -translate-x-px bg-zinc-800" />
+      </div>
+      <div className="flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider text-center px-8 border-t pt-1">
+        <div className="w-1/5 shrink-0">50</div>
+        <div className="w-1/5 shrink-0">100</div>
+        <div className="w-1/5 shrink-0">150</div>
+        <div className="w-1/5 shrink-0">200</div>
+        <div className="w-1/5 shrink-0">250</div>
+      </div>
+    </div>
+  );
+};

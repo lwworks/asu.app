@@ -5,6 +5,7 @@ export const operationsTable = State.SQLite.table({
   columns: {
     id: State.SQLite.text({ primaryKey: true }),
     description: State.SQLite.text({ default: "" }),
+    slug: State.SQLite.text({ default: "" }),
     createdAt: State.SQLite.integer({
       schema: Schema.DateFromNumber,
     }),
@@ -24,6 +25,7 @@ export const operationsEvents = {
     schema: Schema.Struct({
       id: Schema.String,
       description: Schema.String,
+      slug: Schema.String,
       createdAt: Schema.Date,
       recordKeeper: Schema.String,
     }),
@@ -41,11 +43,23 @@ export const operationsEvents = {
 export const operationsMaterializers = State.SQLite.materializers(
   operationsEvents,
   {
-    "v1.OperationCreated": ({ id, description, createdAt, recordKeeper }) =>
-      operationsTable.insert({ id, description, createdAt, recordKeeper }),
+    "v1.OperationCreated": ({
+      id,
+      description,
+      slug,
+      createdAt,
+      recordKeeper,
+    }) =>
+      operationsTable.insert({
+        id,
+        description,
+        slug,
+        createdAt,
+        recordKeeper,
+      }),
     "v1.RecordKeeperUpdated": ({ id, recordKeeper }) =>
-      operationsTable.update({ id, recordKeeper }),
+      operationsTable.update({ recordKeeper }).where({ id }),
     "v1.OperationCompleted": ({ id, completedAt }) =>
-      operationsTable.update({ id, completedAt }),
+      operationsTable.update({ completedAt }).where({ id }),
   }
 );

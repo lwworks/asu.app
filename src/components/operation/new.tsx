@@ -5,6 +5,7 @@ import { useStore } from "@livestore/react";
 import { useNavigate } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { useState, type FormEvent } from "react";
+import slugify from "slugify";
 import {
   Card,
   CardContent,
@@ -30,13 +31,19 @@ export const NewOperation = () => {
     const startDate = formData.get("start-date") as string;
     if (startDate) createdAt = new Date(startDate);
     const description = formData.get("description") as string;
+    const slug = slugify(
+      `${format(createdAt, "yyyyMMdd-HHmm")}-${description}`,
+      { lower: true, strict: true }
+    );
     const recordKeeper = formData.get("record-keeper") as string;
     const operationId = crypto.randomUUID();
+    const squadId = crypto.randomUUID();
 
     store.commit(
       events.operationCreated({
         id: operationId,
         description,
+        slug,
         createdAt,
         recordKeeper,
       })
@@ -44,7 +51,7 @@ export const NewOperation = () => {
     if (withFirstSquad) {
       store.commit(
         events.squadCreated({
-          id: crypto.randomUUID(),
+          id: squadId,
           name: "Trupp 1",
           operationId,
           createdAt,
@@ -52,8 +59,25 @@ export const NewOperation = () => {
           safetyTeam: false,
         })
       );
+      store.commit(
+        events.squadStarted({
+          id: squadId,
+          startedAt: currentTime,
+        })
+      );
+      store.commit(
+        events.squadLogCreatedWithText({
+          id: crypto.randomUUID(),
+          squadId,
+          text: "Einsatz gestartet",
+          timestamp: currentTime,
+        })
+      );
     }
-    navigate({ to: "/einsatz/$operationId", params: { operationId } });
+    navigate({
+      to: "/einsatz/$operationSlug",
+      params: { operationSlug: slug },
+    });
   };
 
   return (
@@ -101,16 +125,16 @@ export const NewOperation = () => {
             </FieldGroup>
           </CardContent>
           <CardFooter className="grid grid-cols-2 gap-2 border-t">
+            <Button type="submit" className="w-full order-2">
+              Einsatz starten
+            </Button>
             <Button
               type="submit"
               variant="outline"
-              className="w-full"
+              className="w-full order-1"
               onClick={() => setWithFirstSquad(true)}
             >
               Mit erstem Trupp starten
-            </Button>
-            <Button type="submit" className="w-full">
-              Einsatz starten
             </Button>
           </CardFooter>
         </form>

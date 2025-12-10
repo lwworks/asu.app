@@ -1,8 +1,8 @@
 import { tables } from "@/livestore/schema";
 import { queryDb } from "@livestore/livestore";
 
-export const operation$ = (operationId: string) => {
-  return queryDb(tables.operations.where({ id: operationId }).first(), {
+export const operation$ = (operationSlug: string) => {
+  return queryDb(tables.operations.where({ slug: operationSlug }).first(), {
     label: "operation",
   });
 };

@@ -4,19 +4,21 @@ import { operation$ } from "@/livestore/queries/operation";
 import { useStore } from "@livestore/react";
 
 export const Route = createFileRoute({
-  loader: async ({ params: { operationId } }) => operationId,
+  loader: async ({ params: { operationSlug } }) => operationSlug,
   component: Operation,
 });
 
 function Operation() {
-  const operationId = Route.useLoaderData();
+  const operationSlug = Route.useLoaderData();
   const { store } = useStore();
-  const operation = store.query(operation$(operationId));
+  const operation = store.useQuery(operation$(operationSlug));
 
   return (
     <>
       <OperationHeader operation={operation} />
-      <OperationSquads operationId={operationId} />
+      <main className="h-[calc(100vh-4rem)]">
+        <OperationSquads operationId={operation.id} />
+      </main>
     </>
   );
 }

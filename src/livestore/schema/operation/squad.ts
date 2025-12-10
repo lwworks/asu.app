@@ -38,6 +38,10 @@ export const squadsEvents = {
       safetyTeam: Schema.Boolean,
     }),
   }),
+  squadStarted: Events.synced({
+    name: "v1.SquadStarted",
+    schema: Schema.Struct({ id: Schema.String, startedAt: Schema.Date }),
+  }),
 };
 
 export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
@@ -57,4 +61,6 @@ export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
       status,
       safetyTeam,
     }),
+  "v1.SquadStarted": ({ id, startedAt }) =>
+    squadsTable.update({ startedAt, status: "active" }).where({ id }),
 });

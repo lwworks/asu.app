@@ -33,6 +33,7 @@ export const Livestore = ({ children }: { children: React.ReactNode }) => {
       adapter={adapter}
       renderLoading={(_) => <div>Loading LiveStore ({_.stage})...</div>}
       batchUpdates={batchUpdates}
+      storeId="asu-app"
     >
       {children}
     </LiveStoreProvider>

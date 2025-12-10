@@ -8,7 +8,7 @@ import type { SquadLog } from "@/livestore/schema/operation/squad-log";
 import { useStore } from "@livestore/react";
 import { format } from "date-fns";
 import { ArrowUpIcon } from "lucide-react";
-import { useRef, type FormEvent } from "react";
+import { useEffect, useRef, type FormEvent } from "react";
 
 export const SquadLogs = ({ squadId }: { squadId: string }) => {
   const { currentTime } = useCurrentTime();
@@ -54,6 +54,9 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
       );
     }
     (event.target as HTMLFormElement).reset();
+  };
+
+  useEffect(() => {
     setTimeout(
       () =>
         logsRef.current?.scrollTo({
@@ -62,7 +65,7 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
         }),
       100
     );
-  };
+  }, [logs.length]);
 
   return (
     <div className="flex flex-col flex-1 min-h-0">

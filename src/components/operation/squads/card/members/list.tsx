@@ -1,12 +1,14 @@
 import { cn } from "@/lib/cn";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, PencilIcon } from "lucide-react";
 
 export const MembersList = ({
   members,
+  setMemberToEdit,
   status,
 }: {
   members: SquadMember[];
+  setMemberToEdit: (member: SquadMember) => void;
   status: string;
 }) => {
   if (members.length === 0) return null;
@@ -16,7 +18,13 @@ export const MembersList = ({
       <ul className="space-y-2">
         {members.map((member) => (
           <li key={member.id} className="flex items-center justify-between">
-            <div>
+            <button
+              className="relative group cursor-pointer text-left"
+              onClick={() => setMemberToEdit(member)}
+            >
+              <div className="absolute w-6 inset-y-0 -left-6 pt-1 justify-center hidden group-hover:flex">
+                <PencilIcon className="size-3 text-muted-foreground/50" />
+              </div>
               <div className="text-sm">
                 <span>{member.name}</span>
                 {member.isLeader ? (
@@ -28,7 +36,7 @@ export const MembersList = ({
               <div className="text-xs text-muted-foreground">
                 {member.organization}
               </div>
-            </div>
+            </button>
             <div className="flex">
               <div className="text-right">
                 <div className="text-sm font-mono">

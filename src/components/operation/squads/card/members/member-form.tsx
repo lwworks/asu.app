@@ -20,17 +20,27 @@ import { cn } from "@/lib/utils";
 import { events } from "@/livestore/schema";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
 import { useStore } from "@livestore/react";
-import { AlertTriangleIcon, MinusIcon, PlusIcon, XIcon } from "lucide-react";
+import {
+  AlertTriangleIcon,
+  CheckIcon,
+  MinusIcon,
+  PlusIcon,
+  XIcon,
+} from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 
 export const MemberForm = ({
   squadId,
   members,
+  memberToEdit,
+  setMemberToEdit,
   onCloseClick,
   className,
 }: {
   squadId: string;
   members: SquadMember[];
+  memberToEdit?: SquadMember | null;
+  setMemberToEdit: (member: SquadMember | null) => void;
   onCloseClick: () => void;
   className?: string;
 }) => {
@@ -41,8 +51,19 @@ export const MemberForm = ({
   const [organization, setOrganization] = useState("");
   const [organizationError, setOrganizationError] = useState<string>("");
   const [startPressure, setStartPressure] = useState(300);
-
+  const [equipmentId, setEquipmentId] = useState("");
+  const [isLeader, setIsLeader] = useState(false);
   const showCloseButton = members.length > 1;
+
+  useEffect(() => {
+    if (memberToEdit) {
+      setName(memberToEdit.name);
+      setOrganization(memberToEdit.organization ?? "");
+      setStartPressure(memberToEdit.startPressure);
+      setEquipmentId(memberToEdit.equipmentId ?? "");
+      setIsLeader(memberToEdit.isLeader);
+    }
+  }, [memberToEdit]);
 
   useEffect(() => {
     const newMember = availableMembers.find((m) => m.name === name);
@@ -66,41 +87,72 @@ export const MemberForm = ({
       setOrganizationError("Organisation auswählen.");
       return;
     }
-    const formData = new FormData(event.target as HTMLFormElement);
-    const startPressure = Number(formData.get("startPressure"));
-    const equipmentId = formData.get("equipmentId") as string;
-    const isLeader = formData.get("isLeader") === "on";
+    if (memberToEdit) {
+      let editedFields = [];
+      if (name !== memberToEdit.name) editedFields.push(`Name: ${name}`);
+      if (organization !== memberToEdit.organization)
+        editedFields.push(`Organisation: ${organization}`);
+      if (startPressure !== memberToEdit.startPressure)
+        editedFields.push(`Startdruck: ${startPressure}`);
+      if (equipmentId !== memberToEdit.equipmentId)
+        editedFields.push(`Gerät: ${equipmentId}`);
+      if (isLeader !== memberToEdit.isLeader)
+        editedFields.push(`Truppführer/in: ${isLeader ? "Ja" : "Nein"}`);
 
-    store.commit(
-      events.squadMemberCreated({
-        id: crypto.randomUUID(),
-        squadId,
-        name,
-        organization,
-        startPressure,
-        equipmentId,
-        isLeader,
-      })
-    );
-
-    store.commit(
-      events.squadLogCreatedWithTextAndPressure({
-        id: crypto.randomUUID(),
-        squadId,
-        text: `${
-          isLeader ? "Truppführer/in" : "Truppmitglied"
-        } ${name} (${organization})${
-          equipmentId ? ` mit Gerät ${equipmentId}` : ""
-        } hinzugefügt.`,
-        pressure: startPressure,
-        timestamp: currentTime,
-      })
-    );
+      if (editedFields.length > 0) {
+        store.commit(
+          events.squadLogCreatedWithText({
+            id: crypto.randomUUID(),
+            squadId,
+            text: `${memberToEdit.name} bearbeitet: ${editedFields.join(", ")}`,
+            timestamp: currentTime,
+          })
+        );
+        store.commit(
+          events.squadMemberUpdated({
+            id: memberToEdit.id,
+            name,
+            organization,
+            startPressure,
+            equipmentId,
+            isLeader,
+          })
+        );
+      }
+      setMemberToEdit(null);
+    } else {
+      store.commit(
+        events.squadMemberCreated({
+          id: crypto.randomUUID(),
+          squadId,
+          name,
+          organization,
+          startPressure,
+          equipmentId,
+          isLeader,
+        })
+      );
+      store.commit(
+        events.squadLogCreatedWithTextAndPressure({
+          id: crypto.randomUUID(),
+          squadId,
+          text: `${
+            isLeader ? "Truppführer/in" : "Truppmitglied"
+          } ${name} (${organization})${
+            equipmentId ? ` mit Gerät ${equipmentId}` : ""
+          } hinzugefügt.`,
+          pressure: startPressure,
+          timestamp: currentTime,
+        })
+      );
+    }
 
     (event.target as HTMLFormElement).reset();
     setName("");
     setOrganization("");
     setStartPressure(300);
+    setEquipmentId("");
+    setIsLeader(false);
   };
 
   return (
@@ -111,7 +163,7 @@ export const MemberForm = ({
       <FieldGroup className="gap-2">
         <div className="flex items-center justify-between">
           <FieldLegend variant="label" className="m-0 font-normal">
-            Truppmitglied hinzufügen
+            Truppmitglied {memberToEdit ? "bearbeiten" : "hinzufügen"}
           </FieldLegend>
           {showCloseButton ? (
             <Button
@@ -230,6 +282,8 @@ export const MemberForm = ({
               id="equipmentId"
               type="number"
               placeholder="0"
+              value={equipmentId}
+              onChange={(e) => setEquipmentId(e.target.value)}
             />
           </Field>
         </FieldGroup>
@@ -239,6 +293,8 @@ export const MemberForm = ({
               name="isLeader"
               id="isLeader"
               className="h-5 w-5! flex-none cursor-pointer"
+              checked={isLeader}
+              onCheckedChange={(checked: boolean) => setIsLeader(checked)}
             />
             <FieldLabel
               htmlFor="isLeader"
@@ -247,10 +303,17 @@ export const MemberForm = ({
               Truppführer/in
             </FieldLabel>
           </Field>
-          <Button type="submit" variant="default">
-            <PlusIcon className="size-4" />
-            <span>Hinzufügen</span>
-          </Button>
+          {memberToEdit ? (
+            <Button type="submit" variant="default">
+              <CheckIcon className="size-4" />
+              <span>Speichern</span>
+            </Button>
+          ) : (
+            <Button type="submit" variant="default">
+              <PlusIcon className="size-4" />
+              <span>Hinzufügen</span>
+            </Button>
+          )}
         </div>
       </FieldGroup>
     </form>

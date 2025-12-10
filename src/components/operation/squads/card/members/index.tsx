@@ -16,8 +16,13 @@ export const SquadMembers = ({
 }) => {
   const [showNewMemberButton, setShowNewMemberButton] = useState(true);
   const [showMemberForm, setShowMemberForm] = useState(false);
+  const [memberToEdit, setMemberToEdit] = useState<SquadMember | null>(null);
 
   useEffect(() => {
+    if (memberToEdit) {
+      setShowMemberForm(true);
+      return;
+    }
     if (members.length < 2) {
       setShowNewMemberButton(false);
       setShowMemberForm(true);
@@ -25,11 +30,15 @@ export const SquadMembers = ({
       setShowMemberForm(false);
       setShowNewMemberButton(true);
     }
-  }, [members.length]);
+  }, [members.length, memberToEdit]);
 
   return (
     <>
-      <MembersList members={members} status={squad.status} />
+      <MembersList
+        members={members}
+        setMemberToEdit={setMemberToEdit}
+        status={squad.status}
+      />
       {squad.status !== "ended" && (
         <div className="relative">
           {showNewMemberButton && (
@@ -49,6 +58,8 @@ export const SquadMembers = ({
               <MemberForm
                 squadId={squad.id}
                 members={members}
+                memberToEdit={memberToEdit}
+                setMemberToEdit={setMemberToEdit}
                 onCloseClick={() => setShowMemberForm(false)}
               />
             </div>

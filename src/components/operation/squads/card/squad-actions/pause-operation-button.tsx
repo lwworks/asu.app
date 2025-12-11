@@ -35,6 +35,7 @@ export const PauseOperationButton = ({
         <div className="absolute inset-0 bg-card rounded-md overflow-hidden">
           <div className="bg-white/4">
             <Button
+              disabled={true}
               className="bg-amber-200 hover:bg-amber-200/90 w-full"
               onClick={handlePauseOperation}
             >

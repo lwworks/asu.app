@@ -3,7 +3,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Logo } from "@/components/visuals/logo";
 
@@ -18,8 +17,6 @@ export const Header = () => {
                 <Logo className="h-4 text-white" />
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>Einsätze</BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>

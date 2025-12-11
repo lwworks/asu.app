@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 
 const statusLabels = {
   active: "Im Einsatz",
-  standby: "In Bereitschaft",
+  standby: "In Bereitstellung",
   ended: "Beendet",
 };
 

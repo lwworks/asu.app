@@ -42,10 +42,6 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Einsätze</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
             <BreadcrumbItem>{operation.description}</BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

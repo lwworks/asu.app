@@ -14,6 +14,10 @@ export const operationsTable = State.SQLite.table({
       nullable: true,
       schema: Schema.DateFromNumber,
     }),
+    archivedAt: State.SQLite.integer({
+      nullable: true,
+      schema: Schema.DateFromNumber,
+    }),
   },
 });
 
@@ -38,6 +42,10 @@ export const operationsEvents = {
     name: "v1.OperationCompleted",
     schema: Schema.Struct({ id: Schema.String, completedAt: Schema.Date }),
   }),
+  operationArchived: Events.synced({
+    name: "v1.OperationArchived",
+    schema: Schema.Struct({ id: Schema.String, archivedAt: Schema.Date }),
+  }),
 };
 
 export const operationsMaterializers = State.SQLite.materializers(
@@ -61,5 +69,7 @@ export const operationsMaterializers = State.SQLite.materializers(
       operationsTable.update({ recordKeeper }).where({ id }),
     "v1.OperationCompleted": ({ id, completedAt }) =>
       operationsTable.update({ completedAt }).where({ id }),
+    "v1.OperationArchived": ({ id, archivedAt }) =>
+      operationsTable.update({ archivedAt }).where({ id }),
   }
 );

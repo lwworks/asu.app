@@ -21,10 +21,7 @@ export const SquadActions = ({
       {squad.status === "standby" && <StartOperationForm squadId={squad.id} />}
       {squad.status === "active" && (
         <>
-          <PauseOperationButton
-            squadId={squad.id}
-            className="w-[calc(50%-4px)]"
-          />
+          <PauseOperationButton className="w-[calc(50%-4px)]" />
           <EndOperationButton
             squadId={squad.id}
             className="w-[calc(50%-4px)]"

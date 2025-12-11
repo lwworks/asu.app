@@ -1,19 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { useCurrentTime } from "@/context/current-time";
 import { cn } from "@/lib/cn";
-import { useStore } from "@livestore/react";
 import { PauseIcon } from "lucide-react";
 import { useState } from "react";
 
-export const PauseOperationButton = ({
-  squadId,
-  className,
-}: {
-  squadId: string;
-  className?: string;
-}) => {
-  const { store } = useStore();
-  const { currentTime } = useCurrentTime();
+export const PauseOperationButton = ({ className }: { className?: string }) => {
   const [showConfirmButton, setShowConfirmButton] = useState(false);
 
   const handlePauseOperation = () => {};

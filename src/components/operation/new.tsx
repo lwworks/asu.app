@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useCurrentTime } from "@/context/current-time";
+import { cn } from "@/lib/cn";
 import { events } from "@/livestore/schema";
 import { useStore } from "@livestore/react";
 import { useNavigate } from "@tanstack/react-router";
@@ -17,7 +18,7 @@ import {
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
-export const NewOperation = () => {
+export const NewOperation = ({ className }: { className?: string }) => {
   const { currentTime } = useCurrentTime();
   const [withFirstSquad, setWithFirstSquad] = useState<boolean>(false);
   const { store } = useStore();
@@ -81,64 +82,59 @@ export const NewOperation = () => {
   };
 
   return (
-    <section className="p-16">
-      <Card className="max-w-lg">
-        <CardHeader className="border-b">
-          <CardTitle>Neuer Einsatz</CardTitle>
-          <CardDescription>
-            Starte einen neuen Einsatz. Wenn's schnell gehen muss, kannst Du
-            auch direkt mit dem ersten Trupp starten.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="pb-6">
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="start-date">Startzeit</FieldLabel>
-                <Input
-                  id="start-date"
-                  name="start-date"
-                  placeholder={format(currentTime, "dd.MM.yyyy HH:mm")}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="description">Bezeichnung</FieldLabel>
-                <FieldDescription>
-                  Kurze Bezeichnung oder Beschreibung des Einsatzes,
-                  optimalerweise mit Einsatzort.
-                </FieldDescription>
-                <Input
-                  id="description"
-                  name="description"
-                  placeholder="B3 Oerel"
-                  required
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="record-keeper">Überwachende/r</FieldLabel>
-                <Input
-                  id="record-keeper"
-                  name="record-keeper"
-                  placeholder="Max Mustermann"
-                />
-              </Field>
-            </FieldGroup>
-          </CardContent>
-          <CardFooter className="grid grid-cols-2 gap-2 border-t">
-            <Button type="submit" className="w-full order-2">
-              Einsatz starten
-            </Button>
-            <Button
-              type="submit"
-              variant="outline"
-              className="w-full order-1"
-              onClick={() => setWithFirstSquad(true)}
-            >
-              Mit erstem Trupp starten
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
-    </section>
+    <Card className={cn("w-128 py-0", className)}>
+      <CardHeader className="border-b pt-6 bg-white/4">
+        <CardTitle className="text-2xl bold">Neuer Einsatz</CardTitle>
+        <CardDescription>Starte einen neuen Einsatz.</CardDescription>
+      </CardHeader>
+      <form onSubmit={handleSubmit} className="grow flex flex-col">
+        <CardContent className="pb-6 grow">
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="start-date">Startzeit</FieldLabel>
+              <Input
+                id="start-date"
+                name="start-date"
+                placeholder={format(currentTime, "dd.MM.yyyy HH:mm")}
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="description">Bezeichnung</FieldLabel>
+              <FieldDescription>
+                Kurze Bezeichnung oder Beschreibung des Einsatzes,
+                optimalerweise mit Einsatzort.
+              </FieldDescription>
+              <Input
+                id="description"
+                name="description"
+                placeholder="B3 Oerel"
+                required
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="record-keeper">Überwachende/r</FieldLabel>
+              <Input
+                id="record-keeper"
+                name="record-keeper"
+                placeholder="Max Mustermann"
+              />
+            </Field>
+          </FieldGroup>
+        </CardContent>
+        <CardFooter className="grid grid-cols-2 gap-2 border-t bg-white/4 pb-6">
+          <Button type="submit" className="w-full order-2">
+            Einsatz starten
+          </Button>
+          <Button
+            type="submit"
+            variant="outline"
+            className="w-full order-1"
+            onClick={() => setWithFirstSquad(true)}
+          >
+            Mit erstem Trupp starten
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
   );
 };

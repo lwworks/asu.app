@@ -96,7 +96,6 @@ export const StartOperationForm = ({
           name="start-time"
           id="start-time"
           type="text"
-          required
           placeholder={format(currentTime, "HH:mm:ss")}
           aria-invalid={!!inputError}
         />

@@ -60,7 +60,6 @@ export const EndPressureForm = ({
           <span className="text-xs text-muted-foreground">Enddruck</span>
           <br />
           <span>{member.name}</span>
-          {isLast && <span className="text-xs text-muted-foreground">!!!</span>}
         </FieldLabel>
         <ButtonGroup>
           <Input

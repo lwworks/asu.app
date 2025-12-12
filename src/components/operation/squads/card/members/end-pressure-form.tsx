@@ -12,9 +12,11 @@ import type { FormEvent } from "react";
 export const EndPressureForm = ({
   squadId,
   member,
+  isLast,
 }: {
   squadId: string;
   member: SquadMember;
+  isLast: boolean;
 }) => {
   const { store } = useStore();
   const { currentTime } = useCurrentTime();
@@ -38,6 +40,14 @@ export const EndPressureForm = ({
         timestamp: currentTime,
       })
     );
+    if (isLast) {
+      store.commit(
+        events.endPressuresCompleted({
+          id: squadId,
+          endPressuresCompletedAt: currentTime,
+        })
+      );
+    }
   };
 
   return (
@@ -50,6 +60,7 @@ export const EndPressureForm = ({
           <span className="text-xs text-muted-foreground">Enddruck</span>
           <br />
           <span>{member.name}</span>
+          {isLast && <span className="text-xs text-muted-foreground">!!!</span>}
         </FieldLabel>
         <ButtonGroup>
           <Input

@@ -19,8 +19,13 @@ export const EndPressures = ({
 
   return (
     <div className={cn("w-full space-y-2", className)}>
-      {membersWithoutEndPressure.map((member) => (
-        <EndPressureForm key={member.id} squadId={squadId} member={member} />
+      {membersWithoutEndPressure.map((member, index) => (
+        <EndPressureForm
+          key={member.id}
+          squadId={squadId}
+          member={member}
+          isLast={index === 0 && membersWithoutEndPressure.length === 1}
+        />
       ))}
     </div>
   );

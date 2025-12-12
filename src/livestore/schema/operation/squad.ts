@@ -21,6 +21,10 @@ export const squadsTable = State.SQLite.table({
       schema: Schema.DateFromNumber,
       nullable: true,
     }),
+    endPressuresCompletedAt: State.SQLite.integer({
+      schema: Schema.DateFromNumber,
+      nullable: true,
+    }),
   },
 });
 
@@ -46,6 +50,13 @@ export const squadsEvents = {
     name: "v1.SquadEnded",
     schema: Schema.Struct({ id: Schema.String, endedAt: Schema.Date }),
   }),
+  endPressuresCompleted: Events.synced({
+    name: "v1.EndPressuresCompleted",
+    schema: Schema.Struct({
+      id: Schema.String,
+      endPressuresCompletedAt: Schema.Date,
+    }),
+  }),
 };
 
 export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
@@ -69,4 +80,6 @@ export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
     squadsTable.update({ startedAt, status: "active" }).where({ id }),
   "v1.SquadEnded": ({ id, endedAt }) =>
     squadsTable.update({ endedAt, status: "ended" }).where({ id }),
+  "v1.EndPressuresCompleted": ({ id, endPressuresCompletedAt }) =>
+    squadsTable.update({ endPressuresCompletedAt }).where({ id }),
 });

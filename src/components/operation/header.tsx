@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
 import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
+import { EndOperationDialog } from "./end-operation-dialog";
 
 export const OperationHeader = ({ operation }: { operation: Operation }) => {
   const { store } = useStore();
@@ -46,45 +47,48 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex items-center text-sm">
-        <span className="mr-2.5">Überwachende/r:</span>
-        {editRecordKeeper ? (
-          <form
-            className="flex items-center gap-2"
-            onSubmit={handleSubmitRecordKeeper}
-          >
-            <Field>
-              <FieldLabel htmlFor="record-keeper" className="sr-only">
-                Überwachende/r
-              </FieldLabel>
-              <ButtonGroup>
-                <Input
-                  name="record-keeper"
-                  id="record-keeper"
-                  placeholder="Überwachende/r"
-                  defaultValue={operation.recordKeeper ?? ""}
-                  required
-                  autoFocus
-                />
-                <Button type="submit" size="icon" variant="outline">
-                  <CheckIcon className="size-4" />
-                </Button>
-              </ButtonGroup>
-            </Field>
-          </form>
-        ) : (
-          <>
-            <span className="text-foreground">{operation.recordKeeper}</span>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className="hover:bg-transparent!"
-              onClick={() => setEditRecordKeeper(true)}
+      <div className="flex items-center gap-4">
+        <div className="flex items-center text-sm">
+          <span className="mr-2.5">Überwachende/r:</span>
+          {editRecordKeeper ? (
+            <form
+              className="flex items-center gap-2"
+              onSubmit={handleSubmitRecordKeeper}
             >
-              <PencilIcon className="size-3" />
-            </Button>
-          </>
-        )}
+              <Field>
+                <FieldLabel htmlFor="record-keeper" className="sr-only">
+                  Überwachende/r
+                </FieldLabel>
+                <ButtonGroup>
+                  <Input
+                    name="record-keeper"
+                    id="record-keeper"
+                    placeholder="Überwachende/r"
+                    defaultValue={operation.recordKeeper ?? ""}
+                    required
+                    autoFocus
+                  />
+                  <Button type="submit" size="icon" variant="outline">
+                    <CheckIcon className="size-4" />
+                  </Button>
+                </ButtonGroup>
+              </Field>
+            </form>
+          ) : (
+            <>
+              <span className="text-foreground">{operation.recordKeeper}</span>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="hover:bg-transparent!"
+                onClick={() => setEditRecordKeeper(true)}
+              >
+                <PencilIcon className="size-3" />
+              </Button>
+            </>
+          )}
+        </div>
+        <EndOperationDialog operation={operation} />
       </div>
     </header>
   );

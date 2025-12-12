@@ -89,34 +89,36 @@ export function Combobox({
               </Button>
             </CommandEmpty>
             <CommandGroup>
-              {options.map(({ id, label, sublabel }) => (
-                <CommandItem
-                  key={id}
-                  value={label}
-                  onSelect={(newValue) => {
-                    setValue(newValue);
-                    setOpen(false);
-                  }}
-                >
-                  <CheckIcon
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === label ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  <div className="leading-tight">
-                    <span>{label}</span>
-                    {sublabel && (
-                      <>
-                        <br />
-                        <span className="text-xs leading-tight text-muted-foreground/50">
-                          {sublabel}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </CommandItem>
-              ))}
+              {options
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map(({ id, label, sublabel }) => (
+                  <CommandItem
+                    key={id}
+                    value={label}
+                    onSelect={(newValue) => {
+                      setValue(newValue);
+                      setOpen(false);
+                    }}
+                  >
+                    <CheckIcon
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === label ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    <div className="leading-tight">
+                      <span>{label}</span>
+                      {sublabel && (
+                        <>
+                          <br />
+                          <span className="text-xs leading-tight text-muted-foreground/50">
+                            {sublabel}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </CommandItem>
+                ))}
             </CommandGroup>
           </CommandList>
         </Command>

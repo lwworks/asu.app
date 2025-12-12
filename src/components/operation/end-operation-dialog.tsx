@@ -57,7 +57,7 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
             <span>{operation.description}</span>
             <span> vom </span>
             {format(operation.createdAt, "dd.MM.yyyy")}
-            <span> am </span>
+            <span> um </span>
             <span>{format(operation.createdAt, "HH:mm")}</span>
             <span> Uhr</span>
           </div>

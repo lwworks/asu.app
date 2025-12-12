@@ -346,6 +346,56 @@ const availableMembers = [
     name: "Marcel Tiedemann",
     organization: "Feuerwehr Oerel",
   },
+  {
+    id: "6",
+    name: "Jannis Hünecke",
+    organization: "Feuerwehr Barchel",
+  },
+  {
+    id: "7",
+    name: "Benedikt Mügge",
+    organization: "Feuerwehr Barchel",
+  },
+  {
+    id: "8",
+    name: "Leon Böhm",
+    organization: "Feuerwehr Barchel",
+  },
+  {
+    id: "9",
+    name: "Lasse Schulz",
+    organization: "Feuerwehr Barchel",
+  },
+  {
+    id: "10",
+    name: "Janek Tiedemann",
+    organization: "Feuerwehr Oerel",
+  },
+  {
+    id: "11",
+    name: "Lea Duhme",
+    organization: "Feuerwehr Oerel",
+  },
+  {
+    id: "12",
+    name: "Sven Klintworth",
+    organization: "Feuerwehr Oerel",
+  },
+  {
+    id: "13",
+    name: "Rene Bennöder",
+    organization: "Feuerwehr Barchel",
+  },
+  {
+    id: "14",
+    name: "Timo Roggenkamp",
+    organization: "Feuerwehr Oerel",
+  },
+  {
+    id: "15",
+    name: "Philipp Grimm",
+    organization: "Feuerwehr Barchel",
+  },
 ];
 
 const availableOrganizations = [
@@ -356,5 +406,41 @@ const availableOrganizations = [
   {
     id: "2",
     name: "Feuerwehr Barchel",
+  },
+  {
+    id: "3",
+    name: "Feuerwehr Ebersdorf",
+  },
+  {
+    id: "4",
+    name: "Feuerwehr Alfstedt",
+  },
+  {
+    id: "5",
+    name: "Feuerwehr Hipstedt",
+  },
+  {
+    id: "6",
+    name: "Feuerwehr Heinschenwalde",
+  },
+  {
+    id: "7",
+    name: "Feuerwehr Oese",
+  },
+  {
+    id: "8",
+    name: "Feuerwehr Glinde",
+  },
+  {
+    id: "9",
+    name: "Feuerwehr Basdahl",
+  },
+  {
+    id: "10",
+    name: "Feuerwehr Volkmarst",
+  },
+  {
+    id: "11",
+    name: "Feuerwehr Neu Ebersdorf",
   },
 ];

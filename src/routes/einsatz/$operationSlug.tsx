@@ -16,7 +16,7 @@ function Operation() {
   return (
     <>
       <OperationHeader operation={operation} />
-      <main className="h-[calc(100vh-4rem)]">
+      <main className="h-[calc(100vh-6rem)]">
         <OperationSquads operationId={operation.id} />
       </main>
     </>

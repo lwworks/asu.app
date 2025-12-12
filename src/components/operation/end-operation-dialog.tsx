@@ -4,7 +4,7 @@ import { events } from "@/livestore/schema";
 import type { Operation } from "@/livestore/schema/operation";
 import { useStore } from "@livestore/react";
 import { format } from "date-fns";
-import { AlertTriangleIcon, SquareIcon } from "lucide-react";
+import { AlertTriangleIcon, InfoIcon, SquareIcon } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Button } from "../ui/button";
 import {
@@ -63,7 +63,7 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
           </div>
         </DialogHeader>
         <div className="h-64">
-          {showError && (
+          {showError ? (
             <div className="p-6 bg-destructive/10 text-destructive border-y border-destructive -mt-px">
               <div className="flex items-center gap-2">
                 <AlertTriangleIcon className="size-4" />
@@ -78,6 +78,13 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
                   ))}
                 </ul>
               ) : null}
+            </div>
+          ) : (
+            <div className="p-6 bg-amber-200/10 text-sm text-amber-200 border-y border-amber-200 -mt-px flex items-center gap-2">
+              <InfoIcon className="size-3.5" />
+              <h3>
+                Der Einsatz kann anschließend nicht mehr bearbeitet werden.
+              </h3>
             </div>
           )}
         </div>

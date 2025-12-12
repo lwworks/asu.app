@@ -18,10 +18,7 @@ export const OperationCard = ({ operation }: { operation: Operation }) => {
   const endedSquads = squads.filter((squad) => squad.status === "ended").length;
 
   return (
-    <li
-      key={operation.id}
-      className="relative p-6 border-b last:border-b-0 hover:bg-white/4"
-    >
+    <li key={operation.id} className="relative p-6 border-b hover:bg-white/4">
       <Link
         to={`/einsatz/$operationSlug`}
         params={{ operationSlug: operation.slug }}

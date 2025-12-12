@@ -14,6 +14,7 @@ import { useRef } from "react";
 import { SquadLogs } from "./logs";
 import { SquadMembers } from "./members";
 import { EndPressures } from "./members/end-pressures";
+import { SquadOptionsMenu } from "./options-menu";
 import { SquadActions } from "./squad-actions";
 import { SquadStats } from "./stats";
 
@@ -28,9 +29,12 @@ export const SquadCard = ({ squad }: { squad: Squad }) => {
       ref={cardRef}
       className="w-96 shrink-0 py-0 gap-0 h-full flex flex-col overflow-hidden"
     >
-      <CardHeader className="py-6 flex items-center justify-between bg-white/4 flex-none border-b">
-        <CardTitle>{squad.name}</CardTitle>
-        <StatusLabel status={squad.status} />
+      <CardHeader className="h-17 py-0! pr-4.5 flex items-center justify-between bg-white/4 flex-none border-b">
+        <div className="flex items-center gap-4">
+          <CardTitle>{squad.name}</CardTitle>
+          <StatusLabel status={squad.status} />
+        </div>
+        <SquadOptionsMenu squad={squad} />
       </CardHeader>
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
         <SquadMembers squad={squad} members={members} />

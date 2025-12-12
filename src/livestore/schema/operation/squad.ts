@@ -10,7 +10,7 @@ export const squadsTable = State.SQLite.table({
       schema: Schema.DateFromNumber,
     }),
     status: State.SQLite.text({
-      schema: Schema.Literal("active", "standby", "ended"),
+      schema: Schema.Literal("active", "standby", "ended", "archived"),
     }),
     safetyTeam: State.SQLite.boolean(),
     startedAt: State.SQLite.integer({
@@ -22,6 +22,10 @@ export const squadsTable = State.SQLite.table({
       nullable: true,
     }),
     endPressuresCompletedAt: State.SQLite.integer({
+      schema: Schema.DateFromNumber,
+      nullable: true,
+    }),
+    archivedAt: State.SQLite.integer({
       schema: Schema.DateFromNumber,
       nullable: true,
     }),
@@ -57,6 +61,10 @@ export const squadsEvents = {
       endPressuresCompletedAt: Schema.Date,
     }),
   }),
+  squadArchived: Events.synced({
+    name: "v1.SquadArchived",
+    schema: Schema.Struct({ id: Schema.String, archivedAt: Schema.Date }),
+  }),
 };
 
 export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
@@ -82,4 +90,6 @@ export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
     squadsTable.update({ endedAt, status: "ended" }).where({ id }),
   "v1.EndPressuresCompleted": ({ id, endPressuresCompletedAt }) =>
     squadsTable.update({ endPressuresCompletedAt }).where({ id }),
+  "v1.SquadArchived": ({ id, archivedAt }) =>
+    squadsTable.update({ archivedAt, status: "archived" }).where({ id }),
 });

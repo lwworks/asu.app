@@ -1,20 +1,13 @@
-import { StatusLabel } from "@/components/operation/squads/card/status-label";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { squadMembers$ } from "@/livestore/queries/operation/squad-members";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
 import { useStore } from "@livestore/react";
 import { useRef } from "react";
+import { SquadHeader } from "./header";
 import { SquadLogs } from "./logs";
 import { SquadMembers } from "./members";
 import { EndPressures } from "./members/end-pressures";
-import { SquadOptionsMenu } from "./options-menu";
 import { SquadActions } from "./squad-actions";
 import { SquadStats } from "./stats";
 
@@ -29,13 +22,7 @@ export const SquadCard = ({ squad }: { squad: Squad }) => {
       ref={cardRef}
       className="w-96 shrink-0 py-0 gap-0 h-full flex flex-col overflow-hidden"
     >
-      <CardHeader className="h-17 py-0! pr-4.5 flex items-center justify-between bg-white/4 flex-none border-b">
-        <div className="flex items-center gap-4">
-          <CardTitle>{squad.name}</CardTitle>
-          <StatusLabel status={squad.status} />
-        </div>
-        <SquadOptionsMenu squad={squad} />
-      </CardHeader>
+      <SquadHeader squad={squad} />
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
         <SquadMembers squad={squad} members={members} />
         {showStats && <SquadStats squad={squad} members={members} />}

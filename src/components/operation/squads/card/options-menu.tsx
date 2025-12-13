@@ -10,9 +10,20 @@ import { useCurrentTime } from "@/context/current-time";
 import { events } from "@/livestore/schema";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import { useStore } from "@livestore/react";
-import { ArchiveIcon, EllipsisVerticalIcon, EyeIcon } from "lucide-react";
+import {
+  ArchiveIcon,
+  EllipsisVerticalIcon,
+  EyeIcon,
+  TextCursorInputIcon,
+} from "lucide-react";
 
-export const SquadOptionsMenu = ({ squad }: { squad: Squad }) => {
+export const SquadOptionsMenu = ({
+  squad,
+  setEditSquadName,
+}: {
+  squad: Squad;
+  setEditSquadName: (editSquadName: boolean) => void;
+}) => {
   const { store } = useStore();
   const { currentTime } = useCurrentTime();
 
@@ -33,6 +44,10 @@ export const SquadOptionsMenu = ({ squad }: { squad: Squad }) => {
         <DropdownMenuItem disabled>
           <EyeIcon className="size-3.5" />
           <span>Detailansicht öffnen</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setEditSquadName(true)}>
+          <TextCursorInputIcon className="size-3.5" />
+          <span>Trupp umbenennen</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

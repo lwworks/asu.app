@@ -141,10 +141,10 @@ export const SquadStats = ({
       </div>
       <div
         className={cn(
-          "relative w-full h-2 border-y",
+          "relative w-full h-2.5 border-y",
           pressure <= criticalPressure
-            ? "bg-destructive/20 border-destructive/20"
-            : "bg-primary/20"
+            ? "bg-stripes-destructive"
+            : "bg-zinc-800"
         )}
       >
         <div
@@ -154,11 +154,21 @@ export const SquadStats = ({
           )}
           style={{ width: `${(pressure / 300) * 100}%` }}
         />
-        <div className="absolute inset-y-0 left-1/6 w-px -translate-x-px bg-zinc-800" />
-        <div className="absolute inset-y-0 left-1/3 w-px -translate-x-px bg-zinc-800" />
-        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-zinc-800" />
-        <div className="absolute inset-y-0 left-2/3 w-px -translate-x-px bg-zinc-800" />
-        <div className="absolute inset-y-0 left-5/6 w-px -translate-x-px bg-zinc-800" />
+        {pressure >= 50 && (
+          <div className="absolute inset-y-0 left-1/6 w-px -translate-x-px bg-zinc-800" />
+        )}
+        {pressure >= 100 && (
+          <div className="absolute inset-y-0 left-1/3 w-px -translate-x-px bg-zinc-800" />
+        )}
+        {pressure >= 150 && (
+          <div className="absolute inset-y-0 left-1/2 w-px -translate-x-px bg-zinc-800" />
+        )}
+        {pressure >= 200 && (
+          <div className="absolute inset-y-0 left-2/3 w-px -translate-x-px bg-zinc-800" />
+        )}
+        {pressure >= 250 && (
+          <div className="absolute inset-y-0 left-5/6 w-px -translate-x-px bg-zinc-800" />
+        )}
       </div>
       <div className="flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider text-center px-8 pt-1">
         <div className="w-1/5 shrink-0">50</div>

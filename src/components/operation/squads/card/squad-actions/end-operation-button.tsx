@@ -46,11 +46,12 @@ export const EndOperationButton = ({
         <div className="absolute inset-0 bg-card rounded-md overflow-hidden">
           <div className="bg-white/4">
             <Button
-              className="bg-destructive hover:bg-destructive/90 w-full"
+              variant="destructive"
+              className="w-full"
               onClick={handleEndOperation}
             >
               <SquareIcon className="size-3.5" />
-              <span>Einsatz beenden</span>
+              <span>Ende bestätigen</span>
             </Button>
           </div>
         </div>

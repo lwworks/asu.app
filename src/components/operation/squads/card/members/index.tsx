@@ -60,7 +60,10 @@ export const SquadMembers = ({
                 members={members}
                 memberToEdit={memberToEdit}
                 setMemberToEdit={setMemberToEdit}
-                onCloseClick={() => setShowMemberForm(false)}
+                onCloseClick={() => {
+                  setShowMemberForm(false);
+                  setMemberToEdit(null);
+                }}
                 className={cn(members.length < 2 && "pt-3")}
               />
             </div>

@@ -104,7 +104,13 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
           <FieldLabel htmlFor="text" className="sr-only">
             Meldung
           </FieldLabel>
-          <Input name="text" id="text" type="text" placeholder="Meldung" />
+          <Input
+            name="text"
+            id="text"
+            type="text"
+            placeholder="Meldung"
+            autoComplete="off"
+          />
         </Field>
         <Field className="w-25">
           <FieldLabel htmlFor="pressure" className="sr-only">
@@ -115,9 +121,10 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
             id="pressure"
             type="number"
             placeholder="Druck"
+            autoComplete="off"
           />
         </Field>
-        <Button type="submit" size="icon">
+        <Button type="submit" size="icon" variant="secondary">
           <ArrowUpIcon className="size-4" />
         </Button>
       </form>

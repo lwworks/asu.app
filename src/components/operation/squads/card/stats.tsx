@@ -1,12 +1,19 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useCurrentTime } from "@/context/current-time";
 import { cn } from "@/lib/cn";
 import { duration } from "@/lib/duration";
+import { latestLogWithPressure$ } from "@/livestore/queries/operation/latest-log-with-pressure";
 import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import type { SquadLog } from "@/livestore/schema/operation/squad-log";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
 import { useStore } from "@livestore/react";
-import { differenceInSeconds } from "date-fns";
+import { differenceInMinutes, differenceInSeconds } from "date-fns";
+import { AlertTriangleIcon } from "lucide-react";
 
 const predictedPressure = (
   startPressure: number,
@@ -50,9 +57,14 @@ export const SquadStats = ({
   const { currentTime } = useCurrentTime();
   const { store } = useStore();
   const logs = store.useQuery(squadLogs$(squad.id)) as SquadLog[];
+  const latestLogWithPressure = store.useQuery(
+    latestLogWithPressure$(squad.id)
+  ) as SquadLog | null;
 
   const defaultBarsPerMinute = 10;
   const defaultStartPressure = 300;
+  const criticalPressure = 60;
+  const pressureUpdateInterval = 10;
 
   const startPressure =
     members
@@ -70,7 +82,7 @@ export const SquadStats = ({
 
   return (
     <div>
-      <div className="grid grid-cols-2 divide-x border-b">
+      <div className="grid grid-cols-2 divide-x">
         <div className="p-6">
           <div
             className={cn(
@@ -85,26 +97,60 @@ export const SquadStats = ({
           </div>
         </div>
         <div className="p-6">
-          <div
-            className={cn(
-              "text-3xl font-mono text-emerald-300",
-              pressure < 200 && "text-amber-300",
-              pressure < 100 && "text-destructive"
+          <div className="flex items-center justify-between">
+            <div
+              className={cn(
+                "text-3xl font-mono text-primary",
+                pressure <= criticalPressure && "text-destructive"
+              )}
+            >
+              {pressure}
+            </div>
+            {pressure <= criticalPressure ? (
+              <Tooltip>
+                <TooltipTrigger>
+                  <AlertTriangleIcon className="size-6 text-destructive" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Rückzug antreten!</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <>
+                {latestLogWithPressure &&
+                  differenceInMinutes(
+                    currentTime,
+                    latestLogWithPressure.timestamp
+                  ) >= pressureUpdateInterval && (
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <AlertTriangleIcon className="size-6 text-destructive" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Druckabfrage erforderlich.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+              </>
             )}
-          >
-            {pressure}
           </div>
           <div className="text-sm uppercase tracking-wider text-muted-foreground">
             Restdruck
           </div>
         </div>
       </div>
-      <div className="relative w-full h-2 bg-zinc-800">
+      <div
+        className={cn(
+          "relative w-full h-2 border-y",
+          pressure <= criticalPressure
+            ? "bg-destructive/20 border-destructive/20"
+            : "bg-primary/20"
+        )}
+      >
         <div
           className={cn(
-            "h-full bg-emerald-300",
-            pressure < 200 && "bg-amber-300",
-            pressure < 100 && "bg-destructive"
+            "h-full bg-primary",
+            pressure <= criticalPressure && "bg-destructive"
           )}
           style={{ width: `${(pressure / 300) * 100}%` }}
         />
@@ -114,7 +160,7 @@ export const SquadStats = ({
         <div className="absolute inset-y-0 left-2/3 w-px -translate-x-px bg-zinc-800" />
         <div className="absolute inset-y-0 left-5/6 w-px -translate-x-px bg-zinc-800" />
       </div>
-      <div className="flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider text-center px-8 border-t pt-1">
+      <div className="flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider text-center px-8 pt-1">
         <div className="w-1/5 shrink-0">50</div>
         <div className="w-1/5 shrink-0">100</div>
         <div className="w-1/5 shrink-0">150</div>

@@ -26,7 +26,14 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
     operationSquadsWithUncompletedEndPressures$(operation.id)
   );
 
-  const showError = squadsWithUncompletedEndPressures.length > 0;
+  const activeSquads = squadsWithUncompletedEndPressures.filter(
+    (squad) => squad.status === "active"
+  );
+  const endedSquads = squadsWithUncompletedEndPressures.filter(
+    (squad) => squad.status === "ended"
+  );
+
+  const showError = activeSquads.length > 0 || endedSquads.length > 0;
 
   const handleCompleteOperation = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,10 +49,7 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="text-destructive hover:text-destructive border-destructive dark:border-destructive"
-        >
+        <Button variant="outline-destructive">
           <SquareIcon className="size-3.5" />
           <span>Einsatz beenden</span>
         </Button>
@@ -71,7 +75,14 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
                   Einsatz kann nicht beendet werden
                 </h3>
               </div>
-              {squadsWithUncompletedEndPressures.length > 0 ? (
+              {activeSquads.length > 0 ? (
+                <ul className="text-sm list-disc mt-2 ml-6 list-inside">
+                  {squadsWithUncompletedEndPressures.map((squad) => (
+                    <li key={squad.id}>{squad.name} ist noch im Einsatz</li>
+                  ))}
+                </ul>
+              ) : null}
+              {endedSquads.length > 0 ? (
                 <ul className="text-sm list-disc mt-2 ml-6 list-inside">
                   {squadsWithUncompletedEndPressures.map((squad) => (
                     <li key={squad.id}>Fehlender Endruck in {squad.name}</li>
@@ -80,7 +91,7 @@ export const EndOperationDialog = ({ operation }: { operation: Operation }) => {
               ) : null}
             </div>
           ) : (
-            <div className="p-6 bg-amber-200/10 text-sm text-amber-200 border-y border-amber-200 -mt-px flex items-center gap-2">
+            <div className="p-6 text-sm flex items-center gap-2">
               <InfoIcon className="size-3.5" />
               <h3>
                 Der Einsatz kann anschließend nicht mehr bearbeitet werden.

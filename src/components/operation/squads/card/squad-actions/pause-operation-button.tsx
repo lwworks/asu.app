@@ -25,12 +25,12 @@ export const PauseOperationButton = ({ className }: { className?: string }) => {
         <div className="absolute inset-0 bg-card rounded-md overflow-hidden">
           <div className="bg-white/4">
             <Button
-              disabled={true}
-              className="bg-amber-200 hover:bg-amber-200/90 w-full"
+              className="w-full"
+              variant="secondary"
               onClick={handlePauseOperation}
             >
               <PauseIcon className="size-3.5" />
-              <span>Einsatz pausieren</span>
+              <span>Pause bestätigen</span>
             </Button>
           </div>
         </div>

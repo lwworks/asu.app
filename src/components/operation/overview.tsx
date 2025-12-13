@@ -38,21 +38,21 @@ export const OperationsOverview = ({ className }: { className?: string }) => {
               value="running"
               className="group relative p-0 pb-2 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer"
             >
-              <span className="absolute -bottom-px inset-x-0 h-px bg-white opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
+              <span className="absolute -bottom-px inset-x-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
               <span>Laufend</span>
             </TabsTrigger>
             <TabsTrigger
               value="completed"
               className="group relative p-0 pb-2 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer"
             >
-              <span className="absolute -bottom-px inset-x-0 h-px bg-white opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
+              <span className="absolute -bottom-px inset-x-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
               <span>Beendet</span>
             </TabsTrigger>
             <TabsTrigger
               value="archived"
               className="group relative p-0 pb-2 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer"
             >
-              <span className="absolute -bottom-px inset-x-0 h-px bg-white opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
+              <span className="absolute -bottom-px inset-x-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
               <span>Archiviert</span>
             </TabsTrigger>
           </TabsList>

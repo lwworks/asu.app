@@ -19,8 +19,10 @@ import {
   squadMembersMaterializers,
   squadMembersTable,
 } from "./operation/squad-member";
+import { uiSettingsEvents, uiSettingsTable } from "./ui-settings";
 
 export const tables = {
+  uiSettings: uiSettingsTable,
   operations: operationsTable,
   squads: squadsTable,
   squadLogs: squadLogsTable,
@@ -28,6 +30,7 @@ export const tables = {
 };
 
 export const events = {
+  ...uiSettingsEvents,
   ...operationsEvents,
   ...squadsEvents,
   ...squadLogsEvents,

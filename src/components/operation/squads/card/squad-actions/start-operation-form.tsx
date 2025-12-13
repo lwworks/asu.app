@@ -1,56 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useCurrentTime } from "@/context/current-time";
 import { cn } from "@/lib/utils";
+import { validateTimeInput } from "@/lib/validate-time-input";
 import { lowestStartPressure$ } from "@/livestore/queries/operation/lowest-start-pressure";
 import { events } from "@/livestore/schema";
 import { useStore } from "@livestore/react";
-import { format, setHours, setMinutes, setSeconds, subDays } from "date-fns";
+import { format } from "date-fns";
 import { PlayIcon } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
-const validateTime = (
-  time: string,
-  currentTime: Date
-): { error?: string; startTime?: Date } => {
-  // Check input format
-  const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
-  if (!timeRegex.test(time)) {
-    return {
-      error: "Format: HH:mm oder HH:mm:ss",
-    };
-  }
-  // Parse the time string
-  const parts = time.split(":");
-  const hours = parseInt(parts[0], 10);
-  const minutes = parseInt(parts[1], 10);
-  const seconds = parts.length === 3 ? parseInt(parts[2], 10) : 0;
-  // Create a date with the input time for today
-  let resultDate = new Date(currentTime);
-  resultDate = setHours(resultDate, hours);
-  resultDate = setMinutes(resultDate, minutes);
-  resultDate = setSeconds(resultDate, seconds);
-
-  // Check if time should be yesterday
-  const currentHours = currentTime.getHours();
-  const currentMinutes = currentTime.getMinutes();
-  const currentSeconds = currentTime.getSeconds();
-  const inputTimeInSeconds = hours * 3600 + minutes * 60 + seconds;
-  const currentTimeInSeconds =
-    currentHours * 3600 + currentMinutes * 60 + currentSeconds;
-  if (inputTimeInSeconds > currentTimeInSeconds) {
-    resultDate = subDays(resultDate, 1);
-  }
-
-  return { startTime: resultDate };
-};
-
 export const StartOperationForm = ({
   squadId,
+  memberCount,
   className,
 }: {
   squadId: string;
+  memberCount: number;
   className?: string;
 }) => {
   const { store } = useStore();
@@ -63,15 +35,12 @@ export const StartOperationForm = ({
     const inputValue = formData.get("start-time") as string;
     let startTime = currentTime;
     if (inputValue !== "") {
-      const { error, startTime: inputTime } = validateTime(
-        inputValue,
-        currentTime
-      );
+      const { error, time } = validateTimeInput(inputValue, currentTime);
       if (error) {
         setInputError(error);
         return;
       }
-      startTime = inputTime!;
+      startTime = time!;
     }
     const { startPressure } = store.query(lowestStartPressure$(squadId));
     store.commit(events.squadStarted({ id: squadId, startedAt: startTime }));
@@ -105,16 +74,24 @@ export const StartOperationForm = ({
           </FieldError>
         ) : null}
       </Field>
-      <Button
-        className={cn(
-          "bg-emerald-300 hover:bg-emerald-300/90 w-full flex-1",
-          className
+      <div className="relative w-full flex-1">
+        <Button
+          className={cn("w-full", className)}
+          type="submit"
+          disabled={memberCount === 0}
+        >
+          <PlayIcon className="size-3.5" />
+          <span>Einsatz starten</span>
+        </Button>
+        {memberCount === 0 && (
+          <Tooltip>
+            <TooltipTrigger className="absolute inset-0" />
+            <TooltipContent>
+              <p>Der Trupp braucht mindestens ein Mitglied.</p>
+            </TooltipContent>
+          </Tooltip>
         )}
-        type="submit"
-      >
-        <PlayIcon className="size-3.5" />
-        <span>Einsatz starten</span>
-      </Button>
+      </div>
     </form>
   );
 };

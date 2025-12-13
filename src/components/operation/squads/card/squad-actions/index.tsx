@@ -18,7 +18,9 @@ export const SquadActions = ({
 
   return (
     <div className="flex gap-2">
-      {squad.status === "standby" && <StartOperationForm squadId={squad.id} />}
+      {squad.status === "standby" && (
+        <StartOperationForm squadId={squad.id} memberCount={members.length} />
+      )}
       {squad.status === "active" && (
         <>
           <PauseOperationButton className="w-[calc(50%-4px)]" />

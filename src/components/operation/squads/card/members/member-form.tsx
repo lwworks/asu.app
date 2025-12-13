@@ -244,7 +244,7 @@ export const MemberForm = ({
                 placeholder="Startdruck"
                 className={cn(
                   "text-center font-mono text-base",
-                  startPressure < 270 && "text-rose-400 text-left"
+                  startPressure < 270 && "text-destructive text-left"
                 )}
                 required
                 value={startPressure}
@@ -253,7 +253,7 @@ export const MemberForm = ({
               {startPressure < 270 && (
                 <Tooltip>
                   <TooltipTrigger className="absolute inset-y-0 w-9 right-9 flex items-center justify-center">
-                    <AlertTriangleIcon className="size-4 text-rose-400" />
+                    <AlertTriangleIcon className="size-4 text-destructive" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Druck zu niedrig.</p>
@@ -304,12 +304,12 @@ export const MemberForm = ({
             </FieldLabel>
           </Field>
           {memberToEdit ? (
-            <Button type="submit" variant="default">
+            <Button type="submit" variant="secondary">
               <CheckIcon className="size-4" />
               <span>Speichern</span>
             </Button>
           ) : (
-            <Button type="submit" variant="default">
+            <Button type="submit" variant="secondary">
               <PlusIcon className="size-4" />
               <span>Hinzufügen</span>
             </Button>

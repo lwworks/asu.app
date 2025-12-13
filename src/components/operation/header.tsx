@@ -12,11 +12,11 @@ import { useStore } from "@livestore/react";
 import { Link } from "@tanstack/react-router";
 import { CheckIcon, PencilIcon } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { UiSettingsDrawer } from "../ui-settings-drawer";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
 import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
-import { EndOperationDialog } from "./end-operation-dialog";
 
 export const OperationHeader = ({ operation }: { operation: Operation }) => {
   const { store } = useStore();
@@ -26,7 +26,10 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const recordKeeper = formData.get("record-keeper") as string;
-    if (!recordKeeper) return;
+    if (!recordKeeper) {
+      setEditRecordKeeper(false);
+      return;
+    }
     store.commit(
       events.recordKeeperUpdated({ id: operation.id, recordKeeper })
     );
@@ -35,7 +38,7 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
 
   return (
     <div>
-      <header className="border-b h-16 flex items-center justify-between px-8">
+      <header className="border-b h-16 flex items-center justify-between pl-8 pr-4">
         <div>
           <Breadcrumb>
             <BreadcrumbList>
@@ -51,7 +54,7 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <div className="flex items-center text-sm">
             <span className="mr-2.5">Überwachende/r:</span>
             {editRecordKeeper ? (
@@ -69,7 +72,6 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
                       id="record-keeper"
                       placeholder="Überwachende/r"
                       defaultValue={operation.recordKeeper ?? ""}
-                      required
                       autoFocus
                     />
                     <Button type="submit" size="icon" variant="outline">
@@ -81,7 +83,7 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
             ) : (
               <>
                 <span className="text-foreground">
-                  {operation.recordKeeper}
+                  {operation.recordKeeper === "" ? "—" : operation.recordKeeper}
                 </span>
                 <Button
                   variant="ghost"
@@ -94,7 +96,8 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
               </>
             )}
           </div>
-          <EndOperationDialog operation={operation} />
+          {/* <EndOperationDialog operation={operation} /> */}
+          <UiSettingsDrawer />
         </div>
       </header>
       <ul className="flex gap-4 px-8 w-full text-sm -mt-px h-[calc(2rem+1px)]">
@@ -111,7 +114,7 @@ export const OperationHeader = ({ operation }: { operation: Operation }) => {
           <Link
             to="/einsatz/$operationSlug"
             params={{ operationSlug: operation.slug }}
-            className="flex h-full items-end text-foreground font-bold border-t border-[#F2FF00]"
+            className="flex h-full items-end text-foreground font-medium border-t border-primary"
           >
             Trupps
           </Link>

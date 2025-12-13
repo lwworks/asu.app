@@ -76,7 +76,7 @@ export function Combobox({
           <CommandList>
             <CommandEmpty className="p-1">
               <Button
-                variant="secondary"
+                variant="ghost"
                 className="w-full justify-start font-normal"
                 onClick={() => {
                   setValue(capitalize(search));

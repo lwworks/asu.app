@@ -6,7 +6,7 @@ import {
 import { useCurrentTime } from "@/context/current-time";
 import { cn } from "@/lib/cn";
 import { duration } from "@/lib/duration";
-import { latestLogWithPressure$ } from "@/livestore/queries/operation/latest-log-with-pressure";
+import { logsWithPressure$ } from "@/livestore/queries/operation/logs-with-pressure";
 import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import type { SquadLog } from "@/livestore/schema/operation/squad-log";
@@ -57,9 +57,11 @@ export const SquadStats = ({
   const { currentTime } = useCurrentTime();
   const { store } = useStore();
   const logs = store.useQuery(squadLogs$(squad.id)) as SquadLog[];
-  const latestLogWithPressure = store.useQuery(
-    latestLogWithPressure$(squad.id)
-  ) as SquadLog | null;
+  const logsWithPressure = store.useQuery(
+    logsWithPressure$(squad.id)
+  ) as SquadLog[];
+  const latestLogWithPressure =
+    logsWithPressure.length > 0 ? logsWithPressure[0] : null;
 
   const defaultBarsPerMinute = 10;
   const defaultStartPressure = 300;

@@ -1,7 +1,6 @@
 "use client";
 
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-react";
-import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 type Option = {
   id: string;
@@ -45,8 +45,12 @@ export function Combobox({
   placeholder: string;
   error?: string;
 }) {
-  const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState("");
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    setSearch("");
+  }, [open]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

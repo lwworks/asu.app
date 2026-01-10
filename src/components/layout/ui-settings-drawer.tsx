@@ -1,3 +1,15 @@
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { uiSettings$ } from "@/livestore/queries/ui-settings";
 import {
   uiSettingsEvents,
@@ -21,18 +33,6 @@ import {
   TabletSmartphoneIcon,
   XIcon,
 } from "lucide-react";
-import { Button } from "./ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./ui/drawer";
-import { Label } from "./ui/label";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 export const UiSettingsDrawer = () => {
   const { store } = useStore();
@@ -60,7 +60,7 @@ export const UiSettingsDrawer = () => {
       </DrawerTrigger>
       <DrawerContent className="p-0">
         <DrawerHeader className="px-6 py-4 bg-white/4 border-b flex flex-row items-center justify-between">
-          <DrawerTitle className="text-lg">Schnelleinstellungen</DrawerTitle>
+          <DrawerTitle className="text-lg">Anzeigeeinstellungen</DrawerTitle>
           <DrawerClose asChild>
             <Button variant="ghost" size="icon">
               <XIcon className="size-4" />
@@ -165,7 +165,7 @@ export const UiSettingsDrawer = () => {
         </div>
         <DrawerFooter className="p-6 bg-white/4 border-t">
           <Button variant="outline" className="w-full" asChild>
-            <Link to="/">
+            <Link to="/einstellungen">
               <span>Zu den Einstellungen</span>
               <ArrowRightIcon className="size-4" />
             </Link>

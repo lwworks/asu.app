@@ -2,6 +2,7 @@ import { operationSquads$ } from "@/livestore/queries/operation/squads";
 import type { Operation } from "@/livestore/schema/operation";
 import { useStore } from "@livestore/react";
 import { Link } from "@tanstack/react-router";
+import { format } from "date-fns";
 import { UsersIcon } from "lucide-react";
 
 export const OperationCard = ({ operation }: { operation: Operation }) => {
@@ -20,11 +21,15 @@ export const OperationCard = ({ operation }: { operation: Operation }) => {
   return (
     <li key={operation.id} className="relative p-6 border-b hover:bg-white/4">
       <Link
-        to={`/einsatz/$operationSlug`}
+        to={`/einsatz/$operationSlug/trupps`}
         params={{ operationSlug: operation.slug }}
+        className="flex items-baseline gap-2"
       >
         <span className="absolute inset-0" />
         <h3 className="text-base font-medium">{operation.description}</h3>
+        <div className="text-sm text-muted-foreground">
+          {format(operation.createdAt, "dd.MM.yyyy")}
+        </div>
       </Link>
       <div className="flex items-center gap-1 mt-2">
         <UsersIcon className="size-3.5 text-muted-foreground/75" />
@@ -34,12 +39,12 @@ export const OperationCard = ({ operation }: { operation: Operation }) => {
           </span>
           {squads.length > 0 && <span>: </span>}
           {activeSquads > 0 && (
-            <span className="text-emerald-300">{activeSquads} aktiv</span>
+            <span className="text-primary">{activeSquads} aktiv</span>
           )}
           {pausedSquads > 0 && (
             <>
               {activeSquads > 0 && <span>, </span>}
-              <span className="text-amber-200">{pausedSquads} pausiert</span>
+              <span className="text-primary">{pausedSquads} pausiert</span>
             </>
           )}
           {standbySquads > 0 && (

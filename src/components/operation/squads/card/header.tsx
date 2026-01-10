@@ -1,5 +1,6 @@
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useCurrentTime } from "@/context/current-time";
 import { events } from "@/livestore/schema";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import { useStore } from "@livestore/react";
@@ -9,6 +10,7 @@ import { StatusLabel } from "./status-label";
 
 export const SquadHeader = ({ squad }: { squad: Squad }) => {
   const { store } = useStore();
+  const { currentTime } = useCurrentTime();
   const [editSquadName, setEditSquadName] = useState(false);
 
   const handleSumbitSquadName = (name: string) => {
@@ -17,6 +19,14 @@ export const SquadHeader = ({ squad }: { squad: Squad }) => {
       return;
     }
     store.commit(events.squadNameUpdated({ id: squad.id, name }));
+    store.commit(
+      events.squadLogCreatedWithText({
+        id: crypto.randomUUID(),
+        squadId: squad.id,
+        text: `Trupp-Name geändert: ${name}`,
+        timestamp: currentTime,
+      })
+    );
     setEditSquadName(false);
   };
 
@@ -35,8 +45,7 @@ export const SquadHeader = ({ squad }: { squad: Squad }) => {
                 handleSumbitSquadName(event.currentTarget.value);
               }
             }}
-            className="font-semibold leading-none text-lg! bg-transparent dark:bg-transparent border-none p-0 focus:ring-0 focus-visible:ring-0 w-48"
-            autoFocus
+            className="font-semibold leading-none text-lg! bg-transparent dark:bg-transparent border-none p-0 w-52 focus:ring-0 focus-visible:ring-0"
             autoComplete="off"
           />
         ) : (

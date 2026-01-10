@@ -33,6 +33,15 @@ export const SquadOptionsMenu = ({
     );
   };
 
+  const handleEditSquadName = () => {
+    setEditSquadName(true);
+  };
+
+  const handleCloseAutoFocus = (event: Event) => {
+    event.preventDefault();
+    document.getElementById("name")?.focus();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,12 +49,15 @@ export const SquadOptionsMenu = ({
           <EllipsisVerticalIcon className="size-3.5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent
+        align="start"
+        onCloseAutoFocus={handleCloseAutoFocus}
+      >
         <DropdownMenuItem disabled>
           <EyeIcon className="size-3.5" />
           <span>Detailansicht öffnen</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setEditSquadName(true)}>
+        <DropdownMenuItem onClick={handleEditSquadName}>
           <TextCursorInputIcon className="size-3.5" />
           <span>Trupp umbenennen</span>
         </DropdownMenuItem>

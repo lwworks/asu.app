@@ -19,7 +19,7 @@ export const uiSettingsTable = State.SQLite.clientDocument({
       mode: "desktop",
       theme: "dark",
       fontSize: "default",
-      squadOrder: "status",
+      squadOrder: "createdAt",
     },
   },
 });

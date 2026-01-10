@@ -36,21 +36,21 @@ export const OperationsOverview = ({ className }: { className?: string }) => {
           <TabsList className="p-0 mt-4 gap-4 h-fit bg-transparent">
             <TabsTrigger
               value="running"
-              className="group relative p-0 pb-2 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer"
+              className="group relative p-0 pb-3 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer font-normal"
             >
               <span className="absolute -bottom-px inset-x-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
               <span>Laufend</span>
             </TabsTrigger>
             <TabsTrigger
               value="completed"
-              className="group relative p-0 pb-2 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer"
+              className="group relative p-0 pb-3 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer font-normal"
             >
               <span className="absolute -bottom-px inset-x-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
               <span>Beendet</span>
             </TabsTrigger>
             <TabsTrigger
               value="archived"
-              className="group relative p-0 pb-2 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer"
+              className="group relative p-0 pb-3 h-fit rounded-none border-none data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent cursor-pointer font-normal"
             >
               <span className="absolute -bottom-px inset-x-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]:opacity-100" />
               <span>Archiviert</span>

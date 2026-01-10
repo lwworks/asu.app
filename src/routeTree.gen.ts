@@ -12,43 +12,59 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as EinsatzOperationSlugRouteImport } from './routes/einsatz/$operationSlug'
+import { Route as EinsatzOperationSlugIndexRouteImport } from './routes/einsatz/$operationSlug/index'
+import { Route as EinsatzOperationSlugTruppsRouteImport } from './routes/einsatz/$operationSlug/trupps'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EinsatzOperationSlugRoute = EinsatzOperationSlugRouteImport.update({
-  id: '/einsatz/$operationSlug',
-  path: '/einsatz/$operationSlug',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const EinsatzOperationSlugIndexRoute =
+  EinsatzOperationSlugIndexRouteImport.update({
+    id: '/einsatz/$operationSlug/',
+    path: '/einsatz/$operationSlug/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EinsatzOperationSlugTruppsRoute =
+  EinsatzOperationSlugTruppsRouteImport.update({
+    id: '/einsatz/$operationSlug/trupps',
+    path: '/einsatz/$operationSlug/trupps',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/einsatz/$operationSlug': typeof EinsatzOperationSlugRoute
+  '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
+  '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/einsatz/$operationSlug': typeof EinsatzOperationSlugRoute
+  '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
+  '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/einsatz/$operationSlug': typeof EinsatzOperationSlugRoute
+  '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
+  '/einsatz/$operationSlug/': typeof EinsatzOperationSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/einsatz/$operationSlug'
+  fullPaths: '/' | '/einsatz/$operationSlug/trupps' | '/einsatz/$operationSlug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/einsatz/$operationSlug'
-  id: '__root__' | '/' | '/einsatz/$operationSlug'
+  to: '/' | '/einsatz/$operationSlug/trupps' | '/einsatz/$operationSlug'
+  id:
+    | '__root__'
+    | '/'
+    | '/einsatz/$operationSlug/trupps'
+    | '/einsatz/$operationSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  EinsatzOperationSlugRoute: typeof EinsatzOperationSlugRoute
+  EinsatzOperationSlugTruppsRoute: typeof EinsatzOperationSlugTruppsRoute
+  EinsatzOperationSlugIndexRoute: typeof EinsatzOperationSlugIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -60,11 +76,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/einsatz/$operationSlug': {
-      id: '/einsatz/$operationSlug'
+    '/einsatz/$operationSlug/trupps': {
+      id: '/einsatz/$operationSlug/trupps'
+      path: '/einsatz/$operationSlug/trupps'
+      fullPath: '/einsatz/$operationSlug/trupps'
+      preLoaderRoute: typeof EinsatzOperationSlugTruppsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/einsatz/$operationSlug/': {
+      id: '/einsatz/$operationSlug/'
       path: '/einsatz/$operationSlug'
       fullPath: '/einsatz/$operationSlug'
-      preLoaderRoute: typeof EinsatzOperationSlugRouteImport
+      preLoaderRoute: typeof EinsatzOperationSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -79,19 +102,29 @@ declare module './routes/index' {
     FileRoutesByPath['/']['fullPath']
   >
 }
-declare module './routes/einsatz/$operationSlug' {
+declare module './routes/einsatz/$operationSlug/trupps' {
   const createFileRoute: CreateFileRoute<
-    '/einsatz/$operationSlug',
-    FileRoutesByPath['/einsatz/$operationSlug']['parentRoute'],
-    FileRoutesByPath['/einsatz/$operationSlug']['id'],
-    FileRoutesByPath['/einsatz/$operationSlug']['path'],
-    FileRoutesByPath['/einsatz/$operationSlug']['fullPath']
+    '/einsatz/$operationSlug/trupps',
+    FileRoutesByPath['/einsatz/$operationSlug/trupps']['parentRoute'],
+    FileRoutesByPath['/einsatz/$operationSlug/trupps']['id'],
+    FileRoutesByPath['/einsatz/$operationSlug/trupps']['path'],
+    FileRoutesByPath['/einsatz/$operationSlug/trupps']['fullPath']
+  >
+}
+declare module './routes/einsatz/$operationSlug/index' {
+  const createFileRoute: CreateFileRoute<
+    '/einsatz/$operationSlug/',
+    FileRoutesByPath['/einsatz/$operationSlug/']['parentRoute'],
+    FileRoutesByPath['/einsatz/$operationSlug/']['id'],
+    FileRoutesByPath['/einsatz/$operationSlug/']['path'],
+    FileRoutesByPath['/einsatz/$operationSlug/']['fullPath']
   >
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  EinsatzOperationSlugRoute: EinsatzOperationSlugRoute,
+  EinsatzOperationSlugTruppsRoute: EinsatzOperationSlugTruppsRoute,
+  EinsatzOperationSlugIndexRoute: EinsatzOperationSlugIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

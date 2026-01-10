@@ -26,7 +26,6 @@ export const NewOperation = ({ className }: { className?: string }) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const formData = new FormData(event.target as HTMLFormElement);
     let createdAt = currentTime;
     const startDate = formData.get("start-date") as string;
@@ -76,7 +75,7 @@ export const NewOperation = ({ className }: { className?: string }) => {
       );
     }
     navigate({
-      to: "/einsatz/$operationSlug",
+      to: "/einsatz/$operationSlug/trupps",
       params: { operationSlug: slug },
     });
   };
@@ -131,7 +130,7 @@ export const NewOperation = ({ className }: { className?: string }) => {
             className="w-full order-1"
             onClick={() => setWithFirstSquad(true)}
           >
-            Mit erstem Trupp starten
+            Mit Trupp starten
           </Button>
         </CardFooter>
       </form>

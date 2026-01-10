@@ -1,6 +1,7 @@
-import { Header } from "@/components/header";
+import { Header } from "@/components/layout/header";
+import { Main } from "@/components/layout/main";
+import { NewOperation } from "@/components/operation/new";
 import { OperationsOverview } from "@/components/operation/overview";
-import { NewOperation } from "../components/operation/new";
 
 export const Route = createFileRoute({
   component: Index,
@@ -9,13 +10,18 @@ export const Route = createFileRoute({
 function Index() {
   return (
     <>
-      <Header />
-      <main className="h-[calc(100vh-4rem)]">
+      <Header
+        tabs={[
+          { label: "Einsätze", href: "/" },
+          { label: "Einstellungen", href: "/einstellungen" },
+        ]}
+      />
+      <Main>
         <div className="h-full flex gap-8 p-8 items-stretch">
           <NewOperation className="h-full" />
           <OperationsOverview className="h-full w-full flex-1" />
         </div>
-      </main>
+      </Main>
     </>
   );
 }

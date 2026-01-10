@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/tooltip";
 import { useCurrentTime } from "@/context/current-time";
 import { cn } from "@/lib/utils";
+import { forces$ } from "@/livestore/queries/force/forces";
+import { organizations$ } from "@/livestore/queries/organization/organizations";
 import { events } from "@/livestore/schema";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
 import { useStore } from "@livestore/react";
@@ -54,6 +56,9 @@ export const MemberForm = ({
   const [equipmentId, setEquipmentId] = useState("");
   const [isLeader, setIsLeader] = useState(false);
   const showCloseButton = members.length > 1;
+
+  const availableMembers = store.query(forces$());
+  const availableOrganizations = store.query(organizations$());
 
   useEffect(() => {
     if (memberToEdit) {
@@ -185,11 +190,14 @@ export const MemberForm = ({
           </FieldLabel>
           <Combobox
             options={availableMembers
-              .filter((m) => !members.map((m) => m.name).includes(m.name))
-              .map((m) => ({
-                id: m.id,
-                label: m.name,
-                sublabel: m.organization,
+              .filter(
+                (member) =>
+                  !members.map((member) => member.name).includes(member.name)
+              )
+              .map((member) => ({
+                id: member.id,
+                label: member.name,
+                sublabel: member.organization ?? undefined,
               }))}
             value={name}
             setValue={setName}
@@ -205,10 +213,12 @@ export const MemberForm = ({
             Organisation
           </FieldLabel>
           <Combobox
-            options={availableOrganizations.map((m) => ({
-              id: m.id,
-              label: m.name,
-            }))}
+            options={[...new Set(availableOrganizations)].map(
+              (organization) => ({
+                id: organization as string,
+                label: organization as string,
+              })
+            )}
             value={organization}
             setValue={setOrganization}
             placeholder="Organisation auswählen..."
@@ -319,128 +329,3 @@ export const MemberForm = ({
     </form>
   );
 };
-
-const availableMembers = [
-  {
-    id: "1",
-    name: "Lukas Brunkhorst",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "2",
-    name: "Niklas Pape",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "3",
-    name: "Nicolai Breden",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "4",
-    name: "Fabian Lau",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "5",
-    name: "Marcel Tiedemann",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "6",
-    name: "Jannis Hünecke",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "7",
-    name: "Benedikt Mügge",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "8",
-    name: "Leon Böhm",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "9",
-    name: "Lasse Schulz",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "10",
-    name: "Janek Tiedemann",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "11",
-    name: "Lea Duhme",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "12",
-    name: "Sven Klintworth",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "13",
-    name: "Rene Bennöder",
-    organization: "Feuerwehr Barchel",
-  },
-  {
-    id: "14",
-    name: "Timo Roggenkamp",
-    organization: "Feuerwehr Oerel",
-  },
-  {
-    id: "15",
-    name: "Philipp Grimm",
-    organization: "Feuerwehr Barchel",
-  },
-];
-
-const availableOrganizations = [
-  {
-    id: "1",
-    name: "Feuerwehr Oerel",
-  },
-  {
-    id: "2",
-    name: "Feuerwehr Barchel",
-  },
-  {
-    id: "3",
-    name: "Feuerwehr Ebersdorf",
-  },
-  {
-    id: "4",
-    name: "Feuerwehr Alfstedt",
-  },
-  {
-    id: "5",
-    name: "Feuerwehr Hipstedt",
-  },
-  {
-    id: "6",
-    name: "Feuerwehr Heinschenwalde",
-  },
-  {
-    id: "7",
-    name: "Feuerwehr Oese",
-  },
-  {
-    id: "8",
-    name: "Feuerwehr Glinde",
-  },
-  {
-    id: "9",
-    name: "Feuerwehr Basdahl",
-  },
-  {
-    id: "10",
-    name: "Feuerwehr Volkmarst",
-  },
-  {
-    id: "11",
-    name: "Feuerwehr Neu Ebersdorf",
-  },
-];

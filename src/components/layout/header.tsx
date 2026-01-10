@@ -20,7 +20,7 @@ export const Header = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <header className="border-b pl-8 pr-4">
+    <header className="border-b px-8">
       <div className="flex items-center justify-between h-16">
         <Breadcrumb>
           <BreadcrumbList>

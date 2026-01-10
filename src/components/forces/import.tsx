@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { checkDateFormat } from "@/lib/check-date-format";
 import { forceByNameAndOrganization$ } from "@/livestore/queries/force/force-by-name-and-organization";
 import { events } from "@/livestore/schema";
 import { useStore } from "@livestore/react";
@@ -57,16 +58,12 @@ export const ImportForces = () => {
           throw new Error("Die Datei enthält keine Daten.");
         }
         for (const row of data.slice(5)) {
-          const annualTraining = parse(
-            row[4] as string,
-            "dd.MM.yyyy",
-            new Date()
-          );
-          const medicalCheck = parse(
-            row[5] as string,
-            "dd.MM.yyyy",
-            new Date()
-          );
+          const annualTraining = checkDateFormat(row[4] as string)
+            ? parse(row[4] as string, "dd.MM.yyyy", new Date())
+            : undefined;
+          const medicalCheck = checkDateFormat(row[5] as string)
+            ? parse(row[5] as string, "dd.MM.yyyy", new Date())
+            : undefined;
           const force = store.query(
             forceByNameAndOrganization$(row[0] as string, row[2] as string)
           );
@@ -84,9 +81,11 @@ export const ImportForces = () => {
           } else {
             const annualTrainingUpdated =
               force[0].annualTraining &&
+              annualTraining &&
               !isSameDay(force[0].annualTraining, annualTraining);
             const medicalCheckUpdated =
               force[0].medicalCheck &&
+              medicalCheck &&
               !isSameDay(force[0].medicalCheck, medicalCheck);
             if (annualTrainingUpdated || medicalCheckUpdated) {
               store.commit(

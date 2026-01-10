@@ -106,7 +106,7 @@ export function Combobox({
                   >
                     <CheckIcon
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "size-4",
                         value === label ? "opacity-100" : "opacity-0"
                       )}
                     />

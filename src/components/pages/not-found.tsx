@@ -2,7 +2,7 @@ import { Header } from "@/components/layout/header";
 import { Main } from "@/components/layout/main";
 import { IconOutline } from "../visuals/icon-outline";
 
-export const NotFound = () => {
+export const NotFoundPage = () => {
   return (
     <>
       <Header

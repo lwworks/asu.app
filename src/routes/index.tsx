@@ -13,6 +13,7 @@ function Index() {
       <Header
         tabs={[
           { label: "Einsätze", href: "/" },
+          { label: "Personal", href: "/personal" },
           { label: "Einstellungen", href: "/einstellungen" },
         ]}
       />

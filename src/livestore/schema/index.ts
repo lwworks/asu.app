@@ -1,4 +1,5 @@
 import { makeSchema, State } from "@livestore/livestore";
+import { forcesEvents, forcesMaterializers, forcesTable } from "./force";
 import {
   operationsEvents,
   operationsMaterializers,
@@ -27,6 +28,7 @@ export const tables = {
   squads: squadsTable,
   squadLogs: squadLogsTable,
   squadMembers: squadMembersTable,
+  forces: forcesTable,
 };
 
 export const events = {
@@ -35,6 +37,7 @@ export const events = {
   ...squadsEvents,
   ...squadLogsEvents,
   ...squadMembersEvents,
+  ...forcesEvents,
 };
 
 const materializers = {
@@ -42,6 +45,7 @@ const materializers = {
   ...squadsMaterializers,
   ...squadLogsMaterializers,
   ...squadMembersMaterializers,
+  ...forcesMaterializers,
 };
 
 const state = State.SQLite.makeState({ tables, materializers });

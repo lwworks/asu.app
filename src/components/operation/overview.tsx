@@ -28,7 +28,7 @@ export const OperationsOverview = ({ className }: { className?: string }) => {
   return (
     <Card className={cn("py-0 gap-0", className)}>
       <CardHeader className="border-b pt-6 pb-0! bg-white/4">
-        <CardTitle className="text-2xl bold">Einsätze</CardTitle>
+        <CardTitle className="text-2xl bold -mb-1">Einsätze</CardTitle>
         <Tabs
           value={filter}
           onValueChange={(value) => setFilter(value as Filter)}

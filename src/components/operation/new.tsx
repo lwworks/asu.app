@@ -83,7 +83,7 @@ export const NewOperation = ({ className }: { className?: string }) => {
   return (
     <Card className={cn("w-128 py-0", className)}>
       <CardHeader className="border-b pt-6 bg-white/4">
-        <CardTitle className="text-2xl bold">Neuer Einsatz</CardTitle>
+        <CardTitle className="text-2xl">Neuer Einsatz</CardTitle>
         <CardDescription>Starte einen neuen Einsatz.</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit} className="grow flex flex-col">

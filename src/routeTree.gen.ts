@@ -11,12 +11,18 @@
 import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PersonalRouteImport } from './routes/personal'
 import { Route as EinstellungenRouteImport } from './routes/einstellungen'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EinsatzOperationSlugIndexRouteImport } from './routes/einsatz/$operationSlug/index'
 import { Route as EinsatzOperationSlugTruppsRouteImport } from './routes/einsatz/$operationSlug/trupps'
 import { Route as EinsatzOperationSlugExportRouteImport } from './routes/einsatz/$operationSlug/export'
 
+const PersonalRoute = PersonalRouteImport.update({
+  id: '/personal',
+  path: '/personal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EinstellungenRoute = EinstellungenRouteImport.update({
   id: '/einstellungen',
   path: '/einstellungen',
@@ -49,6 +55,7 @@ const EinsatzOperationSlugExportRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/einstellungen': typeof EinstellungenRoute
+  '/personal': typeof PersonalRoute
   '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
   '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/einstellungen': typeof EinstellungenRoute
+  '/personal': typeof PersonalRoute
   '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
   '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
@@ -64,6 +72,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/einstellungen': typeof EinstellungenRoute
+  '/personal': typeof PersonalRoute
   '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
   '/einsatz/$operationSlug/': typeof EinsatzOperationSlugIndexRoute
@@ -73,6 +82,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/einstellungen'
+    | '/personal'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
     | '/einsatz/$operationSlug'
@@ -80,6 +90,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/einstellungen'
+    | '/personal'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
     | '/einsatz/$operationSlug'
@@ -87,6 +98,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/einstellungen'
+    | '/personal'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
     | '/einsatz/$operationSlug/'
@@ -95,6 +107,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EinstellungenRoute: typeof EinstellungenRoute
+  PersonalRoute: typeof PersonalRoute
   EinsatzOperationSlugExportRoute: typeof EinsatzOperationSlugExportRoute
   EinsatzOperationSlugTruppsRoute: typeof EinsatzOperationSlugTruppsRoute
   EinsatzOperationSlugIndexRoute: typeof EinsatzOperationSlugIndexRoute
@@ -114,6 +127,13 @@ declare module '@tanstack/react-router' {
       path: '/einstellungen'
       fullPath: '/einstellungen'
       preLoaderRoute: typeof EinstellungenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personal': {
+      id: '/personal'
+      path: '/personal'
+      fullPath: '/personal'
+      preLoaderRoute: typeof PersonalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/einsatz/$operationSlug/export': {
@@ -158,6 +178,15 @@ declare module './routes/einstellungen' {
     FileRoutesByPath['/einstellungen']['fullPath']
   >
 }
+declare module './routes/personal' {
+  const createFileRoute: CreateFileRoute<
+    '/personal',
+    FileRoutesByPath['/personal']['parentRoute'],
+    FileRoutesByPath['/personal']['id'],
+    FileRoutesByPath['/personal']['path'],
+    FileRoutesByPath['/personal']['fullPath']
+  >
+}
 declare module './routes/einsatz/$operationSlug/export' {
   const createFileRoute: CreateFileRoute<
     '/einsatz/$operationSlug/export',
@@ -189,6 +218,7 @@ declare module './routes/einsatz/$operationSlug/index' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EinstellungenRoute: EinstellungenRoute,
+  PersonalRoute: PersonalRoute,
   EinsatzOperationSlugExportRoute: EinsatzOperationSlugExportRoute,
   EinsatzOperationSlugTruppsRoute: EinsatzOperationSlugTruppsRoute,
   EinsatzOperationSlugIndexRoute: EinsatzOperationSlugIndexRoute,

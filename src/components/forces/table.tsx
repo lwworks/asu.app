@@ -28,7 +28,6 @@ import {
   ArrowDownZA,
   MoreHorizontalIcon,
   PencilIcon,
-  PlusIcon,
   SearchIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -41,6 +40,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { IconOutline } from "../visuals/icon-outline";
+import { ForceForm } from "./force-form";
 
 export const ForcesTable = () => {
   const { store } = useStore();
@@ -48,6 +48,8 @@ export const ForcesTable = () => {
     { id: "name", desc: false },
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [forceFormOpen, setForceFormOpen] = useState(false);
+  const [forceId, setForceId] = useState<string | undefined>(undefined);
   const forces = store.useQuery(forcesByOrganization$("all"));
 
   const handleArchiveForce = (id: string) => {
@@ -129,7 +131,12 @@ export const ForcesTable = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem disabled>
+              <DropdownMenuItem
+                onClick={() => {
+                  setForceId(row.original.id);
+                  setForceFormOpen(true);
+                }}
+              >
                 <PencilIcon className="size-3.5" />
                 <span>Bearbeiten</span>
               </DropdownMenuItem>
@@ -178,10 +185,12 @@ export const ForcesTable = () => {
             />
             <SearchIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           </div>
-          <Button disabled>
-            <PlusIcon className="size-4" />
-            <span>Personal hinzufügen</span>
-          </Button>
+          <ForceForm
+            forceId={forceId}
+            setForceId={setForceId}
+            open={forceFormOpen}
+            setOpen={setForceFormOpen}
+          />
         </div>
       </CardHeader>
       <CardContent className="p-0 h-[calc(100%-4.25rem)] overflow-auto">

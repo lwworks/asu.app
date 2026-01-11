@@ -1,5 +1,5 @@
 import { ImportForces } from "@/components/forces/import";
-import { ForcesList } from "@/components/forces/list";
+import { ForcesTable } from "@/components/forces/table";
 import { Header } from "@/components/layout/header";
 import { Main } from "@/components/layout/main";
 
@@ -14,7 +14,7 @@ export const ForcesPage = () => {
         ]}
       />
       <Main className="p-8 flex items-stretch gap-8">
-        <ForcesList />
+        <ForcesTable />
         <div className="w-128 shrink-0">
           <ImportForces />
         </div>

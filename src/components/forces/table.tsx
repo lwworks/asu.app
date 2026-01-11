@@ -13,23 +13,54 @@ import type { Force } from "@/livestore/schema/force";
 import { useStore } from "@livestore/react";
 import {
   type ColumnDef,
+  type SortingState,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { ArrowDownAZ, ArrowDownZA } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../ui/button";
 
 const columns: ColumnDef<Force>[] = [
   {
-    header: "Name",
     accessorKey: "name",
+    header: ({ column }) => {
+      const sorting = column.getIsSorted();
+      return (
+        <Button
+          variant="ghost"
+          className="px-0! text-xs uppercase tracking-wide"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          {sorting === "asc" && <ArrowDownAZ className="size-4" />}
+          {sorting === "desc" && <ArrowDownZA className="size-4" />}
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return <span className="text-foreground">{row.original.name}</span>;
     },
   },
   {
-    header: "Organisation",
     accessorKey: "organization",
+    header: ({ column }) => {
+      const sorting = column.getIsSorted();
+      return (
+        <Button
+          variant="ghost"
+          className="px-0! text-xs uppercase tracking-wide"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Organisation
+          {sorting === "asc" && <ArrowDownAZ className="size-4" />}
+          {sorting === "desc" && <ArrowDownZA className="size-4" />}
+        </Button>
+      );
+    },
   },
   {
     header: "Belastungsübung",
@@ -60,12 +91,18 @@ const columns: ColumnDef<Force>[] = [
 
 export const ForcesTable = () => {
   const { store } = useStore();
+  const [sorting, setSorting] = useState<SortingState>([]);
   const forces = store.useQuery(forcesByOrganization$("all"));
 
   const table = useReactTable({
     data: forces as Force[],
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   return (
@@ -101,23 +138,6 @@ export const ForcesTable = () => {
                 })}
               </TableRow>
             ))}
-            {/* <TableRow className="bg-white/4 hover:bg-white/4">
-              <TableHead className="px-6 text-muted-foreground uppercase tracking-wide text-xs">
-                Name
-              </TableHead>
-              <TableHead className="pr-6 text-muted-foreground uppercase tracking-wide text-xs">
-                Organisation
-              </TableHead>
-              <TableHead className="pr-6 text-muted-foreground uppercase tracking-wide text-xs">
-                Belastungsübung
-              </TableHead>
-              <TableHead className="pr-6 text-muted-foreground uppercase tracking-wide text-xs">
-                G26.3
-              </TableHead>
-              <TableHead className="pr-6 text-muted-foreground uppercase tracking-wide text-xs">
-                Letzte Aktualisierung
-              </TableHead>
-            </TableRow> */}
             <div className="absolute h-px bg-border inset-x-0 bottom-0" />
           </TableHeader>
           <TableBody className="text-muted-foreground">
@@ -150,25 +170,6 @@ export const ForcesTable = () => {
                 </TableCell>
               </TableRow>
             )}
-            {/* {forces.map((force) => (
-              <TableRow key={force.id}>
-                <TableCell className="px-6">{force.name}</TableCell>
-                <TableCell className="pr-6">{force.organization}</TableCell>
-                <TableCell className="pr-6 text-muted-foreground">
-                  {force.annualTraining
-                    ? format(force.annualTraining, "dd.MM.yyyy")
-                    : "-"}
-                </TableCell>
-                <TableCell className="pr-6 text-muted-foreground">
-                  {force.medicalCheck
-                    ? format(force.medicalCheck, "dd.MM.yyyy")
-                    : "-"}
-                </TableCell>
-                <TableCell className="pr-6 text-muted-foreground">
-                  {format(force.updatedAt, "dd.MM.yyyy HH:mm")}
-                </TableCell>
-              </TableRow>
-            ))} */}
           </TableBody>
         </Table>
       </CardContent>

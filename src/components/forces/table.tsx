@@ -12,17 +12,21 @@ import { forcesByOrganization$ } from "@/livestore/queries/force/forces-by-organ
 import type { Force } from "@/livestore/schema/force";
 import { useStore } from "@livestore/react";
 import {
-  type ColumnDef,
-  type SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowDownAZ, ArrowDownZA } from "lucide-react";
+import { ArrowDownAZ, ArrowDownZA, PlusIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { IconOutline } from "../visuals/icon-outline";
 
 const columns: ColumnDef<Force>[] = [
   {
@@ -91,7 +95,10 @@ const columns: ColumnDef<Force>[] = [
 
 export const ForcesTable = () => {
   const { store } = useStore();
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "name", desc: false },
+  ]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const forces = store.useQuery(forcesByOrganization$("all"));
 
   const table = useReactTable({
@@ -100,15 +107,37 @@ export const ForcesTable = () => {
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
     <Card className="flex-1 py-0 gap-0">
-      <CardHeader className="pt-6 bg-white/4 h-17">
-        <CardTitle className="text-2xl mb-1">Verfügbares Personal</CardTitle>
+      <CardHeader className="py-6 border-b bg-white/4 flex items-center justify-between">
+        <CardTitle className="text-2xl">Verfügbares Personal</CardTitle>
+        <div className="flex items-start gap-2">
+          <div className="relative">
+            <Input
+              className="pl-9"
+              placeholder="Personal suchen..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+            />
+            <SearchIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          </div>
+          <Button>
+            <PlusIcon className="size-4" />
+            <span>Personal hinzufügen</span>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="p-0 h-[calc(100%-4.25rem)] overflow-auto">
         <Table wrapperClassName="overflow-x-visible">
@@ -164,9 +193,14 @@ export const ForcesTable = () => {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="bg-card hover:bg-card"
                 >
-                  No results.
+                  <div className="h-96 w-full flex items-center justify-center flex-col gap-8">
+                    <IconOutline className="h-12 text-muted-foreground/50" />
+                    <p className="text-muted-foreground">
+                      Kein Personal gefunden.
+                    </p>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

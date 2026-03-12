@@ -4,6 +4,7 @@ import { makePersistedAdapter } from "@livestore/adapter-web";
 import LiveStoreSharedWorker from "@livestore/adapter-web/shared-worker?sharedworker";
 import { LiveStoreProvider } from "@livestore/react";
 import { unstable_batchedUpdates as batchUpdates } from "react-dom";
+import { StoreError } from "./error";
 import { Loading } from "./loading";
 
 export const Livestore = ({ children }: { children: React.ReactNode }) => {
@@ -33,6 +34,7 @@ export const Livestore = ({ children }: { children: React.ReactNode }) => {
       schema={schema}
       adapter={adapter}
       renderLoading={(_) => <Loading stage={_.stage} />}
+      renderError={(_) => <StoreError error={String(_)} />}
       batchUpdates={batchUpdates}
       storeId="asu-app-dev-4"
     >

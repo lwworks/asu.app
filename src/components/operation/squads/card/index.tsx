@@ -4,6 +4,7 @@ import type { Squad } from "@/livestore/schema/operation/squad";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
 import { useStore } from "@livestore/react";
 import { useRef } from "react";
+import { EndedStats } from "./ended-stats";
 import { SquadHeader } from "./header";
 import { SquadLogs } from "./logs";
 import { SquadMembers } from "./members";
@@ -15,7 +16,10 @@ export const SquadCard = ({ squad }: { squad: Squad }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const { store } = useStore();
   const members = store.useQuery(squadMembers$(squad.id)) as SquadMember[];
-  const showStats = squad.status === "active";
+  const isEnded = squad.status === "ended";
+  const membersWithoutEndPressure = members.filter(
+    (member) => member.endPressure === null
+  );
 
   return (
     <Card
@@ -25,15 +29,23 @@ export const SquadCard = ({ squad }: { squad: Squad }) => {
       <SquadHeader squad={squad} />
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
         <SquadMembers squad={squad} members={members} />
-        {showStats && <SquadStats squad={squad} members={members} />}
+        {squad.status === "active" && (
+          <SquadStats squad={squad} members={members} />
+        )}
+        {isEnded && <EndedStats squad={squad} members={members} />}
         <SquadLogs squadId={squad.id} />
       </CardContent>
-      <CardFooter className="block p-6 bg-white/4 border-t flex-none">
-        {squad.status === "ended" && (
-          <EndPressures squadId={squad.id} members={members} />
-        )}
-        <SquadActions squad={squad} members={members} />
-      </CardFooter>
+      {isEnded ? (
+        membersWithoutEndPressure.length > 0 && (
+          <CardFooter className="block p-6 bg-white/4 border-t flex-none">
+            <EndPressures squadId={squad.id} members={members} />
+          </CardFooter>
+        )
+      ) : (
+        <CardFooter className="block p-6 bg-white/4 border-t flex-none">
+          <SquadActions squad={squad} members={members} />
+        </CardFooter>
+      )}
     </Card>
   );
 };

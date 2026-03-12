@@ -67,6 +67,8 @@ export const EndPressureForm = ({
             id="end-pressure"
             type="number"
             placeholder="Enddruck"
+            max={member.startPressure ?? undefined}
+            min={0}
             required
           />
           <Button variant="outline" type="submit">

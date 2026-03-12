@@ -1,5 +1,5 @@
 import { Header } from "@/components/layout/header";
-import { Main } from "@/components/layout/main";
+import { OperationOverviewPage } from "@/components/pages/operation/overview";
 import { operation$ } from "@/livestore/queries/operation";
 import { useStore } from "@livestore/react";
 
@@ -26,7 +26,7 @@ function Operation() {
           { label: "Export", href: "/einsatz/$operationSlug/export" },
         ]}
       />
-      <Main>Übersicht</Main>
+      <OperationOverviewPage operation={operation} />
     </>
   );
 }

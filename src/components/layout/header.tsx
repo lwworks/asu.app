@@ -6,7 +6,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Logo } from "@/components/visuals/logo";
+import { useCurrentTime } from "@/context/current-time";
 import { Link } from "@tanstack/react-router";
+import { format } from "date-fns";
+import { ClockIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { UiSettingsDrawer } from "./ui-settings-drawer";
 
@@ -19,6 +22,8 @@ export const Header = ({
   tabs?: { label: string; href: string }[];
   children?: React.ReactNode;
 }) => {
+  const { currentTime } = useCurrentTime();
+
   return (
     <header className="border-b px-8">
       <div className="flex items-center justify-between h-16">
@@ -43,8 +48,12 @@ export const Header = ({
             ))}
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           {children}
+          <div className="w-44 flex items-center gap-2">
+            <ClockIcon className="size-4 text-primary" />
+            <div className="text-sm text-foreground">{format(currentTime, "dd.MM.yyyy HH:mm:ss")}</div>
+          </div>
           <UiSettingsDrawer />
         </div>
       </div>

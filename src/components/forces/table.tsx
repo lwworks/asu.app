@@ -29,6 +29,7 @@ import {
   MoreHorizontalIcon,
   PencilIcon,
   SearchIcon,
+  XIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -184,6 +185,15 @@ export const ForcesTable = () => {
               }
             />
             <SearchIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            {(table.getColumn("name")?.getFilterValue() as string) && (
+              <button
+                type="button"
+                onClick={() => table.getColumn("name")?.setFilterValue("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <XIcon className="size-4" />
+              </button>
+            )}
           </div>
           <ForceForm
             forceId={forceId}

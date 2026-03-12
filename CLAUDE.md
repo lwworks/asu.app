@@ -32,6 +32,13 @@ The app uses Livestore for event-driven state management with client-side SQLite
 
 **Queries location:** `/src/livestore/queries/`
 
+**Event schema evolution rules** (see `livestore-migrations.md` for full details):
+- Never modify existing event schemas with breaking changes (removing/renaming fields, changing types)
+- Only add **optional** fields to existing events, with sensible defaults in materializers
+- For breaking changes, create versioned events (`forceCreatedV2`, `forceCreatedV3`...) and keep old ones
+- Update materializers to handle **all** event versions
+- Table schema changes (adding/removing columns) are always safe — tables are rebuilt from events
+
 ### Routing: TanStack Router
 
 File-based routing in `/src/routes/`:

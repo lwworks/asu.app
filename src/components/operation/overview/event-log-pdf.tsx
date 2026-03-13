@@ -16,6 +16,7 @@ export type EventEntry = {
   source: string;
   text: string;
   pressure: number | null;
+  attachmentName?: string | null;
 };
 
 const styles = StyleSheet.create({
@@ -152,7 +153,10 @@ export const EventLogDocument = ({
             {format(entry.timestamp, "HH:mm:ss")}
           </Text>
           <Text style={styles.colSource}>{entry.source}</Text>
-          <Text style={styles.colMessage}>{entry.text}</Text>
+          <Text style={styles.colMessage}>
+            {entry.text}
+            {entry.attachmentName ? ` [${entry.attachmentName}]` : ""}
+          </Text>
           <Text style={styles.colPressure}>
             {entry.pressure !== null ? `${entry.pressure}` : ""}
           </Text>

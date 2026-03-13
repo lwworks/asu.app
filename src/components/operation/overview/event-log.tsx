@@ -9,7 +9,7 @@ import type { SquadLog } from "@/livestore/schema/operation/squad-log";
 import { useStore } from "@livestore/react";
 import { pdf } from "@react-pdf/renderer";
 import { format } from "date-fns";
-import { FileDownIcon } from "lucide-react";
+import { FileDownIcon, PaperclipIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EventLogDocument, type EventEntry } from "./event-log-pdf";
 
@@ -65,6 +65,7 @@ const NotesCollector = ({
       source: "Notiz",
       text: note.text,
       pressure: null,
+      attachmentName: note.attachmentName,
     }));
     onEntries("notes", entries);
   }, [notes, operationId, onEntries]);
@@ -154,13 +155,19 @@ export const OperationEventLog = ({
           <div className="relative border-l border-muted-foreground/20 ml-0.5 pl-4 space-y-4 py-6">
             {allEntries.map((entry) => (
               <div key={entry.id} className="relative text-sm leading-tight">
-                <div className="absolute -left-4.5 top-1 size-1 rounded-full bg-foreground" />
+                <div className="absolute -left-4.5 top-2 size-1 rounded-full bg-foreground" />
                 <div className="text-muted-foreground/50 text-xs">
                   {format(entry.timestamp, "HH:mm:ss")}
                   <span className="ml-2">{entry.source}</span>
                 </div>
                 <div className="text-muted-foreground">
                   {entry.text}
+                  {entry.attachmentName && (
+                    <span className="inline-flex items-center gap-1 ml-1 text-foreground">
+                      <PaperclipIcon className="size-3 text-primary" />
+                      <span>{entry.attachmentName}</span>
+                    </span>
+                  )}
                   {entry.pressure !== null && (
                     <span className="text-muted-foreground/50 ml-2">
                       {entry.pressure} bar

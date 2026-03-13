@@ -6,6 +6,11 @@ import {
   operationsTable,
 } from "./operation";
 import {
+  operationNotesEvents,
+  operationNotesMaterializers,
+  operationNotesTable,
+} from "./operation/note";
+import {
   squadsEvents,
   squadsMaterializers,
   squadsTable,
@@ -25,6 +30,7 @@ import { uiSettingsEvents, uiSettingsTable } from "./ui-settings";
 export const tables = {
   uiSettings: uiSettingsTable,
   operations: operationsTable,
+  operationNotes: operationNotesTable,
   squads: squadsTable,
   squadLogs: squadLogsTable,
   squadMembers: squadMembersTable,
@@ -34,6 +40,7 @@ export const tables = {
 export const events = {
   ...uiSettingsEvents,
   ...operationsEvents,
+  ...operationNotesEvents,
   ...squadsEvents,
   ...squadLogsEvents,
   ...squadMembersEvents,
@@ -42,6 +49,7 @@ export const events = {
 
 const materializers = {
   ...operationsMaterializers,
+  ...operationNotesMaterializers,
   ...squadsMaterializers,
   ...squadLogsMaterializers,
   ...squadMembersMaterializers,

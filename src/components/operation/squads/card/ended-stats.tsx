@@ -1,6 +1,15 @@
-import { duration } from "@/lib/duration";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
+import { differenceInSeconds } from "date-fns";
+
+const formatDuration = (totalSeconds: number) => {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""}${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+};
 
 export const EndedStats = ({
   squad,
@@ -11,7 +20,13 @@ export const EndedStats = ({
 }) => {
   const activeDuration =
     squad.startedAt && squad.endedAt
-      ? duration(squad.startedAt, squad.endedAt)
+      ? formatDuration(
+          Math.max(
+            differenceInSeconds(squad.endedAt, squad.startedAt) -
+              Math.floor((squad.totalPausedMs ?? 0) / 1000),
+            0
+          )
+        )
       : null;
 
   const highestStartPressure = Math.max(

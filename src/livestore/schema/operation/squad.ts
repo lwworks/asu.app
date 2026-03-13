@@ -10,13 +10,18 @@ export const squadsTable = State.SQLite.table({
       schema: Schema.DateFromNumber,
     }),
     status: State.SQLite.text({
-      schema: Schema.Literal("active", "standby", "ended", "archived"),
+      schema: Schema.Literal("active", "standby", "paused", "ended", "archived"),
     }),
     safetyTeam: State.SQLite.boolean(),
     startedAt: State.SQLite.integer({
       schema: Schema.DateFromNumber,
       nullable: true,
     }),
+    pausedAt: State.SQLite.integer({
+      schema: Schema.DateFromNumber,
+      nullable: true,
+    }),
+    totalPausedMs: State.SQLite.integer({ default: 0 }),
     endedAt: State.SQLite.integer({
       schema: Schema.DateFromNumber,
       nullable: true,
@@ -65,6 +70,22 @@ export const squadsEvents = {
     name: "v1.SquadArchived",
     schema: Schema.Struct({ id: Schema.String, archivedAt: Schema.Date }),
   }),
+  squadPaused: Events.synced({
+    name: "v1.SquadPaused",
+    schema: Schema.Struct({
+      id: Schema.String,
+      pausedAt: Schema.Date,
+      pressure: Schema.Number,
+    }),
+  }),
+  squadResumed: Events.synced({
+    name: "v1.SquadResumed",
+    schema: Schema.Struct({
+      id: Schema.String,
+      resumedAt: Schema.Date,
+      totalPausedMs: Schema.Number,
+    }),
+  }),
   squadNameUpdated: Events.synced({
     name: "v1.SquadNameUpdated",
     schema: Schema.Struct({ id: Schema.String, name: Schema.String }),
@@ -96,6 +117,10 @@ export const squadsMaterializers = State.SQLite.materializers(squadsEvents, {
     squadsTable.update({ endPressuresCompletedAt }).where({ id }),
   "v1.SquadArchived": ({ id, archivedAt }) =>
     squadsTable.update({ archivedAt, status: "archived" }).where({ id }),
+  "v1.SquadPaused": ({ id, pausedAt }) =>
+    squadsTable.update({ status: "paused", pausedAt }).where({ id }),
+  "v1.SquadResumed": ({ id, totalPausedMs }) =>
+    squadsTable.update({ status: "active", pausedAt: null, totalPausedMs }).where({ id }),
   "v1.SquadNameUpdated": ({ id, name }) =>
     squadsTable.update({ name }).where({ id }),
 });

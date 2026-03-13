@@ -56,7 +56,7 @@ export const StartOperationForm = ({
   };
 
   return (
-    <form className="w-full flex gap-2" onSubmit={handleStartOperation}>
+    <form className="w-full col-span-2 flex gap-2" onSubmit={handleStartOperation}>
       <Field className="w-21 shrink-0">
         <FieldLabel htmlFor="start-time" className="sr-only">
           Startzeit

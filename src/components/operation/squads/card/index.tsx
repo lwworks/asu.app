@@ -29,7 +29,7 @@ export const SquadCard = ({ squad }: { squad: Squad }) => {
       <SquadHeader squad={squad} />
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
         <SquadMembers squad={squad} members={members} />
-        {squad.status === "active" && (
+        {(squad.status === "active" || squad.status === "paused") && (
           <SquadStats squad={squad} members={members} />
         )}
         {isEnded && <EndedStats squad={squad} members={members} />}

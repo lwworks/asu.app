@@ -13,6 +13,7 @@ export const StatusLabel = ({ status }: { status: string }) => {
       className={cn(
         "h-5 rounded-full w-fit px-2 flex items-center font-normal text-sm",
         status === "active" && "bg-primary text-primary-foreground",
+        status === "paused" && "bg-primary text-primary-foreground",
         status === "standby" && "bg-secondary text-secondary-foreground",
         status === "ended" && "bg-secondary text-secondary-foreground"
       )}

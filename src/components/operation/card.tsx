@@ -12,7 +12,9 @@ export const OperationCard = ({ operation }: { operation: Operation }) => {
   const activeSquads = squads.filter(
     (squad) => squad.status === "active"
   ).length;
-  const pausedSquads = 0;
+  const pausedSquads = squads.filter(
+    (squad) => squad.status === "paused"
+  ).length;
   const standbySquads = squads.filter(
     (squad) => squad.status === "standby"
   ).length;

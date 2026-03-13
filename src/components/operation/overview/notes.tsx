@@ -73,7 +73,7 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
   }, [notes.length]);
 
   return (
-    <Card className="p-0 flex flex-col flex-1 min-h-0">
+    <Card className="p-0 flex flex-col flex-1 min-h-0 gap-0">
       <div className="px-6 pt-6 flex text-xs uppercase text-muted-foreground/50 font-medium tracking-wider border-b pb-3 flex-none">
         <div className="w-17 shrink-0">Zeit</div>
         <div className="grow">Notiz</div>

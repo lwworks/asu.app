@@ -38,6 +38,47 @@ export async function uploadFile(file: File, key: string): Promise<string> {
 }
 
 /**
+ * Get a presigned download URL for a private S3 object.
+ */
+export async function getDownloadUrl(publicUrl: string): Promise<string> {
+  const key = extractKeyFromPublicUrl(publicUrl);
+
+  const res = await fetch("/api/presign-get", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to get download URL: ${res.status} ${res.statusText}`);
+  }
+
+  const { url } = (await res.json()) as { url: string };
+  return url;
+}
+
+/**
+ * Extract the S3 object key from a public URL.
+ *
+ * Handles both formats:
+ * - Path-style:  https://endpoint/bucket/key
+ * - Virtual-host: https://bucket.s3.region.amazonaws.com/key
+ */
+function extractKeyFromPublicUrl(publicUrl: string): string {
+  const url = new URL(publicUrl);
+  const pathParts = url.pathname.split("/").filter(Boolean);
+
+  // Path-style (e.g. Hetzner): first segment is bucket name, rest is key
+  // Virtual-host (AWS): entire path is the key
+  if (url.hostname.includes("s3.") && url.hostname.includes(".amazonaws.com")) {
+    return pathParts.join("/");
+  }
+
+  // Path-style: skip bucket name (first segment)
+  return pathParts.slice(1).join("/");
+}
+
+/**
  * Build a unique S3 key for a note attachment.
  */
 export function noteAttachmentKey(

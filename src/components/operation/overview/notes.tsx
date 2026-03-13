@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useCurrentTime } from "@/context/current-time";
-import { noteAttachmentKey, uploadFile } from "@/lib/s3";
+import { getDownloadUrl, noteAttachmentKey, uploadFile } from "@/lib/s3";
 import { operationNotes$ } from "@/livestore/queries/operation/notes";
 import { events } from "@/livestore/schema";
 import type { OperationNote } from "@/livestore/schema/operation/note";
@@ -93,15 +93,21 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
                 <div className="grow text-muted-foreground">
                   {note.text}
                   {note.attachmentUrl && (
-                    <a
-                      href={note.attachmentUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 ml-2 text-primary hover:underline"
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const url = await getDownloadUrl(note.attachmentUrl!);
+                          window.open(url, "_blank", "noopener,noreferrer");
+                        } catch (err) {
+                          console.error("Failed to get download URL:", err);
+                        }
+                      }}
+                      className="inline-flex items-center gap-1 ml-1 text-foreground hover:underline cursor-pointer"
                     >
-                      <FileIcon className="size-3" />
+                      <PaperclipIcon className="size-3 text-primary" />
                       <span>{note.attachmentName ?? "Anhang"}</span>
-                    </a>
+                    </button>
                   )}
                 </div>
               </li>

@@ -1,0 +1,9 @@
+{
+  "CORSRules": [
+    {
+      "AllowedOrigins": ["https://asü.app", "https://www.asü.app", "https://xn--as-yka.app", "https://www.xn--as-yka.app"],
+      "AllowedHeaders": ["*"],
+      "AllowedMethods": ["PUT"]
+    }
+  ]
+}

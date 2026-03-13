@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { getDownloadUrl } from "@/lib/s3";
 import { operationNotes$ } from "@/livestore/queries/operation/notes";
 import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
 import { operationSquads$ } from "@/livestore/queries/operation/squads";
@@ -65,6 +66,7 @@ const NotesCollector = ({
       source: "Notiz",
       text: note.text,
       pressure: null,
+      attachmentUrl: note.attachmentUrl,
       attachmentName: note.attachmentName,
     }));
     onEntries("notes", entries);
@@ -162,11 +164,22 @@ export const OperationEventLog = ({
                 </div>
                 <div className="text-muted-foreground">
                   {entry.text}
-                  {entry.attachmentName && (
-                    <span className="inline-flex items-center gap-1 ml-1 text-foreground">
-                      <PaperclipIcon className="size-3 text-primary" />
-                      <span>{entry.attachmentName}</span>
-                    </span>
+                  {entry.attachmentName && entry.attachmentUrl && (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const url = await getDownloadUrl(entry.attachmentUrl!);
+                          window.open(url, "_blank", "noopener,noreferrer");
+                        } catch (err) {
+                          console.error("Failed to get download URL:", err);
+                        }
+                      }}
+                      className="inline-flex items-center gap-1 ml-1 text-primary hover:underline cursor-pointer"
+                    >
+                      <PaperclipIcon className="size-3" />
+                      <span>1 Datei</span>
+                    </button>
                   )}
                   {entry.pressure !== null && (
                     <span className="text-muted-foreground/50 ml-2">

@@ -16,6 +16,7 @@ export type EventEntry = {
   source: string;
   text: string;
   pressure: number | null;
+  attachmentUrl?: string | null;
   attachmentName?: string | null;
 };
 

@@ -103,10 +103,10 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
                           console.error("Failed to get download URL:", err);
                         }
                       }}
-                      className="inline-flex items-center gap-1 ml-1 text-foreground hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 ml-1 text-primary hover:underline cursor-pointer"
                     >
-                      <PaperclipIcon className="size-3 text-primary" />
-                      <span>{note.attachmentName ?? "Anhang"}</span>
+                      <PaperclipIcon className="size-3" />
+                      <span>1 Datei</span>
                     </button>
                   )}
                 </div>

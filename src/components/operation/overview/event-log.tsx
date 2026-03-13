@@ -134,8 +134,8 @@ export const OperationEventLog = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="text-xs uppercase text-muted-foreground/50 font-medium tracking-wider pb-3 flex-none">
-        Einsatz-Log
+      <div className="text-sm uppercase text-muted-foreground tracking-wider flex-none">
+        Einsatzverlauf
       </div>
       {squads.map((squad) => (
         <SquadLogCollector
@@ -148,28 +148,32 @@ export const OperationEventLog = ({
         operationId={operation.id}
         onEntries={handleEntries}
       />
-      <div ref={listRef} className="flex-1 min-h-0 overflow-y-auto">
-        <div className="relative border-l border-muted-foreground/20 ml-[52px] pl-5 space-y-4 py-1">
-          {allEntries.map((entry) => (
-            <div key={entry.id} className="relative text-sm leading-tight">
-              <div className="absolute -left-5 top-1 w-2 h-2 rounded-full bg-muted-foreground/30 -translate-x-[calc(50%-0.5px)]" />
-              <div className="text-muted-foreground/50 text-xs">
-                {format(entry.timestamp, "HH:mm:ss")}
-                <span className="ml-2">{entry.source}</span>
+      <div className="relative flex-1 min-h-0">
+        <div className="absolute inset-x-0 top-0 h-6 bg-linear-to-b from-background to-transparent z-10" />
+        <div ref={listRef} className="h-full overflow-y-auto">
+          <div className="relative border-l border-muted-foreground/20 ml-0.5 pl-4 space-y-4 py-6">
+            {allEntries.map((entry) => (
+              <div key={entry.id} className="relative text-sm leading-tight">
+                <div className="absolute -left-4.5 top-1 size-1 rounded-full bg-foreground" />
+                <div className="text-muted-foreground/50 text-xs">
+                  {format(entry.timestamp, "HH:mm:ss")}
+                  <span className="ml-2">{entry.source}</span>
+                </div>
+                <div className="text-muted-foreground">
+                  {entry.text}
+                  {entry.pressure !== null && (
+                    <span className="text-muted-foreground/50 ml-2">
+                      {entry.pressure} bar
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="text-muted-foreground">
-                {entry.text}
-                {entry.pressure !== null && (
-                  <span className="text-muted-foreground/50 ml-2">
-                    {entry.pressure} bar
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+        <div className="absolute inset-x-0 bottom-0 h-6 bg-linear-to-t from-background to-transparent z-10" />
       </div>
-      <div className="pt-4 flex-none">
+      <div className="flex-none">
         <Button
           variant="outline"
           className="w-full"

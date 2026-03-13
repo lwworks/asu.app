@@ -21,12 +21,12 @@ export const EndedStats = ({
   const activeDuration =
     squad.startedAt && squad.endedAt
       ? formatDuration(
-          Math.max(
-            differenceInSeconds(squad.endedAt, squad.startedAt) -
-              Math.floor((squad.totalPausedMs ?? 0) / 1000),
-            0
-          )
+        Math.max(
+          differenceInSeconds(squad.endedAt, squad.startedAt) -
+          Math.floor((squad.totalPausedMs ?? 0) / 1000),
+          0
         )
+      )
       : null;
 
   const highestStartPressure = Math.max(

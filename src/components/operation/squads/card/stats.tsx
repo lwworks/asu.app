@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useCurrentTime } from "@/context/current-time";
 import { cn } from "@/lib/cn";
+import { duration } from "@/lib/duration";
 import { logsWithPressure$ } from "@/livestore/queries/operation/logs-with-pressure";
 import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
 import type { Squad } from "@/livestore/schema/operation/squad";
@@ -19,12 +20,10 @@ const predictedPressure = (
   startTime: Date | null,
   currentTime: Date,
   logs: SquadLog[],
-  defaultBarsPerMinute: number,
-  totalPausedMs: number
+  defaultBarsPerMinute: number
 ) => {
   if (!startTime || !startPressure) return 0;
-  const pausedMinutes = totalPausedMs / 60000;
-  let duration = differenceInSeconds(currentTime, startTime) / 60 - pausedMinutes;
+  let duration = differenceInSeconds(currentTime, startTime) / 60;
   let barsPerMinute = defaultBarsPerMinute;
   let latestPressure = startPressure;
 
@@ -36,9 +35,9 @@ const predictedPressure = (
       (a, b) => a.pressure! - b.pressure!
     )[0];
     latestPressure = logWithLowestPressure.pressure!;
-    const durationToLog =
-      differenceInSeconds(logWithLowestPressure.timestamp, startTime) / 60 - pausedMinutes;
-    barsPerMinute = durationToLog > 0 ? (startPressure - latestPressure) / durationToLog : defaultBarsPerMinute;
+    duration =
+      differenceInSeconds(logWithLowestPressure.timestamp, startTime) / 60;
+    barsPerMinute = (startPressure - latestPressure) / duration;
     duration =
       differenceInSeconds(currentTime, logWithLowestPressure.timestamp) / 60;
   }
@@ -46,15 +45,6 @@ const predictedPressure = (
     Math.ceil((latestPressure - duration * barsPerMinute) / 5) * 5,
     0
   );
-};
-
-const formatDuration = (totalSeconds: number) => {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return `${hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""}${minutes
-    .toString()
-    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 };
 
 export const SquadStats = ({
@@ -78,10 +68,6 @@ export const SquadStats = ({
   const criticalPressure = 60;
   const pressureUpdateInterval = 10;
 
-  const totalPausedMs = squad.totalPausedMs ?? 0;
-  const isPaused = squad.status === "paused";
-  const effectiveCurrentTime = isPaused && squad.pausedAt ? squad.pausedAt : currentTime;
-
   const startPressure =
     members
       .filter((member) => member.startPressure !== null)
@@ -91,19 +77,10 @@ export const SquadStats = ({
   const pressure = predictedPressure(
     startPressure,
     squad.startedAt,
-    effectiveCurrentTime,
+    currentTime,
     logs,
-    defaultBarsPerMinute,
-    totalPausedMs
+    defaultBarsPerMinute
   );
-
-  const activeDurationSeconds = squad.startedAt
-    ? Math.max(
-        differenceInSeconds(effectiveCurrentTime, squad.startedAt) -
-          Math.floor(totalPausedMs / 1000),
-        0
-      )
-    : 0;
 
   return (
     <div>
@@ -115,7 +92,7 @@ export const SquadStats = ({
               squad.startedAt && "text-white"
             )}
           >
-            {squad.startedAt ? formatDuration(activeDurationSeconds) : "00:00"}
+            {squad.startedAt ? duration(squad.startedAt, currentTime) : "00:00"}
           </div>
           <div className="text-sm uppercase tracking-wider text-muted-foreground">
             im Einsatz

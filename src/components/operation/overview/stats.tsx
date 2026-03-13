@@ -18,7 +18,7 @@ export const OperationStats = ({ operation }: { operation: Operation }) => {
         <div className="text-3xl font-mono">
           {duration(operation.createdAt, currentTime)}
         </div>
-        <div className="text-sm uppercase tracking-wider text-muted-foreground mt-1">
+        <div className="text-sm uppercase tracking-wider text-muted-foreground">
           Einsatzdauer
         </div>
       </div>
@@ -28,7 +28,7 @@ export const OperationStats = ({ operation }: { operation: Operation }) => {
           <span>/</span>
           <span>{squads.length}</span>
         </div>
-        <div className="text-sm uppercase tracking-wider text-muted-foreground mt-1">
+        <div className="text-sm uppercase tracking-wider text-muted-foreground">
           Trupp{activeSquads.length !== 1 ? "s" : ""} eingesetzt
         </div>
       </div>

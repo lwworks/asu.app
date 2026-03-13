@@ -1,0 +1,163 @@
+import type { Operation } from "@/livestore/schema/operation";
+import {
+  Document,
+  Page,
+  View,
+  Text,
+  Svg,
+  Path,
+  StyleSheet,
+} from "@react-pdf/renderer";
+import { format } from "date-fns";
+
+export type EventEntry = {
+  id: string;
+  timestamp: Date;
+  source: string;
+  text: string;
+  pressure: number | null;
+};
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 40,
+    fontSize: 9,
+    fontFamily: "Helvetica",
+    color: "#222",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 24,
+  },
+  title: {
+    fontSize: 14,
+    fontFamily: "Helvetica-Bold",
+  },
+  date: {
+    fontSize: 10,
+    color: "#666",
+    marginTop: 2,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#282828",
+    color: "#fff",
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+  },
+  tableHeaderText: {
+    fontFamily: "Helvetica-Bold",
+    fontSize: 8,
+    color: "#fff",
+  },
+  tableRow: {
+    flexDirection: "row",
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#e0e0e0",
+  },
+  tableRowAlt: {
+    backgroundColor: "#f7f7f7",
+  },
+  colTime: { width: "12%" },
+  colSource: { width: "18%" },
+  colMessage: { width: "58%" },
+  colPressure: { width: "12%", textAlign: "right" },
+});
+
+export const EventLogDocument = ({
+  operation,
+  entries,
+}: {
+  operation: Operation;
+  entries: EventEntry[];
+}) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.header}>
+        <View>
+          <Svg viewBox="0 0 760 100" style={{ width: 100, height: 13 }}>
+            <Path
+              fill="#222"
+              d="M142.412 0C150.98 0 158.15 1.43763 163.922 4.31274C169.694 7.18785 174.159 11.1412 177.315 16.1726C180.562 21.204 182.501 27.044 183.133 33.6926L157.023 34.771C156.662 30.3685 155.174 26.9542 152.558 24.5283C150.033 22.0126 146.56 20.7546 142.141 20.7546C138.353 20.7546 135.422 21.5185 133.348 23.0459C131.273 24.5733 130.236 26.5949 130.236 29.1106C130.236 32.0755 131.409 34.3667 133.754 35.9839C136.189 37.5113 140.518 38.8139 146.741 39.8921C156.211 41.5093 163.697 43.7106 169.198 46.4958C174.7 49.2811 178.578 52.6056 180.833 56.469C183.178 60.3324 184.35 64.7798 184.35 69.8113C184.35 79.1554 180.878 86.523 173.933 91.9138C166.989 97.3046 157.293 100 144.847 100C131.589 100 121.307 96.9451 114.002 90.8354C106.697 84.636 102.683 76.2804 101.962 65.7683L128.342 64.5552C129.064 69.2272 130.732 72.8661 133.348 75.4717C136.053 77.9874 139.977 79.2454 145.118 79.2454C149.176 79.2454 152.288 78.5713 154.452 77.2236C156.707 75.7861 157.834 73.6746 157.834 70.8894C157.834 69.1824 157.383 67.7 156.481 66.4421C155.67 65.0944 154.001 63.9263 151.476 62.938C149.041 61.8598 145.388 60.8267 140.518 59.8384C131.769 58.0414 124.689 55.9749 119.278 53.6389C113.867 51.213 109.898 48.1132 107.373 44.3396C104.938 40.566 103.72 35.7592 103.72 29.9192C103.72 23.9893 105.253 18.778 108.32 14.2856C111.386 9.79332 115.806 6.2894 121.578 3.77368C127.35 1.25796 134.295 2.69135e-06 142.412 0Z"
+            />
+            <Path
+              fill="#222"
+              d="M223.986 62.5337C223.986 67.7448 225.294 71.788 227.91 74.6631C230.525 77.4483 234.313 78.8411 239.274 78.8411C244.324 78.841 248.157 77.4483 250.773 74.6631C253.388 71.788 254.696 67.7448 254.696 62.5337V34.6938H281.212V62.5337C281.212 70.1707 279.498 76.8194 276.071 82.4797C272.644 88.0502 267.774 92.3629 261.461 95.4177C255.237 98.4725 247.842 100 239.274 100C230.796 100 223.4 98.4725 217.087 95.4177C210.864 92.3629 206.039 88.0502 202.612 82.4797C199.184 76.8194 197.471 70.1707 197.471 62.5337V34.6938H223.986V62.5337Z"
+            />
+            <Path fill="#222" d="M332.814 98H300.687V66H332.814V98Z" />
+            <Path fill="#222" d="M397.067 98H364.941V66H397.067V98Z" />
+            <Path fill="#222" d="M461.321 98H429.194V66H461.321V98Z" />
+            <Path
+              fill="#222"
+              fillRule="evenodd"
+              d="M582.472 98H555.311L549.879 82.1802H515.113L509.68 98H482.655L517.421 2H547.706L582.472 98ZM522.174 61.6282H542.953L532.632 31.2056L522.174 61.6282Z"
+            />
+            <Path
+              fill="#222"
+              fillRule="evenodd"
+              d="M630.576 2C642.707 2 652.214 4.92967 659.095 10.7888C666.066 16.648 669.552 24.6705 669.552 34.8564C669.552 41.5268 667.967 47.3409 664.799 52.2986C661.72 57.1662 657.239 60.952 651.354 63.6562C645.559 66.2703 638.633 67.5774 630.576 67.5774H615.909V98H589.291V2H630.576ZM615.909 46.3494H628.538C632.703 46.3494 636.053 45.4027 638.588 43.5098C641.123 41.5267 642.391 38.6423 642.391 34.8564C642.391 31.0705 641.123 28.186 638.588 26.2029C636.144 24.2198 632.794 23.2283 628.538 23.2283H615.909V46.3494Z"
+            />
+            <Path
+              fill="#222"
+              fillRule="evenodd"
+              d="M721.024 2C733.156 2 742.662 4.92966 749.543 10.7888C756.514 16.648 760 24.6705 760 34.8564C760 41.5268 758.416 47.3409 755.247 52.2986C752.169 57.1662 747.687 60.952 741.802 63.6562C736.008 66.2703 729.082 67.5774 721.024 67.5774H706.357V98H679.739V2H721.024ZM706.357 46.3494H718.987C723.151 46.3494 726.501 45.4027 729.036 43.5098C731.571 41.5267 732.839 38.6423 732.839 34.8564C732.839 31.0706 731.571 28.186 729.036 26.2029C726.592 24.2198 723.242 23.2283 718.987 23.2283H706.357V46.3494Z"
+            />
+            <Path
+              fill="#222"
+              fillRule="evenodd"
+              d="M99.4345 97.8438H72.3775L66.966 82.0754H32.3332L26.9217 97.8438H0L34.633 2.15625H64.8014L99.4345 97.8438ZM39.368 61.5903H60.0664L49.7849 31.2668L39.368 61.5903Z"
+            />
+            <Path fill="#222" d="M364.941 66H332.814V34H364.941V66Z" />
+            <Path fill="#222" d="M429.194 66H397.067V34H429.194V66Z" />
+            <Path fill="#222" d="M397.067 34H364.941V2H397.067V34Z" />
+            <Path fill="#222" d="M461.321 34H429.194V2H461.321V34Z" />
+            <Path
+              fill="#222"
+              d="M223.986 28.5715H197.471V2.02148H223.986V28.5715Z"
+            />
+            <Path
+              fill="#222"
+              d="M281.212 28.5715H254.696V2.02148H281.212V28.5715Z"
+            />
+          </Svg>
+        </View>
+        <View style={{ alignItems: "flex-end" }}>
+          <Text style={styles.title}>
+            Einsatz-Log: {operation.description}
+          </Text>
+          <Text style={styles.date}>
+            {format(operation.createdAt, "dd.MM.yyyy")}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.tableHeader}>
+        <Text style={[styles.tableHeaderText, styles.colTime]}>Zeit</Text>
+        <Text style={[styles.tableHeaderText, styles.colSource]}>Quelle</Text>
+        <Text style={[styles.tableHeaderText, styles.colMessage]}>Meldung</Text>
+        <Text style={[styles.tableHeaderText, styles.colPressure]}>Druck</Text>
+      </View>
+
+      {entries.map((entry, i) => (
+        <View
+          key={entry.id}
+          style={[styles.tableRow, ...(i % 2 === 1 ? [styles.tableRowAlt] : [])]}
+          wrap={false}
+        >
+          <Text style={styles.colTime}>
+            {format(entry.timestamp, "HH:mm:ss")}
+          </Text>
+          <Text style={styles.colSource}>{entry.source}</Text>
+          <Text style={styles.colMessage}>{entry.text}</Text>
+          <Text style={styles.colPressure}>
+            {entry.pressure !== null ? `${entry.pressure}` : ""}
+          </Text>
+        </View>
+      ))}
+    </Page>
+  </Document>
+);

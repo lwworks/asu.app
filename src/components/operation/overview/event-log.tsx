@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { operationNotes$ } from "@/livestore/queries/operation/notes";
 import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
 import { operationSquads$ } from "@/livestore/queries/operation/squads";
@@ -6,16 +7,11 @@ import type { OperationNote } from "@/livestore/schema/operation/note";
 import type { Squad } from "@/livestore/schema/operation/squad";
 import type { SquadLog } from "@/livestore/schema/operation/squad-log";
 import { useStore } from "@livestore/react";
+import { pdf } from "@react-pdf/renderer";
 import { format } from "date-fns";
+import { FileDownIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-type EventEntry = {
-  id: string;
-  timestamp: Date;
-  source: string;
-  text: string;
-  pressure: number | null;
-};
+import { EventLogDocument, type EventEntry } from "./event-log-pdf";
 
 const SquadLogCollector = ({
   squad,
@@ -124,6 +120,18 @@ export const OperationEventLog = ({
     );
   }, [allEntries.length]);
 
+  const handleExportPdf = async () => {
+    const blob = await pdf(
+      <EventLogDocument operation={operation} entries={allEntries} />
+    ).toBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `einsatz-log-${operation.slug}.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="text-xs uppercase text-muted-foreground/50 font-medium tracking-wider pb-3 flex-none">
@@ -160,6 +168,16 @@ export const OperationEventLog = ({
             </div>
           ))}
         </div>
+      </div>
+      <div className="pt-4 flex-none">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleExportPdf}
+        >
+          <FileDownIcon className="size-3.5" />
+          <span>Als PDF exportieren</span>
+        </Button>
       </div>
     </div>
   );

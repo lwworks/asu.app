@@ -9,6 +9,8 @@ export const operationNotesTable = State.SQLite.table({
     timestamp: State.SQLite.integer({
       schema: Schema.DateFromNumber,
     }),
+    attachmentUrl: State.SQLite.text({ nullable: true }),
+    attachmentName: State.SQLite.text({ nullable: true }),
   },
 });
 
@@ -22,6 +24,8 @@ export const operationNotesEvents = {
       operationId: Schema.String,
       text: Schema.String,
       timestamp: Schema.Date,
+      attachmentUrl: Schema.optional(Schema.String),
+      attachmentName: Schema.optional(Schema.String),
     }),
   }),
 };
@@ -29,7 +33,21 @@ export const operationNotesEvents = {
 export const operationNotesMaterializers = State.SQLite.materializers(
   operationNotesEvents,
   {
-    "v1.OperationNoteCreated": ({ id, operationId, text, timestamp }) =>
-      operationNotesTable.insert({ id, operationId, text, timestamp }),
+    "v1.OperationNoteCreated": ({
+      id,
+      operationId,
+      text,
+      timestamp,
+      attachmentUrl,
+      attachmentName,
+    }) =>
+      operationNotesTable.insert({
+        id,
+        operationId,
+        text,
+        timestamp,
+        attachmentUrl: attachmentUrl ?? null,
+        attachmentName: attachmentName ?? null,
+      }),
   }
 );

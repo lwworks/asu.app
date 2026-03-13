@@ -2,13 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useCurrentTime } from "@/context/current-time";
+import { noteAttachmentKey, uploadFile } from "@/lib/s3";
 import { operationNotes$ } from "@/livestore/queries/operation/notes";
 import { events } from "@/livestore/schema";
 import type { OperationNote } from "@/livestore/schema/operation/note";
 import { useStore } from "@livestore/react";
 import { format } from "date-fns";
-import { ArrowUpIcon } from "lucide-react";
-import { useEffect, useRef, type FormEvent } from "react";
+import { ArrowUpIcon, FileIcon, PaperclipIcon, XIcon } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 export const OperationNotes = ({ operationId }: { operationId: string }) => {
   const { currentTime } = useCurrentTime();
@@ -17,22 +18,47 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
     operationNotes$(operationId)
   ) as OperationNote[];
   const listRef = useRef<HTMLUListElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
     const text = formData.get("text") as string;
-    if (!text) return;
+    if (!text && !selectedFile) return;
+
+    const noteId = crypto.randomUUID();
+    let attachmentUrl: string | undefined;
+    let attachmentName: string | undefined;
+
+    if (selectedFile) {
+      setUploading(true);
+      try {
+        const key = noteAttachmentKey(operationId, noteId, selectedFile.name);
+        attachmentUrl = await uploadFile(selectedFile, key);
+        attachmentName = selectedFile.name;
+      } catch (err) {
+        console.error("File upload failed:", err);
+        setUploading(false);
+        return;
+      }
+      setUploading(false);
+    }
 
     store.commit(
       events.operationNoteCreated({
-        id: crypto.randomUUID(),
+        id: noteId,
         operationId,
-        text,
+        text: text || attachmentName || "",
         timestamp: currentTime,
+        attachmentUrl,
+        attachmentName,
       })
     );
-    (event.target as HTMLFormElement).reset();
+    form.reset();
+    setSelectedFile(null);
   };
 
   useEffect(() => {
@@ -64,17 +90,55 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
                 <div className="w-17 shrink-0 text-muted-foreground/50">
                   {format(note.timestamp, "HH:mm:ss")}
                 </div>
-                <div className="grow text-muted-foreground">{note.text}</div>
+                <div className="grow text-muted-foreground">
+                  {note.text}
+                  {note.attachmentUrl && (
+                    <a
+                      href={note.attachmentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 ml-2 text-primary hover:underline"
+                    >
+                      <FileIcon className="size-3" />
+                      <span>{note.attachmentName ?? "Anhang"}</span>
+                    </a>
+                  )}
+                </div>
               </li>
             ))}
         </ul>
         <div className="absolute inset-x-0 top-0 h-3 bg-gradient-to-b from-card to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-card to-transparent" />
       </div>
+      {selectedFile && (
+        <div className="px-6 flex items-center gap-2 text-sm text-muted-foreground">
+          <FileIcon className="size-3.5 shrink-0" />
+          <span className="truncate">{selectedFile.name}</span>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedFile(null);
+              if (fileInputRef.current) fileInputRef.current.value = "";
+            }}
+            className="shrink-0 text-muted-foreground/50 hover:text-muted-foreground"
+          >
+            <XIcon className="size-3.5" />
+          </button>
+        </div>
+      )}
       <form
-        className="flex gap-2 p-6 pt-0 relative z-10 flex-none"
+        className="flex gap-2 p-6 pt-3 relative z-10 flex-none"
         onSubmit={handleSubmit}
       >
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) setSelectedFile(file);
+          }}
+        />
         <Input
           name="text"
           type="text"
@@ -82,7 +146,21 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
           autoComplete="off"
           className="grow"
         />
-        <Button type="submit" size="icon" variant="secondary">
+        <Button
+          type="button"
+          size="icon"
+          variant="outline"
+          className="shrink-0"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <PaperclipIcon className="size-4" />
+        </Button>
+        <Button
+          type="submit"
+          size="icon"
+          variant="secondary"
+          disabled={uploading}
+        >
           <ArrowUpIcon className="size-4" />
         </Button>
       </form>

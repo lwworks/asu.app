@@ -1,0 +1,20 @@
+name = "asu-sync"
+main = "src/index.ts"
+compatibility_date = "2025-03-14"
+
+[durable_objects]
+bindings = [
+  { name = "WEBSOCKET_SERVER", class_name = "WebSocketServer" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["WebSocketServer"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "asu-sync"
+database_id = "" # Set after `wrangler d1 create asu-sync`
+
+[placement]
+mode = "smart"

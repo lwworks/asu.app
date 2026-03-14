@@ -7,7 +7,13 @@ import { unstable_batchedUpdates as batchUpdates } from "react-dom";
 import { StoreError } from "./error";
 import { Loading } from "./loading";
 
-export const Livestore = ({ children }: { children: React.ReactNode }) => {
+type Props = {
+  children: React.ReactNode;
+  orgId: string;
+  syncToken: string;
+};
+
+export const Livestore = ({ children, orgId, syncToken }: Props) => {
   const resetPersistence =
     import.meta.env.DEV &&
     new URLSearchParams(window.location.search).get("reset") !== null;
@@ -31,12 +37,14 @@ export const Livestore = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <LiveStoreProvider
+      key={orgId}
       schema={schema}
       adapter={adapter}
       renderLoading={(_) => <Loading stage={_.stage} />}
       renderError={(_) => <StoreError error={String(_)} />}
       batchUpdates={batchUpdates}
-      storeId="asu-app-dev-5"
+      storeId={orgId}
+      syncPayload={{ authToken: syncToken }}
     >
       {children}
     </LiveStoreProvider>

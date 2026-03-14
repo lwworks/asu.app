@@ -11,16 +11,30 @@
 import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegistrierenRouteImport } from './routes/registrieren'
 import { Route as PersonalRouteImport } from './routes/personal'
+import { Route as OrganisationenRouteImport } from './routes/organisationen'
 import { Route as EinstellungenRouteImport } from './routes/einstellungen'
+import { Route as AnmeldenRouteImport } from './routes/anmelden'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EinladungCodeRouteImport } from './routes/einladung/$code'
 import { Route as EinsatzOperationSlugIndexRouteImport } from './routes/einsatz/$operationSlug/index'
 import { Route as EinsatzOperationSlugTruppsRouteImport } from './routes/einsatz/$operationSlug/trupps'
 import { Route as EinsatzOperationSlugExportRouteImport } from './routes/einsatz/$operationSlug/export'
 
+const RegistrierenRoute = RegistrierenRouteImport.update({
+  id: '/registrieren',
+  path: '/registrieren',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PersonalRoute = PersonalRouteImport.update({
   id: '/personal',
   path: '/personal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganisationenRoute = OrganisationenRouteImport.update({
+  id: '/organisationen',
+  path: '/organisationen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EinstellungenRoute = EinstellungenRouteImport.update({
@@ -28,9 +42,19 @@ const EinstellungenRoute = EinstellungenRouteImport.update({
   path: '/einstellungen',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnmeldenRoute = AnmeldenRouteImport.update({
+  id: '/anmelden',
+  path: '/anmelden',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EinladungCodeRoute = EinladungCodeRouteImport.update({
+  id: '/einladung/$code',
+  path: '/einladung/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EinsatzOperationSlugIndexRoute =
@@ -54,16 +78,24 @@ const EinsatzOperationSlugExportRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/anmelden': typeof AnmeldenRoute
   '/einstellungen': typeof EinstellungenRoute
+  '/organisationen': typeof OrganisationenRoute
   '/personal': typeof PersonalRoute
+  '/registrieren': typeof RegistrierenRoute
+  '/einladung/$code': typeof EinladungCodeRoute
   '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
-  '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
+  '/einsatz/$operationSlug/': typeof EinsatzOperationSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/anmelden': typeof AnmeldenRoute
   '/einstellungen': typeof EinstellungenRoute
+  '/organisationen': typeof OrganisationenRoute
   '/personal': typeof PersonalRoute
+  '/registrieren': typeof RegistrierenRoute
+  '/einladung/$code': typeof EinladungCodeRoute
   '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
   '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
@@ -71,8 +103,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/anmelden': typeof AnmeldenRoute
   '/einstellungen': typeof EinstellungenRoute
+  '/organisationen': typeof OrganisationenRoute
   '/personal': typeof PersonalRoute
+  '/registrieren': typeof RegistrierenRoute
+  '/einladung/$code': typeof EinladungCodeRoute
   '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
   '/einsatz/$operationSlug/': typeof EinsatzOperationSlugIndexRoute
@@ -81,24 +117,36 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/anmelden'
     | '/einstellungen'
+    | '/organisationen'
     | '/personal'
+    | '/registrieren'
+    | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
-    | '/einsatz/$operationSlug'
+    | '/einsatz/$operationSlug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/anmelden'
     | '/einstellungen'
+    | '/organisationen'
     | '/personal'
+    | '/registrieren'
+    | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
     | '/einsatz/$operationSlug'
   id:
     | '__root__'
     | '/'
+    | '/anmelden'
     | '/einstellungen'
+    | '/organisationen'
     | '/personal'
+    | '/registrieren'
+    | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
     | '/einsatz/$operationSlug/'
@@ -106,8 +154,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnmeldenRoute: typeof AnmeldenRoute
   EinstellungenRoute: typeof EinstellungenRoute
+  OrganisationenRoute: typeof OrganisationenRoute
   PersonalRoute: typeof PersonalRoute
+  RegistrierenRoute: typeof RegistrierenRoute
+  EinladungCodeRoute: typeof EinladungCodeRoute
   EinsatzOperationSlugExportRoute: typeof EinsatzOperationSlugExportRoute
   EinsatzOperationSlugTruppsRoute: typeof EinsatzOperationSlugTruppsRoute
   EinsatzOperationSlugIndexRoute: typeof EinsatzOperationSlugIndexRoute
@@ -115,18 +167,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/einstellungen': {
-      id: '/einstellungen'
-      path: '/einstellungen'
-      fullPath: '/einstellungen'
-      preLoaderRoute: typeof EinstellungenRouteImport
+    '/registrieren': {
+      id: '/registrieren'
+      path: '/registrieren'
+      fullPath: '/registrieren'
+      preLoaderRoute: typeof RegistrierenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/personal': {
@@ -136,11 +181,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PersonalRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/einsatz/$operationSlug/export': {
-      id: '/einsatz/$operationSlug/export'
-      path: '/einsatz/$operationSlug/export'
-      fullPath: '/einsatz/$operationSlug/export'
-      preLoaderRoute: typeof EinsatzOperationSlugExportRouteImport
+    '/organisationen': {
+      id: '/organisationen'
+      path: '/organisationen'
+      fullPath: '/organisationen'
+      preLoaderRoute: typeof OrganisationenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/einstellungen': {
+      id: '/einstellungen'
+      path: '/einstellungen'
+      fullPath: '/einstellungen'
+      preLoaderRoute: typeof EinstellungenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anmelden': {
+      id: '/anmelden'
+      path: '/anmelden'
+      fullPath: '/anmelden'
+      preLoaderRoute: typeof AnmeldenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/einladung/$code': {
+      id: '/einladung/$code'
+      path: '/einladung/$code'
+      fullPath: '/einladung/$code'
+      preLoaderRoute: typeof EinladungCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/einsatz/$operationSlug/': {
+      id: '/einsatz/$operationSlug/'
+      path: '/einsatz/$operationSlug'
+      fullPath: '/einsatz/$operationSlug/'
+      preLoaderRoute: typeof EinsatzOperationSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/einsatz/$operationSlug/trupps': {
@@ -150,11 +230,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EinsatzOperationSlugTruppsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/einsatz/$operationSlug/': {
-      id: '/einsatz/$operationSlug/'
-      path: '/einsatz/$operationSlug'
-      fullPath: '/einsatz/$operationSlug'
-      preLoaderRoute: typeof EinsatzOperationSlugIndexRouteImport
+    '/einsatz/$operationSlug/export': {
+      id: '/einsatz/$operationSlug/export'
+      path: '/einsatz/$operationSlug/export'
+      fullPath: '/einsatz/$operationSlug/export'
+      preLoaderRoute: typeof EinsatzOperationSlugExportRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -169,6 +249,15 @@ declare module './routes/index' {
     FileRoutesByPath['/']['fullPath']
   >
 }
+declare module './routes/anmelden' {
+  const createFileRoute: CreateFileRoute<
+    '/anmelden',
+    FileRoutesByPath['/anmelden']['parentRoute'],
+    FileRoutesByPath['/anmelden']['id'],
+    FileRoutesByPath['/anmelden']['path'],
+    FileRoutesByPath['/anmelden']['fullPath']
+  >
+}
 declare module './routes/einstellungen' {
   const createFileRoute: CreateFileRoute<
     '/einstellungen',
@@ -178,6 +267,15 @@ declare module './routes/einstellungen' {
     FileRoutesByPath['/einstellungen']['fullPath']
   >
 }
+declare module './routes/organisationen' {
+  const createFileRoute: CreateFileRoute<
+    '/organisationen',
+    FileRoutesByPath['/organisationen']['parentRoute'],
+    FileRoutesByPath['/organisationen']['id'],
+    FileRoutesByPath['/organisationen']['path'],
+    FileRoutesByPath['/organisationen']['fullPath']
+  >
+}
 declare module './routes/personal' {
   const createFileRoute: CreateFileRoute<
     '/personal',
@@ -185,6 +283,24 @@ declare module './routes/personal' {
     FileRoutesByPath['/personal']['id'],
     FileRoutesByPath['/personal']['path'],
     FileRoutesByPath['/personal']['fullPath']
+  >
+}
+declare module './routes/registrieren' {
+  const createFileRoute: CreateFileRoute<
+    '/registrieren',
+    FileRoutesByPath['/registrieren']['parentRoute'],
+    FileRoutesByPath['/registrieren']['id'],
+    FileRoutesByPath['/registrieren']['path'],
+    FileRoutesByPath['/registrieren']['fullPath']
+  >
+}
+declare module './routes/einladung/$code' {
+  const createFileRoute: CreateFileRoute<
+    '/einladung/$code',
+    FileRoutesByPath['/einladung/$code']['parentRoute'],
+    FileRoutesByPath['/einladung/$code']['id'],
+    FileRoutesByPath['/einladung/$code']['path'],
+    FileRoutesByPath['/einladung/$code']['fullPath']
   >
 }
 declare module './routes/einsatz/$operationSlug/export' {
@@ -217,8 +333,12 @@ declare module './routes/einsatz/$operationSlug/index' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnmeldenRoute: AnmeldenRoute,
   EinstellungenRoute: EinstellungenRoute,
+  OrganisationenRoute: OrganisationenRoute,
   PersonalRoute: PersonalRoute,
+  RegistrierenRoute: RegistrierenRoute,
+  EinladungCodeRoute: EinladungCodeRoute,
   EinsatzOperationSlugExportRoute: EinsatzOperationSlugExportRoute,
   EinsatzOperationSlugTruppsRoute: EinsatzOperationSlugTruppsRoute,
   EinsatzOperationSlugIndexRoute: EinsatzOperationSlugIndexRoute,

@@ -12,6 +12,9 @@ import { format } from "date-fns";
 import { ClockIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { UiSettingsDrawer } from "./ui-settings-drawer";
+import { useAuth } from "@/context/auth";
+import { Button } from "@/components/ui/button";
+import { LogOutIcon } from "lucide-react";
 
 export const Header = ({
   breadcrumbs,
@@ -23,6 +26,7 @@ export const Header = ({
   children?: React.ReactNode;
 }) => {
   const { currentTime } = useCurrentTime();
+  const { signOut } = useAuth();
 
   return (
     <header className="border-b px-8">
@@ -55,6 +59,9 @@ export const Header = ({
             <div className="text-sm text-foreground">{format(currentTime, "dd.MM.yyyy HH:mm:ss")}</div>
           </div>
           <UiSettingsDrawer />
+          <Button variant="ghost" size="icon" onClick={signOut} className="ml-2">
+            <LogOutIcon className="size-4" />
+          </Button>
         </div>
       </div>
       <ul className="flex -mb-px text-sm gap-4">

@@ -8,11 +8,32 @@ import syncTokenRoutes from "./routes/sync-token.ts";
 
 const app = new Hono<AppEnv>();
 
+// Global error handler — ensures CORS headers on errors
+app.onError((err, c) => {
+  console.error("Unhandled error:", err);
+  const origins = c.env.CORS_ORIGINS?.split(",") ?? [];
+  const origin = c.req.header("Origin");
+  const allowedOrigin = origin && origins.includes(origin) ? origin : "";
+  const res = c.json({ error: String(err) }, 500);
+  if (allowedOrigin) {
+    c.res.headers.set("Access-Control-Allow-Origin", allowedOrigin);
+    c.res.headers.set("Access-Control-Allow-Credentials", "true");
+  }
+  return res;
+});
+
 // Manual CORS — adds headers to every response including raw BetterAuth ones
 app.use("*", async (c, next) => {
   const origins = c.env.CORS_ORIGINS?.split(",") ?? [];
   const origin = c.req.header("Origin");
   const allowedOrigin = origin && origins.includes(origin) ? origin : "";
+
+  const addCorsHeaders = (res: Response) => {
+    if (allowedOrigin) {
+      res.headers.set("Access-Control-Allow-Origin", allowedOrigin);
+      res.headers.set("Access-Control-Allow-Credentials", "true");
+    }
+  };
 
   // Preflight
   if (c.req.method === "OPTIONS") {
@@ -30,11 +51,7 @@ app.use("*", async (c, next) => {
 
   await next();
 
-  // Add CORS headers to actual response
-  if (allowedOrigin) {
-    c.res.headers.set("Access-Control-Allow-Origin", allowedOrigin);
-    c.res.headers.set("Access-Control-Allow-Credentials", "true");
-  }
+  addCorsHeaders(c.res);
 });
 
 // Initialize db + auth per request
@@ -48,11 +65,16 @@ app.use("*", async (c, next) => {
 
 // BetterAuth handles all /api/auth/* routes
 app.all("/api/auth/*", async (c) => {
-  const auth = c.get("auth");
-  const response = await auth.handler(c.req.raw);
-  // Return as a new mutable Response so CORS middleware can add headers
-  c.res = new Response(response.body, response);
-  return c.res;
+  try {
+    const auth = c.get("auth");
+    const response = await auth.handler(c.req.raw);
+    // Return as a new mutable Response so CORS middleware can add headers
+    c.res = new Response(response.body, response);
+    return c.res;
+  } catch (err) {
+    console.error("BetterAuth error:", err);
+    return c.json({ error: String(err) }, 500);
+  }
 });
 
 // Custom routes

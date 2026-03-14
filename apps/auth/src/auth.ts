@@ -22,5 +22,11 @@ export function getAuth(db: DrizzleD1Database<typeof schema>, env: Bindings) {
       }),
     ],
     trustedOrigins: env.CORS_ORIGINS?.split(",") ?? [],
+    advanced: {
+      defaultCookieAttributes: {
+        sameSite: "none",
+        secure: true,
+      },
+    },
   });
 }

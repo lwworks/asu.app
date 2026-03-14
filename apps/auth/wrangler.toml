@@ -8,6 +8,10 @@ workers_dev = false
 pattern = "auth.xn--as-yka.app"
 custom_domain = true
 
+[observability.logs]
+enabled = true
+invocation_logs = true
+
 [[d1_databases]]
 binding = "DB"
 database_name = "asu-auth"

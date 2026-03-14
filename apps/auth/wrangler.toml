@@ -1,0 +1,14 @@
+name = "asu-auth"
+main = "src/index.ts"
+compatibility_date = "2025-03-14"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+[[routes]]
+pattern = "auth.xn--as-yka.app"
+custom_domain = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "asu-auth"
+database_id = "1500d65b-9e81-4006-bd77-c71d3555e263"

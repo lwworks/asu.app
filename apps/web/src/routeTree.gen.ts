@@ -12,34 +12,21 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegistrierenRouteImport } from './routes/registrieren'
-import { Route as PersonalRouteImport } from './routes/personal'
-import { Route as OrganisationenRouteImport } from './routes/organisationen'
-import { Route as EinstellungenRouteImport } from './routes/einstellungen'
 import { Route as AnmeldenRouteImport } from './routes/anmelden'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as EinladungCodeRouteImport } from './routes/einladung/$code'
-import { Route as EinsatzOperationSlugIndexRouteImport } from './routes/einsatz/$operationSlug/index'
-import { Route as EinsatzOperationSlugTruppsRouteImport } from './routes/einsatz/$operationSlug/trupps'
-import { Route as EinsatzOperationSlugExportRouteImport } from './routes/einsatz/$operationSlug/export'
+import { Route as AuthedRouteImport } from './routes/_authed'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AuthedOrganisationenRouteImport } from './routes/_authed/organisationen'
+import { Route as AppPersonalRouteImport } from './routes/_app/personal'
+import { Route as AppEinstellungenRouteImport } from './routes/_app/einstellungen'
+import { Route as AuthedEinladungCodeRouteImport } from './routes/_authed/einladung/$code'
+import { Route as AppEinsatzOperationSlugIndexRouteImport } from './routes/_app/einsatz/$operationSlug/index'
+import { Route as AppEinsatzOperationSlugTruppsRouteImport } from './routes/_app/einsatz/$operationSlug/trupps'
+import { Route as AppEinsatzOperationSlugExportRouteImport } from './routes/_app/einsatz/$operationSlug/export'
 
 const RegistrierenRoute = RegistrierenRouteImport.update({
   id: '/registrieren',
   path: '/registrieren',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PersonalRoute = PersonalRouteImport.update({
-  id: '/personal',
-  path: '/personal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrganisationenRoute = OrganisationenRouteImport.update({
-  id: '/organisationen',
-  path: '/organisationen',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EinstellungenRoute = EinstellungenRouteImport.update({
-  id: '/einstellungen',
-  path: '/einstellungen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnmeldenRoute = AnmeldenRouteImport.update({
@@ -47,81 +34,106 @@ const AnmeldenRoute = AnmeldenRouteImport.update({
   path: '/anmelden',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AuthedRoute = AuthedRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const EinladungCodeRoute = EinladungCodeRouteImport.update({
+const AuthedOrganisationenRoute = AuthedOrganisationenRouteImport.update({
+  id: '/organisationen',
+  path: '/organisationen',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AppPersonalRoute = AppPersonalRouteImport.update({
+  id: '/personal',
+  path: '/personal',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEinstellungenRoute = AppEinstellungenRouteImport.update({
+  id: '/einstellungen',
+  path: '/einstellungen',
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthedEinladungCodeRoute = AuthedEinladungCodeRouteImport.update({
   id: '/einladung/$code',
   path: '/einladung/$code',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthedRoute,
 } as any)
-const EinsatzOperationSlugIndexRoute =
-  EinsatzOperationSlugIndexRouteImport.update({
+const AppEinsatzOperationSlugIndexRoute =
+  AppEinsatzOperationSlugIndexRouteImport.update({
     id: '/einsatz/$operationSlug/',
     path: '/einsatz/$operationSlug/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AppRoute,
   } as any)
-const EinsatzOperationSlugTruppsRoute =
-  EinsatzOperationSlugTruppsRouteImport.update({
+const AppEinsatzOperationSlugTruppsRoute =
+  AppEinsatzOperationSlugTruppsRouteImport.update({
     id: '/einsatz/$operationSlug/trupps',
     path: '/einsatz/$operationSlug/trupps',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AppRoute,
   } as any)
-const EinsatzOperationSlugExportRoute =
-  EinsatzOperationSlugExportRouteImport.update({
+const AppEinsatzOperationSlugExportRoute =
+  AppEinsatzOperationSlugExportRouteImport.update({
     id: '/einsatz/$operationSlug/export',
     path: '/einsatz/$operationSlug/export',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AppRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
   '/anmelden': typeof AnmeldenRoute
-  '/einstellungen': typeof EinstellungenRoute
-  '/organisationen': typeof OrganisationenRoute
-  '/personal': typeof PersonalRoute
   '/registrieren': typeof RegistrierenRoute
-  '/einladung/$code': typeof EinladungCodeRoute
-  '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
-  '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
-  '/einsatz/$operationSlug/': typeof EinsatzOperationSlugIndexRoute
+  '/einstellungen': typeof AppEinstellungenRoute
+  '/personal': typeof AppPersonalRoute
+  '/organisationen': typeof AuthedOrganisationenRoute
+  '/einladung/$code': typeof AuthedEinladungCodeRoute
+  '/einsatz/$operationSlug/export': typeof AppEinsatzOperationSlugExportRoute
+  '/einsatz/$operationSlug/trupps': typeof AppEinsatzOperationSlugTruppsRoute
+  '/einsatz/$operationSlug/': typeof AppEinsatzOperationSlugIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
   '/anmelden': typeof AnmeldenRoute
-  '/einstellungen': typeof EinstellungenRoute
-  '/organisationen': typeof OrganisationenRoute
-  '/personal': typeof PersonalRoute
   '/registrieren': typeof RegistrierenRoute
-  '/einladung/$code': typeof EinladungCodeRoute
-  '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
-  '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
-  '/einsatz/$operationSlug': typeof EinsatzOperationSlugIndexRoute
+  '/einstellungen': typeof AppEinstellungenRoute
+  '/personal': typeof AppPersonalRoute
+  '/organisationen': typeof AuthedOrganisationenRoute
+  '/einladung/$code': typeof AuthedEinladungCodeRoute
+  '/einsatz/$operationSlug/export': typeof AppEinsatzOperationSlugExportRoute
+  '/einsatz/$operationSlug/trupps': typeof AppEinsatzOperationSlugTruppsRoute
+  '/einsatz/$operationSlug': typeof AppEinsatzOperationSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_authed': typeof AuthedRouteWithChildren
   '/anmelden': typeof AnmeldenRoute
-  '/einstellungen': typeof EinstellungenRoute
-  '/organisationen': typeof OrganisationenRoute
-  '/personal': typeof PersonalRoute
   '/registrieren': typeof RegistrierenRoute
-  '/einladung/$code': typeof EinladungCodeRoute
-  '/einsatz/$operationSlug/export': typeof EinsatzOperationSlugExportRoute
-  '/einsatz/$operationSlug/trupps': typeof EinsatzOperationSlugTruppsRoute
-  '/einsatz/$operationSlug/': typeof EinsatzOperationSlugIndexRoute
+  '/_app/einstellungen': typeof AppEinstellungenRoute
+  '/_app/personal': typeof AppPersonalRoute
+  '/_authed/organisationen': typeof AuthedOrganisationenRoute
+  '/_app/': typeof AppIndexRoute
+  '/_authed/einladung/$code': typeof AuthedEinladungCodeRoute
+  '/_app/einsatz/$operationSlug/export': typeof AppEinsatzOperationSlugExportRoute
+  '/_app/einsatz/$operationSlug/trupps': typeof AppEinsatzOperationSlugTruppsRoute
+  '/_app/einsatz/$operationSlug/': typeof AppEinsatzOperationSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/anmelden'
-    | '/einstellungen'
-    | '/organisationen'
-    | '/personal'
     | '/registrieren'
+    | '/einstellungen'
+    | '/personal'
+    | '/organisationen'
     | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
@@ -130,39 +142,35 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/anmelden'
-    | '/einstellungen'
-    | '/organisationen'
-    | '/personal'
     | '/registrieren'
+    | '/einstellungen'
+    | '/personal'
+    | '/organisationen'
     | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
     | '/einsatz/$operationSlug'
   id:
     | '__root__'
-    | '/'
+    | '/_app'
+    | '/_authed'
     | '/anmelden'
-    | '/einstellungen'
-    | '/organisationen'
-    | '/personal'
     | '/registrieren'
-    | '/einladung/$code'
-    | '/einsatz/$operationSlug/export'
-    | '/einsatz/$operationSlug/trupps'
-    | '/einsatz/$operationSlug/'
+    | '/_app/einstellungen'
+    | '/_app/personal'
+    | '/_authed/organisationen'
+    | '/_app/'
+    | '/_authed/einladung/$code'
+    | '/_app/einsatz/$operationSlug/export'
+    | '/_app/einsatz/$operationSlug/trupps'
+    | '/_app/einsatz/$operationSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthedRoute: typeof AuthedRouteWithChildren
   AnmeldenRoute: typeof AnmeldenRoute
-  EinstellungenRoute: typeof EinstellungenRoute
-  OrganisationenRoute: typeof OrganisationenRoute
-  PersonalRoute: typeof PersonalRoute
   RegistrierenRoute: typeof RegistrierenRoute
-  EinladungCodeRoute: typeof EinladungCodeRoute
-  EinsatzOperationSlugExportRoute: typeof EinsatzOperationSlugExportRoute
-  EinsatzOperationSlugTruppsRoute: typeof EinsatzOperationSlugTruppsRoute
-  EinsatzOperationSlugIndexRoute: typeof EinsatzOperationSlugIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -174,27 +182,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegistrierenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/personal': {
-      id: '/personal'
-      path: '/personal'
-      fullPath: '/personal'
-      preLoaderRoute: typeof PersonalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/organisationen': {
-      id: '/organisationen'
-      path: '/organisationen'
-      fullPath: '/organisationen'
-      preLoaderRoute: typeof OrganisationenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/einstellungen': {
-      id: '/einstellungen'
-      path: '/einstellungen'
-      fullPath: '/einstellungen'
-      preLoaderRoute: typeof EinstellungenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/anmelden': {
       id: '/anmelden'
       path: '/anmelden'
@@ -202,51 +189,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnmeldenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/einladung/$code': {
-      id: '/einladung/$code'
+    '/_authed/organisationen': {
+      id: '/_authed/organisationen'
+      path: '/organisationen'
+      fullPath: '/organisationen'
+      preLoaderRoute: typeof AuthedOrganisationenRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_app/personal': {
+      id: '/_app/personal'
+      path: '/personal'
+      fullPath: '/personal'
+      preLoaderRoute: typeof AppPersonalRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/einstellungen': {
+      id: '/_app/einstellungen'
+      path: '/einstellungen'
+      fullPath: '/einstellungen'
+      preLoaderRoute: typeof AppEinstellungenRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_authed/einladung/$code': {
+      id: '/_authed/einladung/$code'
       path: '/einladung/$code'
       fullPath: '/einladung/$code'
-      preLoaderRoute: typeof EinladungCodeRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthedEinladungCodeRouteImport
+      parentRoute: typeof AuthedRoute
     }
-    '/einsatz/$operationSlug/': {
-      id: '/einsatz/$operationSlug/'
+    '/_app/einsatz/$operationSlug/': {
+      id: '/_app/einsatz/$operationSlug/'
       path: '/einsatz/$operationSlug'
       fullPath: '/einsatz/$operationSlug/'
-      preLoaderRoute: typeof EinsatzOperationSlugIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppEinsatzOperationSlugIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/einsatz/$operationSlug/trupps': {
-      id: '/einsatz/$operationSlug/trupps'
+    '/_app/einsatz/$operationSlug/trupps': {
+      id: '/_app/einsatz/$operationSlug/trupps'
       path: '/einsatz/$operationSlug/trupps'
       fullPath: '/einsatz/$operationSlug/trupps'
-      preLoaderRoute: typeof EinsatzOperationSlugTruppsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppEinsatzOperationSlugTruppsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/einsatz/$operationSlug/export': {
-      id: '/einsatz/$operationSlug/export'
+    '/_app/einsatz/$operationSlug/export': {
+      id: '/_app/einsatz/$operationSlug/export'
       path: '/einsatz/$operationSlug/export'
       fullPath: '/einsatz/$operationSlug/export'
-      preLoaderRoute: typeof EinsatzOperationSlugExportRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppEinsatzOperationSlugExportRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
-declare module './routes/index' {
+declare module './routes/_app' {
   const createFileRoute: CreateFileRoute<
-    '/',
-    FileRoutesByPath['/']['parentRoute'],
-    FileRoutesByPath['/']['id'],
-    FileRoutesByPath['/']['path'],
-    FileRoutesByPath['/']['fullPath']
+    '/_app',
+    FileRoutesByPath['/_app']['parentRoute'],
+    FileRoutesByPath['/_app']['id'],
+    FileRoutesByPath['/_app']['path'],
+    FileRoutesByPath['/_app']['fullPath']
+  >
+}
+declare module './routes/_authed' {
+  const createFileRoute: CreateFileRoute<
+    '/_authed',
+    FileRoutesByPath['/_authed']['parentRoute'],
+    FileRoutesByPath['/_authed']['id'],
+    FileRoutesByPath['/_authed']['path'],
+    FileRoutesByPath['/_authed']['fullPath']
   >
 }
 declare module './routes/anmelden' {
@@ -258,33 +289,6 @@ declare module './routes/anmelden' {
     FileRoutesByPath['/anmelden']['fullPath']
   >
 }
-declare module './routes/einstellungen' {
-  const createFileRoute: CreateFileRoute<
-    '/einstellungen',
-    FileRoutesByPath['/einstellungen']['parentRoute'],
-    FileRoutesByPath['/einstellungen']['id'],
-    FileRoutesByPath['/einstellungen']['path'],
-    FileRoutesByPath['/einstellungen']['fullPath']
-  >
-}
-declare module './routes/organisationen' {
-  const createFileRoute: CreateFileRoute<
-    '/organisationen',
-    FileRoutesByPath['/organisationen']['parentRoute'],
-    FileRoutesByPath['/organisationen']['id'],
-    FileRoutesByPath['/organisationen']['path'],
-    FileRoutesByPath['/organisationen']['fullPath']
-  >
-}
-declare module './routes/personal' {
-  const createFileRoute: CreateFileRoute<
-    '/personal',
-    FileRoutesByPath['/personal']['parentRoute'],
-    FileRoutesByPath['/personal']['id'],
-    FileRoutesByPath['/personal']['path'],
-    FileRoutesByPath['/personal']['fullPath']
-  >
-}
 declare module './routes/registrieren' {
   const createFileRoute: CreateFileRoute<
     '/registrieren',
@@ -294,54 +298,117 @@ declare module './routes/registrieren' {
     FileRoutesByPath['/registrieren']['fullPath']
   >
 }
-declare module './routes/einladung/$code' {
+declare module './routes/_app/einstellungen' {
   const createFileRoute: CreateFileRoute<
-    '/einladung/$code',
-    FileRoutesByPath['/einladung/$code']['parentRoute'],
-    FileRoutesByPath['/einladung/$code']['id'],
-    FileRoutesByPath['/einladung/$code']['path'],
-    FileRoutesByPath['/einladung/$code']['fullPath']
+    '/_app/einstellungen',
+    FileRoutesByPath['/_app/einstellungen']['parentRoute'],
+    FileRoutesByPath['/_app/einstellungen']['id'],
+    FileRoutesByPath['/_app/einstellungen']['path'],
+    FileRoutesByPath['/_app/einstellungen']['fullPath']
   >
 }
-declare module './routes/einsatz/$operationSlug/export' {
+declare module './routes/_app/personal' {
   const createFileRoute: CreateFileRoute<
-    '/einsatz/$operationSlug/export',
-    FileRoutesByPath['/einsatz/$operationSlug/export']['parentRoute'],
-    FileRoutesByPath['/einsatz/$operationSlug/export']['id'],
-    FileRoutesByPath['/einsatz/$operationSlug/export']['path'],
-    FileRoutesByPath['/einsatz/$operationSlug/export']['fullPath']
+    '/_app/personal',
+    FileRoutesByPath['/_app/personal']['parentRoute'],
+    FileRoutesByPath['/_app/personal']['id'],
+    FileRoutesByPath['/_app/personal']['path'],
+    FileRoutesByPath['/_app/personal']['fullPath']
   >
 }
-declare module './routes/einsatz/$operationSlug/trupps' {
+declare module './routes/_authed/organisationen' {
   const createFileRoute: CreateFileRoute<
-    '/einsatz/$operationSlug/trupps',
-    FileRoutesByPath['/einsatz/$operationSlug/trupps']['parentRoute'],
-    FileRoutesByPath['/einsatz/$operationSlug/trupps']['id'],
-    FileRoutesByPath['/einsatz/$operationSlug/trupps']['path'],
-    FileRoutesByPath['/einsatz/$operationSlug/trupps']['fullPath']
+    '/_authed/organisationen',
+    FileRoutesByPath['/_authed/organisationen']['parentRoute'],
+    FileRoutesByPath['/_authed/organisationen']['id'],
+    FileRoutesByPath['/_authed/organisationen']['path'],
+    FileRoutesByPath['/_authed/organisationen']['fullPath']
   >
 }
-declare module './routes/einsatz/$operationSlug/index' {
+declare module './routes/_app/index' {
   const createFileRoute: CreateFileRoute<
-    '/einsatz/$operationSlug/',
-    FileRoutesByPath['/einsatz/$operationSlug/']['parentRoute'],
-    FileRoutesByPath['/einsatz/$operationSlug/']['id'],
-    FileRoutesByPath['/einsatz/$operationSlug/']['path'],
-    FileRoutesByPath['/einsatz/$operationSlug/']['fullPath']
+    '/_app/',
+    FileRoutesByPath['/_app/']['parentRoute'],
+    FileRoutesByPath['/_app/']['id'],
+    FileRoutesByPath['/_app/']['path'],
+    FileRoutesByPath['/_app/']['fullPath']
+  >
+}
+declare module './routes/_authed/einladung/$code' {
+  const createFileRoute: CreateFileRoute<
+    '/_authed/einladung/$code',
+    FileRoutesByPath['/_authed/einladung/$code']['parentRoute'],
+    FileRoutesByPath['/_authed/einladung/$code']['id'],
+    FileRoutesByPath['/_authed/einladung/$code']['path'],
+    FileRoutesByPath['/_authed/einladung/$code']['fullPath']
+  >
+}
+declare module './routes/_app/einsatz/$operationSlug/export' {
+  const createFileRoute: CreateFileRoute<
+    '/_app/einsatz/$operationSlug/export',
+    FileRoutesByPath['/_app/einsatz/$operationSlug/export']['parentRoute'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/export']['id'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/export']['path'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/export']['fullPath']
+  >
+}
+declare module './routes/_app/einsatz/$operationSlug/trupps' {
+  const createFileRoute: CreateFileRoute<
+    '/_app/einsatz/$operationSlug/trupps',
+    FileRoutesByPath['/_app/einsatz/$operationSlug/trupps']['parentRoute'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/trupps']['id'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/trupps']['path'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/trupps']['fullPath']
+  >
+}
+declare module './routes/_app/einsatz/$operationSlug/index' {
+  const createFileRoute: CreateFileRoute<
+    '/_app/einsatz/$operationSlug/',
+    FileRoutesByPath['/_app/einsatz/$operationSlug/']['parentRoute'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/']['id'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/']['path'],
+    FileRoutesByPath['/_app/einsatz/$operationSlug/']['fullPath']
   >
 }
 
+interface AppRouteChildren {
+  AppEinstellungenRoute: typeof AppEinstellungenRoute
+  AppPersonalRoute: typeof AppPersonalRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppEinsatzOperationSlugExportRoute: typeof AppEinsatzOperationSlugExportRoute
+  AppEinsatzOperationSlugTruppsRoute: typeof AppEinsatzOperationSlugTruppsRoute
+  AppEinsatzOperationSlugIndexRoute: typeof AppEinsatzOperationSlugIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppEinstellungenRoute: AppEinstellungenRoute,
+  AppPersonalRoute: AppPersonalRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppEinsatzOperationSlugExportRoute: AppEinsatzOperationSlugExportRoute,
+  AppEinsatzOperationSlugTruppsRoute: AppEinsatzOperationSlugTruppsRoute,
+  AppEinsatzOperationSlugIndexRoute: AppEinsatzOperationSlugIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface AuthedRouteChildren {
+  AuthedOrganisationenRoute: typeof AuthedOrganisationenRoute
+  AuthedEinladungCodeRoute: typeof AuthedEinladungCodeRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedOrganisationenRoute: AuthedOrganisationenRoute,
+  AuthedEinladungCodeRoute: AuthedEinladungCodeRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthedRoute: AuthedRouteWithChildren,
   AnmeldenRoute: AnmeldenRoute,
-  EinstellungenRoute: EinstellungenRoute,
-  OrganisationenRoute: OrganisationenRoute,
-  PersonalRoute: PersonalRoute,
   RegistrierenRoute: RegistrierenRoute,
-  EinladungCodeRoute: EinladungCodeRoute,
-  EinsatzOperationSlugExportRoute: EinsatzOperationSlugExportRoute,
-  EinsatzOperationSlugTruppsRoute: EinsatzOperationSlugTruppsRoute,
-  EinsatzOperationSlugIndexRoute: EinsatzOperationSlugIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

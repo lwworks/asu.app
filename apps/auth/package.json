@@ -4,24 +4,23 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc && tsx src/index.ts",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push"
+    "db:migrate:local": "wrangler d1 migrations apply asu-auth --local",
+    "db:migrate:prod": "wrangler d1 migrations apply asu-auth --remote"
   },
   "dependencies": {
     "@asu/shared": "workspace:*",
     "better-auth": "^1.2.0",
     "drizzle-orm": "^0.44.0",
     "hono": "^4.7.0",
-    "jose": "^6.0.0",
-    "postgres": "^3.4.0"
+    "jose": "^6.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@cloudflare/workers-types": "^4.20250313.0",
     "drizzle-kit": "^0.31.0",
-    "tsx": "^4.19.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "wrangler": "^4.14.0"
   }
 }

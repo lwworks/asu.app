@@ -1,6 +1,11 @@
 name = "asu-sync"
 main = "src/index.ts"
 compatibility_date = "2025-03-14"
+workers_dev = false
+
+[[routes]]
+pattern = "sync.xn--as-yka.app"
+custom_domain = true
 
 [durable_objects]
 bindings = [
@@ -9,12 +14,12 @@ bindings = [
 
 [[migrations]]
 tag = "v1"
-new_classes = ["WebSocketServer"]
+new_sqlite_classes = ["WebSocketServer"]
 
 [[d1_databases]]
 binding = "DB"
 database_name = "asu-sync"
-database_id = "" # Set after `wrangler d1 create asu-sync`
+database_id = "344e7db9-a455-47ff-8e1e-a662f26332a3"
 
 [placement]
 mode = "smart"

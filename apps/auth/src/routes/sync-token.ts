@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../types.ts";
 import { SignJWT } from "jose";
-import { db } from "../db.ts";
 import { membership } from "../schema.ts";
 import { requireAuth } from "../middleware/auth.ts";
 import { eq, and } from "drizzle-orm";
@@ -12,6 +11,7 @@ const app = new Hono<AppEnv>();
 app.use("*", requireAuth);
 
 app.get("/", async (c) => {
+  const db = c.get("db");
   const user = c.get("user");
   const orgId = c.req.query("orgId");
 
@@ -30,7 +30,7 @@ app.get("/", async (c) => {
     return c.json({ error: "Not a member of this org" }, 403);
   }
 
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+  const secret = new TextEncoder().encode(c.env.JWT_SECRET);
   const payload: Omit<SyncTokenPayload, "exp"> = {
     userId: user.id,
     orgId,

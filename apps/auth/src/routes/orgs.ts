@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../types.ts";
-import { db } from "../db.ts";
 import { organization, membership } from "../schema.ts";
 import { requireAuth } from "../middleware/auth.ts";
 import { eq } from "drizzle-orm";
@@ -11,6 +10,7 @@ app.use("*", requireAuth);
 
 // Create org
 app.post("/", async (c) => {
+  const db = c.get("db");
   const user = c.get("user");
   const { name, slug } = await c.req.json<{ name: string; slug: string }>();
 
@@ -34,6 +34,7 @@ app.post("/", async (c) => {
 
 // List user's orgs
 app.get("/", async (c) => {
+  const db = c.get("db");
   const user = c.get("user");
 
   const memberships = await db
@@ -52,6 +53,7 @@ app.get("/", async (c) => {
 
 // List org members
 app.get("/:orgId/members", async (c) => {
+  const db = c.get("db");
   const user = c.get("user");
   const orgId = c.req.param("orgId");
 

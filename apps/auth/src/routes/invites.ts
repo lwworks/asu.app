@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../types.ts";
-import { db } from "../db.ts";
 import { invite, membership } from "../schema.ts";
 import { requireAuth } from "../middleware/auth.ts";
 import { eq, and, isNull } from "drizzle-orm";
@@ -11,6 +10,7 @@ app.use("*", requireAuth);
 
 // Create invite (admin only)
 app.post("/:orgId/invites", async (c) => {
+  const db = c.get("db");
   const user = c.get("user");
   const orgId = c.req.param("orgId");
 
@@ -42,6 +42,7 @@ app.post("/:orgId/invites", async (c) => {
 
 // Redeem invite
 app.post("/invites/:code/redeem", async (c) => {
+  const db = c.get("db");
   const user = c.get("user");
   const code = c.req.param("code");
 

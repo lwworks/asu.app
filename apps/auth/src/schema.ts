@@ -1,35 +1,34 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  primaryKey,
-} from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
-export const organization = pgTable("organization", {
+export const organization = sqliteTable("organization", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
 });
 
-export const membership = pgTable("membership", {
+export const membership = sqliteTable("membership", {
   id: text("id").primaryKey(),
   userId: text("user_id").notNull(),
   orgId: text("org_id")
     .notNull()
     .references(() => organization.id),
   role: text("role", { enum: ["admin", "member"] }).notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
 });
 
-export const invite = pgTable("invite", {
+export const invite = sqliteTable("invite", {
   id: text("id").primaryKey(),
   orgId: text("org_id")
     .notNull()
     .references(() => organization.id),
   code: text("code").notNull().unique(),
   createdBy: text("created_by").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  usedAt: timestamp("used_at"),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  usedAt: integer("used_at", { mode: "timestamp" }),
   usedBy: text("used_by"),
 });

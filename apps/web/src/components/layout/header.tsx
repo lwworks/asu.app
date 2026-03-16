@@ -11,6 +11,7 @@ import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ClockIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
+import { OrgSwitcher } from "./org-switcher";
 import { UiSettingsDrawer } from "./ui-settings-drawer";
 import { useAuth } from "@/context/auth";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,10 @@ export const Header = ({
                   <Logo className="h-4 text-white" />
                 </Link>
               </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <OrgSwitcher />
             </BreadcrumbItem>
             {breadcrumbs?.map((breadcrumb) => (
               <Fragment key={breadcrumb.href}>

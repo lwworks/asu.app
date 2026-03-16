@@ -4,6 +4,9 @@ compatibility_date = "2025-03-14"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 
+[limits]
+cpu_ms = 20
+
 [[routes]]
 pattern = "auth.xn--as-yka.app"
 custom_domain = true

@@ -61,6 +61,8 @@ function PasswordLogin() {
     setLoading(false);
     if (result.error) {
       setError(result.error.message ?? "Anmeldung fehlgeschlagen");
+    } else {
+      window.location.href = "/";
     }
   };
 
@@ -128,6 +130,8 @@ function OtpLogin() {
     setLoading(false);
     if (result.error) {
       setError(result.error.message ?? "Ungültiger Code");
+    } else {
+      window.location.href = "/";
     }
   };
 

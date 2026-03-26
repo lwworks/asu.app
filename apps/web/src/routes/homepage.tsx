@@ -10,6 +10,8 @@ import {
   WifiOff,
   Zap,
   Shield,
+  AlertTriangleIcon,
+  ChevronRight,
 } from "lucide-react";
 
 export const Route = createFileRoute({
@@ -18,9 +20,10 @@ export const Route = createFileRoute({
 
 function HomepagePage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-[oklch(0.141_0.005_285.823)] text-[oklch(0.985_0_0)]">
       <Navbar />
       <Hero />
+      <ProductPreview />
       <Features />
       <Pricing />
       <Footer />
@@ -34,11 +37,16 @@ function HomepagePage() {
 
 function Navbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[oklch(0.141_0.005_285.823)]/80 backdrop-blur-xl">
       <div className="mx-auto max-w-6xl px-6 flex h-16 items-center justify-between">
-        <Logo className="h-5 text-foreground" />
+        <Logo className="h-5 text-white" />
         <nav className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-white/60 hover:text-white hover:bg-white/10"
+            asChild
+          >
             <a href="/anmelden">Anmelden</a>
           </Button>
           <Button size="sm" asChild>
@@ -56,17 +64,22 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="bg-foreground text-background py-32 px-6">
-      <div className="mx-auto max-w-4xl text-center space-y-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-background/20 bg-background/10 px-4 py-1.5 text-sm">
-          <span className="size-2 rounded-full bg-primary" />
+    <section className="relative overflow-hidden pt-24 pb-16 px-6">
+      {/* Subtle grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+      {/* Radial glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(241,255,0,0.08)_0%,transparent_70%)]" />
+
+      <div className="relative mx-auto max-w-4xl text-center space-y-8">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-white/70">
+          <span className="size-2 rounded-full bg-[#F1FF00] animate-pulse" />
           Echtzeit-Synchronisierung für alle Endgeräte
         </div>
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl leading-[1.1]">
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl leading-[1.08]">
           Atemschutz&shy;überwachung.{" "}
-          <span className="text-primary">Digital.</span>
+          <span className="text-[#F1FF00]">Digital.</span>
         </h1>
-        <p className="text-lg text-background/65 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
           ASÜ.APP digitalisiert die Einsatzdokumentation für Feuerwehren und
           Hilfsorganisationen – in Echtzeit synchronisiert, offline-fähig und
           intuitiv bedienbar.
@@ -80,7 +93,7 @@ function Hero() {
           <Button
             size="lg"
             variant="ghost"
-            className="text-background hover:bg-background/10 hover:text-background"
+            className="text-white/60 hover:bg-white/10 hover:text-white"
             asChild
           >
             <a href="/anmelden">Zur Anmeldung</a>
@@ -88,6 +101,222 @@ function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Product Preview – Fake app screenshot built with styled components
+// ---------------------------------------------------------------------------
+
+function ProductPreview() {
+  return (
+    <section className="relative px-6 pb-24">
+      {/* Fade from section above */}
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-transparent to-transparent" />
+
+      <div className="mx-auto max-w-6xl">
+        {/* Browser chrome frame */}
+        <div className="rounded-xl border border-white/10 bg-[oklch(0.18_0.005_285.8)] shadow-2xl shadow-black/40 overflow-hidden">
+          {/* Title bar */}
+          <div className="flex items-center gap-2 px-4 h-10 bg-[oklch(0.16_0.005_285.8)] border-b border-white/10">
+            <div className="flex gap-1.5">
+              <div className="size-3 rounded-full bg-white/10" />
+              <div className="size-3 rounded-full bg-white/10" />
+              <div className="size-3 rounded-full bg-white/10" />
+            </div>
+            <div className="flex-1 flex justify-center">
+              <div className="text-xs text-white/30 bg-white/5 rounded px-3 py-0.5">
+                app.asu.app
+              </div>
+            </div>
+            <div className="w-[54px]" />
+          </div>
+
+          {/* App header */}
+          <div className="border-b border-white/10 px-8">
+            <div className="flex items-center justify-between h-12">
+              <div className="flex items-center gap-3 text-sm text-white/50">
+                <Logo className="h-3.5 text-white" />
+                <ChevronRight className="size-3 text-white/30" />
+                <span className="text-white/70">FF Musterstadt</span>
+                <ChevronRight className="size-3 text-white/30" />
+                <span className="text-white/70">Wohnungsbrand Musterstraße 12</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="size-3.5 text-[#F1FF00]" />
+                <span className="text-xs text-white/70">26.03.2026 14:32:08</span>
+              </div>
+            </div>
+            <div className="flex gap-4 text-xs -mb-px pb-2.5">
+              <span className="text-white/40">Übersicht</span>
+              <span className="text-white border-b border-[#F1FF00] pb-2.5">
+                Trupps
+              </span>
+              <span className="text-white/40">Export</span>
+            </div>
+          </div>
+
+          {/* App content – squad cards */}
+          <div className="p-6 flex gap-4 overflow-hidden">
+            {/* Squad 1 – Active */}
+            <MockSquadCard
+              name="Angriffstrupp"
+              status="active"
+              statusLabel="Aktiv"
+              members={[
+                { name: "Schmidt, M.", role: "TF", pressure: "280" },
+                { name: "Weber, K.", pressure: "300" },
+              ]}
+              duration="12:34"
+              pressure={210}
+              critical={false}
+            />
+
+            {/* Squad 2 – Active, lower pressure */}
+            <MockSquadCard
+              name="Sicherungstrupp"
+              status="active"
+              statusLabel="Aktiv"
+              members={[
+                { name: "Fischer, T.", role: "TF", pressure: "300" },
+                { name: "Braun, L.", pressure: "290" },
+              ]}
+              duration="24:51"
+              pressure={85}
+              critical={false}
+            />
+
+            {/* Squad 3 – Critical */}
+            <MockSquadCard
+              name="2. Angriffstrupp"
+              status="critical"
+              statusLabel="Aktiv"
+              members={[
+                { name: "Müller, A.", role: "TF", pressure: "260" },
+                { name: "Koch, S.", pressure: "240" },
+              ]}
+              duration="31:17"
+              pressure={45}
+              critical={true}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MockSquadCard({
+  name,
+  status,
+  statusLabel,
+  members,
+  duration,
+  pressure,
+  critical,
+}: {
+  name: string;
+  status: "active" | "critical" | "standby";
+  statusLabel: string;
+  members: { name: string; role?: string; pressure: string }[];
+  duration: string;
+  pressure: number;
+  critical: boolean;
+}) {
+  return (
+    <div className="w-80 shrink-0 rounded-xl border border-white/10 bg-[oklch(0.21_0.006_285.885)] overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10">
+        <span className="font-semibold text-sm text-white">{name}</span>
+        <span
+          className={cn(
+            "text-xs px-2 py-0.5 rounded font-medium",
+            critical
+              ? "bg-red-500/15 text-red-400"
+              : status === "active"
+                ? "bg-[#F1FF00]/15 text-[#F1FF00]"
+                : "bg-white/10 text-white/50"
+          )}
+        >
+          {statusLabel}
+        </span>
+      </div>
+
+      {/* Members */}
+      <div className="divide-y divide-white/5">
+        {members.map((m) => (
+          <div
+            key={m.name}
+            className="flex items-center justify-between px-5 py-2.5 text-sm"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-white/90">{m.name}</span>
+              {m.role && (
+                <span className="text-[10px] font-bold bg-white/10 text-white/50 px-1.5 py-0.5 rounded">
+                  {m.role}
+                </span>
+              )}
+            </div>
+            <span className="font-mono text-xs text-white/40">
+              {m.pressure} bar
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 divide-x divide-white/10 border-t border-white/10">
+        <div className="px-5 py-3.5">
+          <div className="text-2xl font-mono text-white">{duration}</div>
+          <div className="text-[10px] uppercase tracking-wider text-white/35 mt-0.5">
+            im Einsatz
+          </div>
+        </div>
+        <div className="px-5 py-3.5">
+          <div className="flex items-center justify-between">
+            <div
+              className={cn(
+                "text-2xl font-mono",
+                critical ? "text-red-400" : "text-[#F1FF00]"
+              )}
+            >
+              {pressure}
+            </div>
+            {critical && (
+              <AlertTriangleIcon className="size-5 text-red-400" />
+            )}
+          </div>
+          <div className="text-[10px] uppercase tracking-wider text-white/35 mt-0.5">
+            Restdruck
+          </div>
+        </div>
+      </div>
+
+      {/* Pressure bar */}
+      <div className="relative w-full h-2 border-y border-white/10 bg-white/5">
+        <div
+          className={cn(
+            "h-full transition-all",
+            critical ? "bg-red-400" : "bg-[#F1FF00]"
+          )}
+          style={{ width: `${(pressure / 300) * 100}%` }}
+        />
+        <div className="absolute inset-y-0 left-1/6 w-px bg-white/10" />
+        <div className="absolute inset-y-0 left-1/3 w-px bg-white/10" />
+        <div className="absolute inset-y-0 left-1/2 w-px bg-white/10" />
+        <div className="absolute inset-y-0 left-2/3 w-px bg-white/10" />
+        <div className="absolute inset-y-0 left-5/6 w-px bg-white/10" />
+      </div>
+
+      {/* Pressure labels */}
+      <div className="flex text-[9px] uppercase text-white/20 font-medium tracking-wider text-center px-6 py-1">
+        <div className="w-1/5 shrink-0">50</div>
+        <div className="w-1/5 shrink-0">100</div>
+        <div className="w-1/5 shrink-0">150</div>
+        <div className="w-1/5 shrink-0">200</div>
+        <div className="w-1/5 shrink-0">250</div>
+      </div>
+    </div>
   );
 }
 
@@ -136,28 +365,28 @@ const features = [
 
 function Features() {
   return (
-    <section className="py-24 px-6 bg-background">
+    <section className="py-24 px-6">
       <div className="mx-auto max-w-6xl space-y-16">
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Alles, was moderne ASÜ braucht
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-white/45 text-lg max-w-xl mx-auto">
             Von der Einsatzerstellung bis zum Abschlussbericht – ASÜ.APP
             begleitet euch durch jeden Einsatz.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="space-y-3 p-6 rounded-xl border border-border bg-card"
+              className="group space-y-3 p-6 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
             >
-              <div className="size-10 rounded-lg bg-foreground flex items-center justify-center">
-                <feature.icon className="size-5 text-primary" />
+              <div className="size-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                <feature.icon className="size-5 text-[#F1FF00]" />
               </div>
-              <h3 className="font-semibold">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <h3 className="font-semibold text-white">{feature.title}</h3>
+              <p className="text-sm text-white/40 leading-relaxed">
                 {feature.description}
               </p>
             </div>
@@ -228,34 +457,32 @@ const plans = [
 
 function Pricing() {
   return (
-    <section className="py-24 px-6 bg-muted/40">
+    <section className="py-24 px-6 border-t border-white/5">
       <div className="mx-auto max-w-6xl space-y-16">
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Einfache Preise
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-white/45 text-lg max-w-xl mx-auto">
             Transparent und fair – ohne versteckte Kosten.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
           {plans.map((plan) => (
             <div
               key={plan.name}
               className={cn(
                 "rounded-xl border p-8 space-y-8",
                 plan.highlighted
-                  ? "bg-foreground text-background border-foreground"
-                  : "bg-card border-border"
+                  ? "bg-[#F1FF00] text-black border-[#F1FF00] shadow-[0_0_60px_-12px_rgba(241,255,0,0.3)]"
+                  : "bg-white/[0.02] border-white/10"
               )}
             >
               <div className="space-y-2">
                 <p
                   className={cn(
                     "text-sm font-medium",
-                    plan.highlighted
-                      ? "text-background/60"
-                      : "text-muted-foreground"
+                    plan.highlighted ? "text-black/50" : "text-white/40"
                   )}
                 >
                   {plan.name}
@@ -266,9 +493,7 @@ function Pricing() {
                     <span
                       className={cn(
                         "text-sm",
-                        plan.highlighted
-                          ? "text-background/60"
-                          : "text-muted-foreground"
+                        plan.highlighted ? "text-black/50" : "text-white/40"
                       )}
                     >
                       {plan.period}
@@ -278,9 +503,7 @@ function Pricing() {
                 <p
                   className={cn(
                     "text-sm",
-                    plan.highlighted
-                      ? "text-background/65"
-                      : "text-muted-foreground"
+                    plan.highlighted ? "text-black/60" : "text-white/40"
                   )}
                 >
                   {plan.description}
@@ -288,8 +511,16 @@ function Pricing() {
               </div>
               <ul className="space-y-3">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5 text-sm">
-                    <Check className="size-4 mt-0.5 shrink-0 text-primary" />
+                  <li
+                    key={feature}
+                    className="flex items-start gap-2.5 text-sm"
+                  >
+                    <Check
+                      className={cn(
+                        "size-4 mt-0.5 shrink-0",
+                        plan.highlighted ? "text-black/70" : "text-[#F1FF00]"
+                      )}
+                    />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -297,7 +528,12 @@ function Pricing() {
               <Button
                 size="lg"
                 variant={plan.highlighted ? "default" : "outline"}
-                className="w-full"
+                className={cn(
+                  "w-full",
+                  plan.highlighted
+                    ? "bg-black text-[#F1FF00] hover:bg-black/80"
+                    : "border-white/15 text-white hover:bg-white/10 bg-transparent"
+                )}
                 asChild
               >
                 <a href={plan.href}>{plan.cta}</a>
@@ -316,17 +552,17 @@ function Pricing() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border py-12 px-6">
+    <footer className="border-t border-white/10 py-12 px-6">
       <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        <Logo className="h-4 text-foreground" />
-        <p className="text-sm text-muted-foreground">
+        <Logo className="h-4 text-white/40" />
+        <p className="text-sm text-white/30">
           © {new Date().getFullYear()} ASÜ.APP – Alle Rechte vorbehalten
         </p>
-        <div className="flex gap-6 text-sm text-muted-foreground">
-          <a href="#" className="hover:text-foreground transition-colors">
+        <div className="flex gap-6 text-sm text-white/30">
+          <a href="#" className="hover:text-white transition-colors">
             Datenschutz
           </a>
-          <a href="#" className="hover:text-foreground transition-colors">
+          <a href="#" className="hover:text-white transition-colors">
             Impressum
           </a>
         </div>

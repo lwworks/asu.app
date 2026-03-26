@@ -4,17 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/visuals/logo";
+import { useAuth } from "@/context/auth";
+import { Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute({
   component: RegistrierenPage,
 });
 
 function RegistrierenPage() {
+  const { user, isLoading } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (isLoading) return null;
+  if (user) return <Navigate to="/" />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

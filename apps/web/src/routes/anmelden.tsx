@@ -3,14 +3,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Logo } from "@/components/visuals/logo";
+import { useAuth } from "@/context/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
+import { Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute({
   component: AnmeldenPage,
 });
 
 function AnmeldenPage() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) return null;
+  if (user) return <Navigate to="/" />;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm space-y-6">

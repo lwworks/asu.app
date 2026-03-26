@@ -5,17 +5,16 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/visuals/logo";
+import { useAuth } from "@/context/auth";
 import { useCurrentTime } from "@/context/current-time";
 import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
-import { ClockIcon } from "lucide-react";
+import { ClockIcon, LogOutIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { OrgSwitcher } from "./org-switcher";
 import { UiSettingsDrawer } from "./ui-settings-drawer";
-import { useAuth } from "@/context/auth";
-import { Button } from "@/components/ui/button";
-import { LogOutIcon } from "lucide-react";
 
 export const Header = ({
   breadcrumbs,
@@ -64,7 +63,7 @@ export const Header = ({
             <div className="text-sm text-foreground">{format(currentTime, "dd.MM.yyyy HH:mm:ss")}</div>
           </div>
           <UiSettingsDrawer />
-          <Button variant="ghost" size="icon" onClick={signOut} className="ml-2">
+          <Button variant="outline" size="icon" onClick={signOut} className="ml-2">
             <LogOutIcon className="size-4" />
           </Button>
         </div>

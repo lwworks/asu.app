@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Logo } from "@/components/visuals/logo";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 
@@ -13,9 +14,9 @@ function AnmeldenPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm space-y-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground">ASÜ.APP</h1>
-          <p className="text-muted-foreground mt-1">Anmelden</p>
+        <div className="space-y-2">
+          <Logo className="h-6 text-foreground" />
+          <p className="text-muted-foreground">Anmelden</p>
         </div>
         <Tabs defaultValue="password">
           <TabsList className="w-full">

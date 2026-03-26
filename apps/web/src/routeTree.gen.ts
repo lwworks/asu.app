@@ -12,6 +12,7 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegistrierenRouteImport } from './routes/registrieren'
+import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as AnmeldenRouteImport } from './routes/anmelden'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as AppRouteImport } from './routes/_app'
@@ -27,6 +28,11 @@ import { Route as AppEinsatzOperationSlugExportRouteImport } from './routes/_app
 const RegistrierenRoute = RegistrierenRouteImport.update({
   id: '/registrieren',
   path: '/registrieren',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomepageRoute = HomepageRouteImport.update({
+  id: '/homepage',
+  path: '/homepage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnmeldenRoute = AnmeldenRouteImport.update({
@@ -89,6 +95,7 @@ const AppEinsatzOperationSlugExportRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/anmelden': typeof AnmeldenRoute
+  '/homepage': typeof HomepageRoute
   '/registrieren': typeof RegistrierenRoute
   '/einstellungen': typeof AppEinstellungenRoute
   '/personal': typeof AppPersonalRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/anmelden': typeof AnmeldenRoute
+  '/homepage': typeof HomepageRoute
   '/registrieren': typeof RegistrierenRoute
   '/einstellungen': typeof AppEinstellungenRoute
   '/personal': typeof AppPersonalRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/_authed': typeof AuthedRouteWithChildren
   '/anmelden': typeof AnmeldenRoute
+  '/homepage': typeof HomepageRoute
   '/registrieren': typeof RegistrierenRoute
   '/_app/einstellungen': typeof AppEinstellungenRoute
   '/_app/personal': typeof AppPersonalRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/anmelden'
+    | '/homepage'
     | '/registrieren'
     | '/einstellungen'
     | '/personal'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/anmelden'
+    | '/homepage'
     | '/registrieren'
     | '/einstellungen'
     | '/personal'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_authed'
     | '/anmelden'
+    | '/homepage'
     | '/registrieren'
     | '/_app/einstellungen'
     | '/_app/personal'
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   AuthedRoute: typeof AuthedRouteWithChildren
   AnmeldenRoute: typeof AnmeldenRoute
+  HomepageRoute: typeof HomepageRoute
   RegistrierenRoute: typeof RegistrierenRoute
 }
 
@@ -180,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/registrieren'
       fullPath: '/registrieren'
       preLoaderRoute: typeof RegistrierenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/homepage': {
+      id: '/homepage'
+      path: '/homepage'
+      fullPath: '/homepage'
+      preLoaderRoute: typeof HomepageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/anmelden': {
@@ -287,6 +307,15 @@ declare module './routes/anmelden' {
     FileRoutesByPath['/anmelden']['id'],
     FileRoutesByPath['/anmelden']['path'],
     FileRoutesByPath['/anmelden']['fullPath']
+  >
+}
+declare module './routes/homepage' {
+  const createFileRoute: CreateFileRoute<
+    '/homepage',
+    FileRoutesByPath['/homepage']['parentRoute'],
+    FileRoutesByPath['/homepage']['id'],
+    FileRoutesByPath['/homepage']['path'],
+    FileRoutesByPath['/homepage']['fullPath']
   >
 }
 declare module './routes/registrieren' {
@@ -408,6 +437,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthedRoute: AuthedRouteWithChildren,
   AnmeldenRoute: AnmeldenRoute,
+  HomepageRoute: HomepageRoute,
   RegistrierenRoute: RegistrierenRoute,
 }
 export const routeTree = rootRouteImport

@@ -23,6 +23,7 @@ type OrgContextValue = {
   isLoading: boolean;
   switchOrg: (orgId: string) => Promise<void>;
   refreshOrgs: () => Promise<Org[] | undefined>;
+  clearCurrentOrg: () => void;
 };
 
 const OrgContext = createContext<OrgContextValue | null>(null);
@@ -57,6 +58,12 @@ export function OrgProvider({ children }: { children: ReactNode }) {
       prev ? data.find((o) => o.orgId === prev.orgId) ?? prev : prev
     );
     return data;
+  }, []);
+
+  const clearCurrentOrg = useCallback(() => {
+    setCurrentOrg(null);
+    setSyncToken(null);
+    localStorage.removeItem(CURRENT_ORG_KEY);
   }, []);
 
   const switchOrg = useCallback(
@@ -106,7 +113,15 @@ export function OrgProvider({ children }: { children: ReactNode }) {
 
   return (
     <OrgContext.Provider
-      value={{ orgs, currentOrg, syncToken, isLoading, switchOrg, refreshOrgs }}
+      value={{
+        orgs,
+        currentOrg,
+        syncToken,
+        isLoading,
+        switchOrg,
+        refreshOrgs,
+        clearCurrentOrg,
+      }}
     >
       {children}
     </OrgContext.Provider>

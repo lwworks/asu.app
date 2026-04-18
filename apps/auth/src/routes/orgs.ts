@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../types.ts";
-import { organization, membership } from "../schema.ts";
+import { organization, membership, invite } from "../schema.ts";
 import { requireAuth } from "../middleware/auth.ts";
 import { eq } from "drizzle-orm";
 
@@ -98,6 +98,32 @@ app.patch("/:orgId", async (c) => {
     .where(eq(organization.id, orgId));
 
   return c.json(updated);
+});
+
+// Delete org (admin only)
+app.delete("/:orgId", async (c) => {
+  const db = c.get("db");
+  const user = c.get("user");
+  const orgId = c.req.param("orgId");
+
+  const userMembership = await db
+    .select()
+    .from(membership)
+    .where(eq(membership.orgId, orgId))
+    .then((rows) => rows.find((r) => r.userId === user.id));
+
+  if (!userMembership) {
+    return c.json({ error: "Not a member" }, 403);
+  }
+  if (userMembership.role !== "admin") {
+    return c.json({ error: "Admin role required" }, 403);
+  }
+
+  await db.delete(invite).where(eq(invite.orgId, orgId));
+  await db.delete(membership).where(eq(membership.orgId, orgId));
+  await db.delete(organization).where(eq(organization.id, orgId));
+
+  return c.json({ success: true });
 });
 
 // List org members

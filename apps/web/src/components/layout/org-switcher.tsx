@@ -7,13 +7,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { OrgLogo } from "@/components/org/logo";
 import { useOrg } from "@/context/org";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-react";
 
 export const OrgSwitcher = () => {
   const { orgs, currentOrg, switchOrg } = useOrg();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   if (!currentOrg) return null;
+
+  const handleSwitch = async (orgId: string) => {
+    if (orgId === currentOrg.orgId) return;
+    await switchOrg(orgId);
+    if (pathname.startsWith("/einsatz/")) {
+      navigate({ to: "/" });
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -25,7 +35,7 @@ export const OrgSwitcher = () => {
         {orgs.map((org) => (
           <DropdownMenuItem
             key={org.orgId}
-            onClick={() => switchOrg(org.orgId)}
+            onClick={() => handleSwitch(org.orgId)}
             className="gap-2"
           >
             <OrgLogo name={org.name} logoUrl={org.logoUrl} size="sm" />

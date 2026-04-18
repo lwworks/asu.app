@@ -61,14 +61,18 @@ export function OrgProvider({ children }: { children: ReactNode }) {
 
   const switchOrg = useCallback(
     async (orgId: string) => {
-      const org = orgs.find((o) => o.orgId === orgId);
+      let org = orgs.find((o) => o.orgId === orgId);
+      if (!org) {
+        const fresh = await refreshOrgs();
+        org = fresh?.find((o) => o.orgId === orgId);
+      }
       if (!org) return;
       const token = await fetchSyncToken(orgId);
       setCurrentOrg(org);
       setSyncToken(token);
       localStorage.setItem(CURRENT_ORG_KEY, orgId);
     },
-    [orgs, fetchSyncToken]
+    [orgs, fetchSyncToken, refreshOrgs]
   );
 
   // Load orgs on user change

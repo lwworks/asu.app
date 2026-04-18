@@ -23,7 +23,7 @@ export const OperationCard = ({ operation }: { operation: Operation }) => {
   return (
     <li key={operation.id} className="relative p-6 border-b hover:bg-white/4">
       <Link
-        to={`/einsatz/$operationSlug/trupps`}
+        to={`/einsatz/$operationSlug${operation.completedAt ? "" : "/trupps"}`}
         params={{ operationSlug: operation.slug }}
         className="flex items-baseline gap-2"
       >

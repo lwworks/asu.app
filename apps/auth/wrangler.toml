@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 
 [limits]
-cpu_ms = 100
+cpu_ms = 1000
 
 [[routes]]
 pattern = "auth.xn--as-yka.app"

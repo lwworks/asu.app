@@ -34,6 +34,8 @@ function RegistrierenPage() {
     setLoading(false);
     if (result.error) {
       setError(result.error.message ?? "Registrierung fehlgeschlagen");
+    } else {
+      window.location.href = "/";
     }
   };
 

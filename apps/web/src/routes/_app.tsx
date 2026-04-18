@@ -9,9 +9,7 @@ function AppShell() {
 
   return (
     <Livestore orgId={currentOrg!.orgId} syncToken={syncToken!}>
-      <CurrentTimeProvider>
-        <Outlet />
-      </CurrentTimeProvider>
+      <Outlet />
     </Livestore>
   );
 }
@@ -20,9 +18,11 @@ export const Route = createFileRoute({
   component: () => (
     <AuthGate fallback={<Navigate to="/anmelden" />}>
       <OrgProvider>
-        <OrgGate fallback={<Navigate to="/organisationen" />}>
-          <AppShell />
-        </OrgGate>
+        <CurrentTimeProvider>
+          <OrgGate fallback={<Navigate to="/neue-organisation" />}>
+            <AppShell />
+          </OrgGate>
+        </CurrentTimeProvider>
       </OrgProvider>
     </AuthGate>
   ),

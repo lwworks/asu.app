@@ -17,7 +17,7 @@ import { Route as AnmeldenRouteImport } from './routes/anmelden'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AuthedOrganisationenRouteImport } from './routes/_authed/organisationen'
+import { Route as AuthedNeueOrganisationRouteImport } from './routes/_authed/neue-organisation'
 import { Route as AppPersonalRouteImport } from './routes/_app/personal'
 import { Route as AppEinstellungenRouteImport } from './routes/_app/einstellungen'
 import { Route as AuthedEinladungCodeRouteImport } from './routes/_authed/einladung/$code'
@@ -53,9 +53,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AuthedOrganisationenRoute = AuthedOrganisationenRouteImport.update({
-  id: '/organisationen',
-  path: '/organisationen',
+const AuthedNeueOrganisationRoute = AuthedNeueOrganisationRouteImport.update({
+  id: '/neue-organisation',
+  path: '/neue-organisation',
   getParentRoute: () => AuthedRoute,
 } as any)
 const AppPersonalRoute = AppPersonalRouteImport.update({
@@ -99,7 +99,7 @@ export interface FileRoutesByFullPath {
   '/registrieren': typeof RegistrierenRoute
   '/einstellungen': typeof AppEinstellungenRoute
   '/personal': typeof AppPersonalRoute
-  '/organisationen': typeof AuthedOrganisationenRoute
+  '/neue-organisation': typeof AuthedNeueOrganisationRoute
   '/einladung/$code': typeof AuthedEinladungCodeRoute
   '/einsatz/$operationSlug/export': typeof AppEinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof AppEinsatzOperationSlugTruppsRoute
@@ -112,7 +112,7 @@ export interface FileRoutesByTo {
   '/registrieren': typeof RegistrierenRoute
   '/einstellungen': typeof AppEinstellungenRoute
   '/personal': typeof AppPersonalRoute
-  '/organisationen': typeof AuthedOrganisationenRoute
+  '/neue-organisation': typeof AuthedNeueOrganisationRoute
   '/einladung/$code': typeof AuthedEinladungCodeRoute
   '/einsatz/$operationSlug/export': typeof AppEinsatzOperationSlugExportRoute
   '/einsatz/$operationSlug/trupps': typeof AppEinsatzOperationSlugTruppsRoute
@@ -127,7 +127,7 @@ export interface FileRoutesById {
   '/registrieren': typeof RegistrierenRoute
   '/_app/einstellungen': typeof AppEinstellungenRoute
   '/_app/personal': typeof AppPersonalRoute
-  '/_authed/organisationen': typeof AuthedOrganisationenRoute
+  '/_authed/neue-organisation': typeof AuthedNeueOrganisationRoute
   '/_app/': typeof AppIndexRoute
   '/_authed/einladung/$code': typeof AuthedEinladungCodeRoute
   '/_app/einsatz/$operationSlug/export': typeof AppEinsatzOperationSlugExportRoute
@@ -143,7 +143,7 @@ export interface FileRouteTypes {
     | '/registrieren'
     | '/einstellungen'
     | '/personal'
-    | '/organisationen'
+    | '/neue-organisation'
     | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
@@ -156,7 +156,7 @@ export interface FileRouteTypes {
     | '/registrieren'
     | '/einstellungen'
     | '/personal'
-    | '/organisationen'
+    | '/neue-organisation'
     | '/einladung/$code'
     | '/einsatz/$operationSlug/export'
     | '/einsatz/$operationSlug/trupps'
@@ -170,7 +170,7 @@ export interface FileRouteTypes {
     | '/registrieren'
     | '/_app/einstellungen'
     | '/_app/personal'
-    | '/_authed/organisationen'
+    | '/_authed/neue-organisation'
     | '/_app/'
     | '/_authed/einladung/$code'
     | '/_app/einsatz/$operationSlug/export'
@@ -230,11 +230,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_authed/organisationen': {
-      id: '/_authed/organisationen'
-      path: '/organisationen'
-      fullPath: '/organisationen'
-      preLoaderRoute: typeof AuthedOrganisationenRouteImport
+    '/_authed/neue-organisation': {
+      id: '/_authed/neue-organisation'
+      path: '/neue-organisation'
+      fullPath: '/neue-organisation'
+      preLoaderRoute: typeof AuthedNeueOrganisationRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_app/personal': {
@@ -345,13 +345,13 @@ declare module './routes/_app/personal' {
     FileRoutesByPath['/_app/personal']['fullPath']
   >
 }
-declare module './routes/_authed/organisationen' {
+declare module './routes/_authed/neue-organisation' {
   const createFileRoute: CreateFileRoute<
-    '/_authed/organisationen',
-    FileRoutesByPath['/_authed/organisationen']['parentRoute'],
-    FileRoutesByPath['/_authed/organisationen']['id'],
-    FileRoutesByPath['/_authed/organisationen']['path'],
-    FileRoutesByPath['/_authed/organisationen']['fullPath']
+    '/_authed/neue-organisation',
+    FileRoutesByPath['/_authed/neue-organisation']['parentRoute'],
+    FileRoutesByPath['/_authed/neue-organisation']['id'],
+    FileRoutesByPath['/_authed/neue-organisation']['path'],
+    FileRoutesByPath['/_authed/neue-organisation']['fullPath']
   >
 }
 declare module './routes/_app/index' {
@@ -421,12 +421,12 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface AuthedRouteChildren {
-  AuthedOrganisationenRoute: typeof AuthedOrganisationenRoute
+  AuthedNeueOrganisationRoute: typeof AuthedNeueOrganisationRoute
   AuthedEinladungCodeRoute: typeof AuthedEinladungCodeRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedOrganisationenRoute: AuthedOrganisationenRoute,
+  AuthedNeueOrganisationRoute: AuthedNeueOrganisationRoute,
   AuthedEinladungCodeRoute: AuthedEinladungCodeRoute,
 }
 

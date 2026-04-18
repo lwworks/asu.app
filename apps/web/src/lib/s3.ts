@@ -89,3 +89,8 @@ export function noteAttachmentKey(
   const ext = fileName.includes(".") ? fileName.split(".").pop() : "";
   return `operations/${operationId}/notes/${noteId}${ext ? `.${ext}` : ""}`;
 }
+
+export function orgLogoKey(orgId: string, fileName: string): string {
+  const ext = fileName.includes(".") ? fileName.split(".").pop() : "";
+  return `organizations/${orgId}/logo-${Date.now()}${ext ? `.${ext}` : ""}`;
+}

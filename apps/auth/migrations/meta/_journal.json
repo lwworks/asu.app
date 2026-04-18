@@ -8,6 +8,13 @@
       "when": 1773505367890,
       "tag": "0000_brown_lionheart",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1776497191624,
+      "tag": "0001_aspiring_terrax",
+      "breakpoints": true
     }
   ]
 }

@@ -5,6 +5,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { OrgLogo } from "@/components/org/logo";
 import { useOrg } from "@/context/org";
 import { Link } from "@tanstack/react-router";
 import { CheckIcon, ChevronsUpDownIcon, PlusIcon } from "lucide-react";
@@ -22,9 +23,16 @@ export const OrgSwitcher = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         {orgs.map((org) => (
-          <DropdownMenuItem key={org.orgId} onClick={() => switchOrg(org.orgId)}>
-            {org.name}
-            {org.orgId === currentOrg.orgId && <CheckIcon className="ml-auto size-4" />}
+          <DropdownMenuItem
+            key={org.orgId}
+            onClick={() => switchOrg(org.orgId)}
+            className="gap-2"
+          >
+            <OrgLogo name={org.name} logoUrl={org.logoUrl} size="sm" />
+            <span>{org.name}</span>
+            {org.orgId === currentOrg.orgId && (
+              <CheckIcon className="ml-auto size-4" />
+            )}
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />

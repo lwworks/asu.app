@@ -8,11 +8,12 @@ import {
 } from "react";
 import { useAuth } from "./auth";
 
-type Org = {
+export type Org = {
   orgId: string;
   name: string;
   slug: string;
   role: string;
+  logoUrl: string | null;
 };
 
 type OrgContextValue = {
@@ -52,6 +53,9 @@ export function OrgProvider({ children }: { children: ReactNode }) {
     if (!res.ok) return;
     const data = (await res.json()) as Org[];
     setOrgs(data);
+    setCurrentOrg((prev) =>
+      prev ? data.find((o) => o.orgId === prev.orgId) ?? prev : prev
+    );
     return data;
   }, []);
 

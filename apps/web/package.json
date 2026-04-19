@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@asu/shared": "workspace:*",
+    "@aws-sdk/client-s3": "^3.1008.0",
+    "@aws-sdk/s3-request-presigner": "^3.1008.0",
     "@livestore/adapter-web": "^0.3.1",
     "@livestore/devtools-vite": "^0.3.1",
     "@livestore/livestore": "^0.3.1",
@@ -57,6 +59,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@vercel/node": "^5.6.15",
     "@vitejs/plugin-react": "^4.4.1",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",

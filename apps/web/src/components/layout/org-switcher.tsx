@@ -27,8 +27,7 @@ export const OrgSwitcher = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-2 hover:text-foreground transition-colors outline-hidden cursor-pointer">
-        <OrgLogo name={currentOrg.name} logoUrl={currentOrg.logoUrl} size="sm" />
+      <DropdownMenuTrigger className="flex items-center gap-1 hover:text-foreground transition-colors outline-hidden cursor-pointer">
         {currentOrg.name}
         <ChevronsUpDownIcon className="size-3.5" />
       </DropdownMenuTrigger>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useOrg } from "@/context/org";
 import { orgLogoKey, uploadFile } from "@/lib/s3";
-import { UploadIcon, Trash2Icon } from "lucide-react";
+import { Trash2Icon, UploadIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import { OrgLogo, invalidateLogoCache } from "./logo";
 
@@ -68,8 +68,8 @@ export const OrgLogoUpload = ({
 
   return (
     <div className="flex items-center gap-4">
-      <OrgLogo name={name} logoUrl={logoUrl} size="lg" />
-      <div className="space-y-2">
+      <OrgLogo name={name} logoUrl={logoUrl} size="md" />
+      <div>
         <div className="flex gap-2">
           <Button
             type="button"
@@ -79,7 +79,7 @@ export const OrgLogoUpload = ({
             disabled={uploading}
           >
             <UploadIcon className="size-4" />
-            {logoUrl ? "Logo ändern" : "Logo hochladen"}
+            {logoUrl ? "Wappen ändern" : "Wappen hochladen"}
           </Button>
           {logoUrl && (
             <Button

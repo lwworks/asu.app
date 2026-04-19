@@ -1,5 +1,5 @@
-import { getDownloadUrl } from "@/lib/s3";
 import { cn } from "@/lib/cn";
+import { getDownloadUrl } from "@/lib/s3";
 import { useEffect, useState } from "react";
 
 const urlCache = new Map<string, { url: string; expiresAt: number }>();
@@ -68,20 +68,20 @@ export const OrgLogo = ({
   }, [logoUrl]);
 
   const base = cn(
-    "rounded shrink-0 flex items-center justify-center overflow-hidden bg-muted text-muted-foreground font-medium uppercase",
+    "relative rounded shrink-0 flex items-center justify-center overflow-hidden bg-muted text-muted-foreground font-medium uppercase",
     sizeStyles[size],
     className
   );
 
   if (logoUrl && resolved) {
     return (
-      <span className={base}>
+      <div className={base}>
         <img
           src={resolved}
           alt={name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
         />
-      </span>
+      </div>
     );
   }
 

@@ -107,13 +107,13 @@ function NeueOrganisationPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Logo (optional)</Label>
+              <Label>Wappen (optional)</Label>
               <div className="flex items-center gap-4">
                 {logoPreview ? (
                   <span className="size-16 rounded shrink-0 overflow-hidden bg-muted">
                     <img
                       src={logoPreview}
-                      alt="Logo Vorschau"
+                      alt="Wappen Vorschau"
                       className="w-full h-full object-cover"
                     />
                   </span>

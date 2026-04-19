@@ -10,6 +10,12 @@ import { defineConfig } from "vite";
 export default defineConfig({
   server: {
     port: process.env.PORT ? Number(process.env.PORT) : 60_001,
+    proxy: {
+      "/api": {
+        target: "https://www.xn--as-yka.app",
+        changeOrigin: true,
+      },
+    },
   },
   worker: { format: "es" },
   plugins: [

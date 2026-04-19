@@ -1,17 +1,17 @@
 /**
- * S3 file uploads via presigned URLs from the backend.
- *
- * The Vercel serverless function at /api/presign generates presigned PUT URLs
- * so that S3 credentials never reach the browser.
+ * S3 file uploads via presigned URLs from the auth server.
  */
+
+const AUTH_URL = import.meta.env.VITE_AUTH_URL;
 
 /**
  * Upload a file to S3 and return its public URL.
  */
 export async function uploadFile(file: File, key: string): Promise<string> {
-  const presignRes = await fetch("/api/presign", {
+  const presignRes = await fetch(`${AUTH_URL}/api/presign`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ key, contentType: file.type }),
   });
 
@@ -43,9 +43,10 @@ export async function uploadFile(file: File, key: string): Promise<string> {
 export async function getDownloadUrl(publicUrl: string): Promise<string> {
   const key = extractKeyFromPublicUrl(publicUrl);
 
-  const res = await fetch("/api/presign-get", {
+  const res = await fetch(`${AUTH_URL}/api/presign/get`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ key }),
   });
 

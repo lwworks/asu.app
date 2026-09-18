@@ -3,18 +3,25 @@ import { getDownloadUrl } from "@/lib/s3";
 import { useEffect, useState } from "react";
 
 const urlCache = new Map<string, { url: string; expiresAt: number }>();
-const URL_TTL_MS = 240_000; // Presigns last 300s; refresh a bit earlier.
+const URL_TTL_MS = 30 * 60_000;
+
+function revokeCached(publicUrl: string) {
+  const cached = urlCache.get(publicUrl);
+  if (cached?.url.startsWith("blob:")) URL.revokeObjectURL(cached.url);
+  urlCache.delete(publicUrl);
+}
 
 async function resolveLogoUrl(publicUrl: string): Promise<string> {
   const cached = urlCache.get(publicUrl);
   if (cached && cached.expiresAt > Date.now()) return cached.url;
   const url = await getDownloadUrl(publicUrl);
+  revokeCached(publicUrl);
   urlCache.set(publicUrl, { url, expiresAt: Date.now() + URL_TTL_MS });
   return url;
 }
 
 export function invalidateLogoCache(publicUrl: string) {
-  urlCache.delete(publicUrl);
+  revokeCached(publicUrl);
 }
 
 function initials(name: string): string {

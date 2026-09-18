@@ -19,3 +19,8 @@ invocation_logs = true
 binding = "DB"
 database_name = "asu-auth"
 database_id = "1500d65b-9e81-4006-bd77-c71d3555e263"
+
+[[r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "asu-app"
+jurisdiction = "eu"

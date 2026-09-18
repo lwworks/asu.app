@@ -3,6 +3,7 @@ import type * as schema from "./schema.ts";
 
 export type Bindings = {
   DB: D1Database;
+  UPLOADS: R2Bucket;
   BETTER_AUTH_SECRET: string;
   BETTER_AUTH_URL: string;
   JWT_SECRET: string;

@@ -5,6 +5,7 @@ import { getAuth } from "./auth.ts";
 import orgsRoutes from "./routes/orgs.ts";
 import invitesRoutes from "./routes/invites.ts";
 import syncTokenRoutes from "./routes/sync-token.ts";
+import filesRoutes from "./routes/files.ts";
 
 const app = new Hono<AppEnv>();
 
@@ -81,6 +82,7 @@ app.all("/api/auth/*", async (c) => {
 app.route("/api/orgs", orgsRoutes);
 app.route("/api", invitesRoutes);
 app.route("/api/sync-token", syncTokenRoutes);
+app.route("/api/files", filesRoutes);
 
 app.get("/api/health", (c) => c.json({ status: "ok" }));
 

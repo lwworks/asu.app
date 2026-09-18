@@ -29,6 +29,16 @@ export default {
       return new Response("ok", { headers: corsHeaders });
     }
 
+    if (url.pathname === "/time") {
+      return new Response(JSON.stringify({ now: Date.now() }), {
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store",
+        },
+      });
+    }
+
     if (url.pathname.endsWith("/websocket")) {
       return handleWebSocket(request, env, ctx, {
         headers: corsHeaders,

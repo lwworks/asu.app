@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { checkDateFormat } from "@/lib/check-date-format";
+import { now } from "@/lib/clock-offset";
 import { forceByNameAndOrganization$ } from "@/livestore/queries/force/force-by-name-and-organization";
 import { events } from "@/livestore/schema";
 import { useStore } from "@livestore/react";
@@ -75,7 +76,7 @@ export const ImportForces = () => {
                 organization: row[2] as string,
                 annualTraining,
                 medicalCheck,
-                updatedAt: new Date(),
+                updatedAt: now(),
               })
             );
           } else {
@@ -95,7 +96,7 @@ export const ImportForces = () => {
                   organization: row[2] as string,
                   annualTraining,
                   medicalCheck,
-                  updatedAt: new Date(),
+                  updatedAt: now(),
                 })
               );
             }

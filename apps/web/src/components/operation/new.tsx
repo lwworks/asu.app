@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 import { events } from "@/livestore/schema";
 import { useStore } from "@livestore/react";
 import { useNavigate } from "@tanstack/react-router";
-import { format } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import { useState, type FormEvent } from "react";
 import slugify from "slugify";
 import {
@@ -29,7 +29,10 @@ export const NewOperation = ({ className }: { className?: string }) => {
     const formData = new FormData(event.target as HTMLFormElement);
     let createdAt = currentTime;
     const startDate = formData.get("start-date") as string;
-    if (startDate) createdAt = new Date(startDate);
+    if (startDate) {
+      const parsed = parse(startDate, "dd.MM.yyyy HH:mm", currentTime);
+      if (isValid(parsed)) createdAt = parsed;
+    }
     const description = formData.get("description") as string;
     const slug = slugify(
       `${format(createdAt, "yyyyMMdd-HHmm")}-${description}`,

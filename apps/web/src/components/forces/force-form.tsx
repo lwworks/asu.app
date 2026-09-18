@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { now } from "@/lib/clock-offset";
 import { forceById$ } from "@/livestore/queries/force/force-by-id";
 import { organizations$ } from "@/livestore/queries/organization/organizations";
 import { events } from "@/livestore/schema";
@@ -67,7 +68,7 @@ export const ForceForm = ({
           organization: organization.trim(),
           annualTraining,
           medicalCheck,
-          updatedAt: new Date(),
+          updatedAt: now(),
         })
       );
     } else {
@@ -78,7 +79,7 @@ export const ForceForm = ({
           organization: organization.trim(),
           annualTraining,
           medicalCheck,
-          updatedAt: new Date(),
+          updatedAt: now(),
         })
       );
     }

@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { now } from "@/lib/clock-offset";
 import { forcesByOrganization$ } from "@/livestore/queries/force/forces-by-organization";
 import { events } from "@/livestore/schema";
 import type { Force } from "@/livestore/schema/force";
@@ -54,7 +55,7 @@ export const ForcesTable = () => {
   const forces = store.useQuery(forcesByOrganization$("all"));
 
   const handleArchiveForce = (id: string) => {
-    store.commit(events.forceArchived({ id, archivedAt: new Date() }));
+    store.commit(events.forceArchived({ id, archivedAt: now() }));
   };
 
   const columns: ColumnDef<Force>[] = [

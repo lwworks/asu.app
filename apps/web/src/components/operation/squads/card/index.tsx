@@ -12,7 +12,13 @@ import { EndPressures } from "./members/end-pressures";
 import { SquadActions } from "./squad-actions";
 import { SquadStats } from "./stats";
 
-export const SquadCard = ({ squad }: { squad: Squad }) => {
+export const SquadCard = ({
+  squad,
+  readOnly = false,
+}: {
+  squad: Squad;
+  readOnly?: boolean;
+}) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const { store } = useStore();
   const members = store.useQuery(squadMembers$(squad.id)) as SquadMember[];
@@ -26,26 +32,27 @@ export const SquadCard = ({ squad }: { squad: Squad }) => {
       ref={cardRef}
       className="w-96 shrink-0 py-0 gap-0 h-full flex flex-col overflow-hidden"
     >
-      <SquadHeader squad={squad} />
+      <SquadHeader squad={squad} readOnly={readOnly} />
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
-        <SquadMembers squad={squad} members={members} />
+        <SquadMembers squad={squad} members={members} readOnly={readOnly} />
         {(squad.status === "active" || squad.status === "paused") && (
           <SquadStats squad={squad} members={members} />
         )}
         {isEnded && <EndedStats squad={squad} members={members} />}
-        <SquadLogs squadId={squad.id} />
+        <SquadLogs squadId={squad.id} readOnly={readOnly} />
       </CardContent>
-      {isEnded ? (
-        membersWithoutEndPressure.length > 0 && (
+      {!readOnly &&
+        (isEnded ? (
+          membersWithoutEndPressure.length > 0 && (
+            <CardFooter className="block p-6 bg-white/4 border-t flex-none">
+              <EndPressures squadId={squad.id} members={members} />
+            </CardFooter>
+          )
+        ) : (
           <CardFooter className="block p-6 bg-white/4 border-t flex-none">
-            <EndPressures squadId={squad.id} members={members} />
+            <SquadActions squad={squad} members={members} />
           </CardFooter>
-        )
-      ) : (
-        <CardFooter className="block p-6 bg-white/4 border-t flex-none">
-          <SquadActions squad={squad} members={members} />
-        </CardFooter>
-      )}
+        ))}
     </Card>
   );
 };

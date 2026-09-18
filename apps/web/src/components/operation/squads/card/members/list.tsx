@@ -2,14 +2,30 @@ import { cn } from "@/lib/cn";
 import type { SquadMember } from "@/livestore/schema/operation/squad-member";
 import { ArrowRightIcon, PencilIcon } from "lucide-react";
 
+const MemberIdentity = ({ member }: { member: SquadMember }) => (
+  <>
+    <div className="text-sm">
+      <span>{member.name}</span>
+      {member.isLeader ? (
+        <span className="ml-1 h-4 inline-flex items-center bg-zinc-700 font-medium rounded-full px-2 text-xs">
+          TF
+        </span>
+      ) : null}
+    </div>
+    <div className="text-xs text-muted-foreground">{member.organization}</div>
+  </>
+);
+
 export const MembersList = ({
   members,
   setMemberToEdit,
   status,
+  readOnly = false,
 }: {
   members: SquadMember[];
   setMemberToEdit: (member: SquadMember) => void;
   status: string;
+  readOnly?: boolean;
 }) => {
   if (members.length === 0) return null;
 
@@ -18,25 +34,21 @@ export const MembersList = ({
       <ul className="space-y-2">
         {members.map((member) => (
           <li key={member.id} className="flex items-center justify-between">
-            <button
-              className="relative group cursor-pointer text-left"
-              onClick={() => setMemberToEdit(member)}
-            >
-              <div className="absolute w-6 inset-y-0 -left-6 pt-1 justify-center hidden group-hover:flex">
-                <PencilIcon className="size-3 text-muted-foreground/50" />
+            {readOnly ? (
+              <div className="text-left">
+                <MemberIdentity member={member} />
               </div>
-              <div className="text-sm">
-                <span>{member.name}</span>
-                {member.isLeader ? (
-                  <span className="ml-1 h-4 inline-flex items-center bg-zinc-700 font-medium rounded-full px-2 text-xs">
-                    TF
-                  </span>
-                ) : null}
-              </div>
-              <div className="text-xs text-muted-foreground">
-                {member.organization}
-              </div>
-            </button>
+            ) : (
+              <button
+                className="relative group cursor-pointer text-left"
+                onClick={() => setMemberToEdit(member)}
+              >
+                <div className="absolute w-6 inset-y-0 -left-6 pt-1 justify-center hidden group-hover:flex">
+                  <PencilIcon className="size-3 text-muted-foreground/50" />
+                </div>
+                <MemberIdentity member={member} />
+              </button>
+            )}
             <div className="flex">
               <div className="text-right">
                 <div className="text-sm font-mono">

@@ -28,7 +28,10 @@ function Squads() {
         ]}
       />
       <Main>
-        <OperationSquads operationId={operation.id} />
+        <OperationSquads
+          operationId={operation.id}
+          readOnly={!!operation.completedAt}
+        />
       </Main>
     </>
   );

@@ -8,7 +8,13 @@ import { useState } from "react";
 import { SquadOptionsMenu } from "./options-menu";
 import { StatusLabel } from "./status-label";
 
-export const SquadHeader = ({ squad }: { squad: Squad }) => {
+export const SquadHeader = ({
+  squad,
+  readOnly = false,
+}: {
+  squad: Squad;
+  readOnly?: boolean;
+}) => {
   const { store } = useStore();
   const { currentTime } = useCurrentTime();
   const [editSquadName, setEditSquadName] = useState(false);
@@ -53,7 +59,9 @@ export const SquadHeader = ({ squad }: { squad: Squad }) => {
         )}
         <StatusLabel status={squad.status} />
       </div>
-      <SquadOptionsMenu squad={squad} setEditSquadName={setEditSquadName} />
+      {!readOnly && (
+        <SquadOptionsMenu squad={squad} setEditSquadName={setEditSquadName} />
+      )}
     </CardHeader>
   );
 };

@@ -107,6 +107,15 @@ export const OperationEventLog = ({
   };
 
   const allEntries: EventEntry[] = [operationStartEntry];
+  if (operation.completedAt) {
+    allEntries.push({
+      id: `operation-completed-${operation.id}`,
+      timestamp: operation.completedAt,
+      source: "Einsatz",
+      text: "Einsatz beendet",
+      pressure: null,
+    });
+  }
   for (const entries of entryGroups.values()) {
     allEntries.push(...entries);
   }

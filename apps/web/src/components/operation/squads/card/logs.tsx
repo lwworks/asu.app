@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useCurrentTime } from "@/context/current-time";
+import { cn } from "@/lib/cn";
 import { squadLogs$ } from "@/livestore/queries/operation/squad-logs";
 import { events } from "@/livestore/schema";
 import type { SquadLog } from "@/livestore/schema/operation/squad-log";
@@ -10,7 +11,13 @@ import { format } from "date-fns";
 import { ArrowUpIcon } from "lucide-react";
 import { useEffect, useRef, type FormEvent } from "react";
 
-export const SquadLogs = ({ squadId }: { squadId: string }) => {
+export const SquadLogs = ({
+  squadId,
+  readOnly = false,
+}: {
+  squadId: string;
+  readOnly?: boolean;
+}) => {
   const { currentTime } = useCurrentTime();
   const { store } = useStore();
   const logs = store.useQuery(squadLogs$(squadId));
@@ -77,7 +84,10 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
       <div className="relative flex-1 min-h-0">
         <ul
           ref={logsRef}
-          className="px-6 py-3 space-y-2 h-full overflow-y-auto"
+          className={cn(
+            "px-6 py-3 space-y-2 h-full overflow-y-auto",
+            readOnly && "pb-6"
+          )}
         >
           {(logs as SquadLog[])
             .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
@@ -96,38 +106,40 @@ export const SquadLogs = ({ squadId }: { squadId: string }) => {
         <div className="absolute inset-x-0 top-0 h-3 bg-gradient-to-b from-card to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-card to-transparent" />
       </div>
-      <form
-        className="flex gap-2 p-6 pt-0 relative z-10 flex-none"
-        onSubmit={handleSubmitLog}
-      >
-        <Field className="grow">
-          <FieldLabel htmlFor="text" className="sr-only">
-            Meldung
-          </FieldLabel>
-          <Input
-            name="text"
-            id="text"
-            type="text"
-            placeholder="Meldung"
-            autoComplete="off"
-          />
-        </Field>
-        <Field className="w-25">
-          <FieldLabel htmlFor="pressure" className="sr-only">
-            Druck
-          </FieldLabel>
-          <Input
-            name="pressure"
-            id="pressure"
-            type="number"
-            placeholder="Druck"
-            autoComplete="off"
-          />
-        </Field>
-        <Button type="submit" size="icon" variant="secondary">
-          <ArrowUpIcon className="size-4" />
-        </Button>
-      </form>
+      {!readOnly && (
+        <form
+          className="flex gap-2 p-6 pt-0 relative z-10 flex-none"
+          onSubmit={handleSubmitLog}
+        >
+          <Field className="grow">
+            <FieldLabel htmlFor="text" className="sr-only">
+              Meldung
+            </FieldLabel>
+            <Input
+              name="text"
+              id="text"
+              type="text"
+              placeholder="Meldung"
+              autoComplete="off"
+            />
+          </Field>
+          <Field className="w-25">
+            <FieldLabel htmlFor="pressure" className="sr-only">
+              Druck
+            </FieldLabel>
+            <Input
+              name="pressure"
+              id="pressure"
+              type="number"
+              placeholder="Druck"
+              autoComplete="off"
+            />
+          </Field>
+          <Button type="submit" size="icon" variant="secondary">
+            <ArrowUpIcon className="size-4" />
+          </Button>
+        </form>
+      )}
     </div>
   );
 };

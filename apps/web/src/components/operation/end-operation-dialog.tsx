@@ -12,6 +12,42 @@ import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
 export const EndOperationCard = ({ operation }: { operation: Operation }) => {
+  if (operation.completedAt) {
+    return <CompletedOperationCard completedAt={operation.completedAt} />;
+  }
+
+  return <EndOperationForm operation={operation} />;
+};
+
+const CompletedOperationCard = ({ completedAt }: { completedAt: Date }) => {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Einsatz beendet</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Der Einsatz ist abgeschlossen. Es können nur noch Notizen und der
+          Überwachende geändert werden.
+        </p>
+      </CardHeader>
+      <CardContent>
+        <Field className="w-44">
+          <FieldLabel htmlFor="completed-at" className="font-normal">
+            Einsatzende
+          </FieldLabel>
+          <Input
+            name="completed-at"
+            id="completed-at"
+            type="text"
+            value={format(completedAt, "dd.MM.yyyy HH:mm")}
+            disabled
+          />
+        </Field>
+      </CardContent>
+    </Card>
+  );
+};
+
+const EndOperationForm = ({ operation }: { operation: Operation }) => {
   const { store } = useStore();
   const { currentTime } = useCurrentTime();
   const squads = store.useQuery(operationSquads$(operation.id));

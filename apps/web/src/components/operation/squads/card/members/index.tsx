@@ -10,9 +10,11 @@ import { NewMemberButton } from "./new-member-button";
 export const SquadMembers = ({
   squad,
   members,
+  readOnly = false,
 }: {
   squad: Squad;
   members: SquadMember[];
+  readOnly?: boolean;
 }) => {
   const [showNewMemberButton, setShowNewMemberButton] = useState(true);
   const [showMemberForm, setShowMemberForm] = useState(false);
@@ -38,8 +40,9 @@ export const SquadMembers = ({
         members={members}
         setMemberToEdit={setMemberToEdit}
         status={squad.status}
+        readOnly={readOnly}
       />
-      {squad.status !== "ended" && (
+      {!readOnly && squad.status !== "ended" && (
         <div className="relative">
           {showNewMemberButton && (
             <NewMemberButton

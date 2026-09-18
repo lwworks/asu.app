@@ -13,7 +13,13 @@ const statusOrder = {
   archived: 4,
 };
 
-export const OperationSquads = ({ operationId }: { operationId: string }) => {
+export const OperationSquads = ({
+  operationId,
+  readOnly = false,
+}: {
+  operationId: string;
+  readOnly?: boolean;
+}) => {
   const { store } = useStore();
   const squads = store.useQuery(operationSquads$(operationId));
   const uiSettings = store.useQuery(uiSettings$);
@@ -34,9 +40,9 @@ export const OperationSquads = ({ operationId }: { operationId: string }) => {
     <section className="p-8 h-full overflow-x-auto">
       <div className="h-full flex gap-8 items-stretch">
         {sortedSquads.map((squad) => (
-          <SquadCard key={squad.id} squad={squad} />
+          <SquadCard key={squad.id} squad={squad} readOnly={readOnly} />
         ))}
-        <NewSquadButton operationId={operationId} />
+        {!readOnly && <NewSquadButton operationId={operationId} />}
         <div className="w-px shrink-0" />
       </div>
     </section>

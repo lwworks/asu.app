@@ -63,7 +63,7 @@ const NotesCollector = ({
     const entries: EventEntry[] = notes.map((note) => ({
       id: note.id,
       timestamp: note.timestamp,
-      source: "Notiz",
+      source: note.kind === "record-keeper" ? "Einsatz" : "Notiz",
       text: note.text,
       pressure: null,
       attachmentUrl: note.attachmentUrl,

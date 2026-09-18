@@ -17,6 +17,7 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
   const notes = store.useQuery(
     operationNotes$(operationId)
   ) as OperationNote[];
+  const userNotes = notes.filter((note) => !note.kind);
   const listRef = useRef<HTMLUListElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -70,7 +71,7 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
         }),
       100
     );
-  }, [notes.length]);
+  }, [userNotes.length]);
 
   return (
     <Card className="p-0 flex flex-col flex-1 min-h-0 gap-0">
@@ -83,7 +84,7 @@ export const OperationNotes = ({ operationId }: { operationId: string }) => {
           ref={listRef}
           className="px-6 py-3 space-y-2 h-full overflow-y-auto"
         >
-          {[...notes]
+          {[...userNotes]
             .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
             .map((note) => (
               <li key={note.id} className="flex text-sm leading-tight">

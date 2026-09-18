@@ -11,6 +11,8 @@ export const operationNotesTable = State.SQLite.table({
     }),
     attachmentUrl: State.SQLite.text({ nullable: true }),
     attachmentName: State.SQLite.text({ nullable: true }),
+    /** System entries (e.g. record-keeper changes) appear in the event log only. */
+    kind: State.SQLite.text({ nullable: true }),
   },
 });
 
@@ -26,6 +28,7 @@ export const operationNotesEvents = {
       timestamp: Schema.Date,
       attachmentUrl: Schema.optional(Schema.String),
       attachmentName: Schema.optional(Schema.String),
+      kind: Schema.optional(Schema.String),
     }),
   }),
 };
@@ -40,6 +43,7 @@ export const operationNotesMaterializers = State.SQLite.materializers(
       timestamp,
       attachmentUrl,
       attachmentName,
+      kind,
     }) =>
       operationNotesTable.insert({
         id,
@@ -48,6 +52,7 @@ export const operationNotesMaterializers = State.SQLite.materializers(
         timestamp,
         attachmentUrl: attachmentUrl ?? null,
         attachmentName: attachmentName ?? null,
+        kind: kind ?? null,
       }),
   }
 );
